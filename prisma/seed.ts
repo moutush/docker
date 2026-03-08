@@ -1633,6 +1633,53 @@ volumes:
                         type: "paragraph",
                         content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
   <div class="doc-sub-card">
+    <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-person-circle"></i></div><h3 class="doc-sub-card-title"><code>whoami</code> — Show Current User</h3></div>
+    <div class="doc-sub-card-body">
+      <p><strong>What it does:</strong> Displays the username of the currently logged-in user.</p>
+      <p><strong>Full Syntax:</strong></p>
+      <code>whoami</code>
+      <pre class="doc-code-block"><code class="language-bash">whoami
+# Output: john</code></pre>
+      <p><strong>Noob Example:</strong> <code>whoami</code> asks the system "Who am I?" and it tells you your username. Useful to double-check which user account you're running commands as.</p>
+      <p><strong>Common Output:</strong></p>
+      <ul><li><code>root</code> — You're the administrator (be careful!)</li>
+      <li><code>john</code> — You're logged in as the user 'john'</li>
+      <li><code>www-data</code> — Running as a web server process</li></ul>
+      <p><strong>Related Commands:</strong></p>
+      <ul><li><code>id</code> — Show user ID, group ID, and all groups you're in</li>
+      <li><code>groups</code> — List which groups you belong to</li></ul>
+    </div>
+  </div>
+
+  <div class="doc-sub-card">
+    <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-globe"></i></div><h3 class="doc-sub-card-title">View Your IP Address</h3></div>
+    <div class="doc-sub-card-body">
+      <p><strong>Check Local IP (your network):</strong></p>
+      <code>hostname -I</code>
+      <pre class="doc-code-block"><code class="language-bash">hostname -I
+# Output: 192.168.1.100 10.0.0.5
+
+ip addr
+ifconfig</code></pre>
+      <p><strong>Check Public IP (internet-facing):</strong></p>
+      <code>curl ifconfig.me</code>
+      <pre class="doc-code-block"><code class="language-bash">curl ifconfig.me
+# Output: 203.45.123.78
+
+curl -s icanhazip.com
+wget -qO- https://checkip.amazonaws.com</code></pre>
+      <p><strong>What's the Difference?</strong></p>
+      <ul><li><strong>Local IP</strong> (192.168.x.x, 10.x.x.x) — Your address on your internal network. Used for docker containers and local communication.</li>
+      <li><strong>Public IP</strong> — Your external IP visible to the internet. Used when services need to be accessed remotely or for debugging connection issues.</li></ul>
+      <p><strong>Common Commands:</strong></p>
+      <ul><li><code>hostname -I</code> — Simple, shows all local IPs</li>
+      <li><code>ip addr</code> — Detailed network info (modern systems)</li>
+      <li><code>ifconfig</code> — Network interfaces (older systems)</li>
+      <li><code>curl ifconfig.me</code> — Public IP (requires internet)</li></ul>
+    </div>
+  </div>
+
+  <div class="doc-sub-card">
     <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-list-ul"></i></div><h3 class="doc-sub-card-title"><code>ls</code> — List Files</h3></div>
     <div class="doc-sub-card-body">
       <p><strong>Full Syntax:</strong></p>
@@ -1796,19 +1843,30 @@ grep -c "text" file.txt</code></pre>
     <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-binoculars"></i></div><h3 class="doc-sub-card-title"><code>find</code> — Find Files</h3></div>
     <div class="doc-sub-card-body">
       <p><strong>Full Syntax:</strong></p>
-      <code>find [PATH] [OPTIONS]</code>
+      <code>find [PATH] [OPTIONS] [EXPRESSION]</code>
       <pre class="doc-code-block"><code class="language-bash">find . -name "*.log"
 find /home -type f -size +10M
 find . -mtime -7
-find ~ -name "Dockerfile" -type f</code></pre>
-      <p><strong>What it does:</strong> Searches for files by name, size, date, or other properties.</p>
-      <p><strong>Noob Example:</strong> <code>find . -name "*.log"</code> is like using File Explorer's search to find all .log files.</p>
+find ~ -name "Dockerfile" -type f
+find . -maxdepth 2 -name "*.py"
+find . -type f -name "test_*" ! -path "*/node_modules/*"</code></pre>
+      <p><strong>What it does:</strong> Recursively searches for files by name, size, date, or other properties. By default, it searches the entire directory tree below the given path.</p>
+      <p><strong>Noob Example:</strong> <code>find . -name "*.log"</code> is like using File Explorer's search to find all .log files, but it looks inside every subfolder too.</p>
       <p><strong>Common Flags:</strong></p>
-      <ul><li><code>-name</code> — Search by filename</li>
+      <ul><li><code>-name PATTERN</code> — Search by filename (glob pattern with * and ?)</li>
       <li><code>-type f</code> — Find only files (not folders)</li>
       <li><code>-type d</code> — Find only directories</li>
-      <li><code>-size +10M</code> — Find files larger than 10MB</li>
-      <li><code>-mtime -7</code> — Files modified in last 7 days</li></ul>
+      <li><code>-size +10M</code> — Find files larger than 10MB (+ means greater, - means less)</li>
+      <li><code>-mtime -7</code> — Files modified in last 7 days</li>
+      <li><code>-maxdepth N</code> — Limit search depth (prevents deep recursion). <code>-maxdepth 1</code> searches only current dir, <code>-maxdepth 2</code> searches 2 levels deep</li>
+      <li><code>-not EXPRESSION</code> or <code>! EXPRESSION</code> — Exclude matches (invert the condition)</li></ul>
+      <p style="color: #79c0ff; margin-top: 1rem;"><strong>💡 Recursion Gotcha:</strong> <code>find</code> automatically descends into ALL subdirectories. If you run <code>find /</code> on a large system, it can take forever! Use <code>-maxdepth</code> to limit how deep it searches, or <code>-not -path</code> to exclude certain directories like <code>-not -path "*/node_modules/*"</code>.</p>
+      <p style="color: #c9d1d9; margin-top: 0.5rem;"><strong>Examples with -maxdepth and -not:</strong></p>
+      <ul style="color: #8b949e;"><li><code>find . -maxdepth 1 -type f</code> — Files only in current directory (not subfolders)</li>
+      <li><code>find . -maxdepth 3 -name "*.js"</code> — JS files up to 3 levels deep</li>
+      <li><code>find . -type f ! -name "*.log"</code> — All files EXCEPT .log files</li>
+      <li><code>find . -type f -not -path "./.git/*"</code> — Files but exclude .git directory</li>
+      <li><code>find . -name "*.pyc" ! -path "*/venv/*"</code> — Python compiled files, but skip virtual env</li></ul>
     </div>
   </div>
 
@@ -1823,12 +1881,66 @@ chmod -w file.txt
 chmod 644 config.ini</code></pre>
       <p><strong>What it does:</strong> Changes who can read, write, or execute a file.</p>
       <p><strong>Noob Example:</strong> <code>chmod +x script.sh</code> makes a script executable (like changing "Read-only" to "Edit allowed").</p>
+      <p><strong>The Three Permission Categories:</strong></p>
+      <ul><li><strong>User (Owner)</strong> — The person who owns the file</li>
+      <li><strong>Group</strong> — A group of users (usually defined by the system)</li>
+      <li><strong>Others</strong> — Everyone else on the system</li></ul>
+      <p><strong>Understanding the Numbers:</strong></p>
+      <p>Each digit in chmod represents one category. For example, <code>chmod 755 file</code>:</p>
+      <ul><li><code>7</code> (User) = Read + Write + Execute (4+2+1)</li>
+      <li><code>5</code> (Group) = Read + Execute (4+1)</li>
+      <li><code>5</code> (Others) = Read + Execute (4+1)</li></ul>
+      <p>So 755 means: Owner can do everything, but Group and Others can only read and execute (not modify).</p>
+      <p><strong>Permission values:</strong> Read=4, Write=2, Execute=1. Add them up: 4+2+1=7 (rwx), 4+1=5 (r-x), 4=4 (r--).</p>
       <p><strong>Common Usage:</strong></p>
-      <ul><li><code>chmod +x file</code> — Make executable</li>
-      <li><code>chmod -w file</code> — Remove write permission</li>
-      <li><code>chmod 755 file</code> — Owner can do all, others can read+execute</li>
-      <li><code>chmod 644 file</code> — Owner can read+write, others read-only</li></ul>
-      <p><strong>Permissions: 7=rwx, 5=r-x, 4=r--</strong></p>
+      <ul><li><code>chmod +x file</code> — Make executable for all</li>
+      <li><code>chmod -w file</code> — Remove write permission from all</li>
+      <li><code>chmod 755 file</code> — Owner: read+write+execute, Group: read+execute, Others: read+execute</li>
+      <li><code>chmod 644 file</code> — Owner: read+write, Group: read only, Others: read only</li>
+      <li><code>chmod 600 file</code> — Owner: read+write, Group: nothing, Others: nothing (most secure)</li></ul>
+    </div>
+  </div>
+
+  <div class="doc-sub-card">
+    <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-person-check"></i></div><h3 class="doc-sub-card-title"><code>chown</code> — Change Owner</h3></div>
+    <div class="doc-sub-card-body">
+      <p><strong>Full Syntax:</strong></p>
+      <code>chown [OPTIONS] USER[:GROUP] FILE</code>
+      <pre class="doc-code-block"><code class="language-bash">chown john file.txt
+chown john:developers file.txt
+chown :admin file.txt
+chown -R newuser:newgroup /path/to/directory
+sudo chown root:root /etc/config.ini</code></pre>
+      <p><strong>What it does:</strong> Changes who owns a file (the user and optionally the group). Different from chmod — this is about WHO owns it, not WHAT they can do with it.</p>
+      <p><strong>Noob Example:</strong> <code>chown john file.txt</code> is like transferring ownership of a document to John. John is now the owner.</p>
+      <p><strong>Common Usage:</strong></p>
+      <ul><li><code>chown newuser file</code> — Change owner to newuser</li>
+      <li><code>chown newuser:newgroup file</code> — Change owner AND group</li>
+      <li><code>chown :newgroup file</code> — Change only the group (keep owner the same)</li>
+      <li><code>chown -R user:group /folder</code> — Recursively change ownership of entire folder and contents</li></ul>
+      <p style="color: #79c0ff; margin-top: 1rem;"><strong>Important Difference:</strong> <code>chmod</code> changes PERMISSIONS (read/write/execute). <code>chown</code> changes OWNERSHIP. A file can be owned by root but readable by everyone, for example.</p>
+      <p style="color: #8b949e; margin-top: 0.5rem;"><strong>Note:</strong> Only root or the owner can change ownership. Usually requires <code>sudo</code>.</p>
+    </div>
+  </div>
+
+  <div class="doc-sub-card">
+    <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-question-circle"></i></div><h3 class="doc-sub-card-title">Why chown instead of chmod 777?</h3></div>
+    <div class="doc-sub-card-body">
+      <p><strong>The Core Difference:</strong></p>
+      <ul><li><code>chown</code> = WHO owns the file (assigns responsibility)</li>
+      <li><code>chmod</code> = WHAT permissions they have (read/write/execute)</li></ul>
+      <p><strong>Why chmod 777 is terrible:</strong></p>
+      <ul><li><code>chmod 777</code> means ANYONE on the system can read, write, and execute your file. Total security nightmare.</li>
+      <li>It's lazy and dangerous — like giving keys to your house to every neighbor instead of just giving one to the person who needs it</li>
+      <li>The right way uses both commands: assign owner with <code>chown</code>, then restrict access with <code>chmod</code></li></ul>
+      <p><strong>Real-world example:</strong></p>
+      <pre class="doc-code-block"><code class="language-bash">WRONG: chmod 777 config.ini (everyone can see your secrets!)
+
+RIGHT: 
+chown www-data:www-data config.ini
+chmod 640 config.ini
+(only www-data user and group can read it)</code></pre>
+      <p><strong>Why it matters:</strong> System processes (nginx, postgres, docker) run as specific users. They need files owned by them. You can't fix this with chmod 777 — you need the right owner. Plus permissions like 640 (owner reads/writes, group reads, others nothing) are vastly more secure.</p>
     </div>
   </div>
 
@@ -1847,6 +1959,15 @@ sudo -l</code></pre>
       <ul><li><code>sudo command</code> — Run single command as root</li>
       <li><code>sudo su</code> — Become root user permanently</li>
       <li><code>sudo -l</code> — List what you can run as sudo</li></ul>
+      <p><strong>Getting Out of sudo su:</strong></p>
+      <ul><li><code>exit</code> — Leave the root session and return to your user</li>
+      <li><code>Ctrl+D</code> — Also exits the root session (keyboard shortcut)</li>
+      <li><code>logout</code> — Alternative way to exit</li></ul>
+      <p><strong>Example:</strong></p>
+      <pre class="doc-code-block"><code class="language-bash">user@host:~$ sudo su
+root@host:/home/user# exit
+user@host:~$</code></pre>
+      <p><strong>Note:</strong> When you're root, your prompt shows <code>#</code> instead of <code>$</code>. Once you exit, you're back to your normal user.</p>
       <p><strong>⚠️ WARNING:</strong> sudo can delete everything or brick your system. Only use when necessary!</p>
     </div>
   </div>
@@ -2117,11 +2238,12 @@ echo -e "Line1\nLine2"</code></pre>
     <div class="doc-sub-card-body">
       <p><strong>What it does:</strong> Display text on the screen.</p>
       <p><strong>Full Syntax:</strong></p>
-      <code>export [NAME=VALUE]</code>
-      <pre class="doc-code-block"><code class="language-bash">export API_KEY="secret123"
-export PATH=$PATH:/usr/local/bin
-export -p
-echo $API_KEY</code></pre>
+      <code>echo [TEXT]</code>
+      <pre class="doc-code-block"><code class="language-bash">echo "Hello, World!"
+echo $HOME
+echo "text" > file.txt
+echo "text" >> file.txt
+echo -e "Line1\nLine2"</code></pre>
       <p><strong>Noob Example:</strong> <code>echo "Hello, World!"</code> prints "Hello, World!"</p>
       <p><strong>Common Uses:</strong></p>
       <ul><li><code>echo $HOME</code> — Print home directory path</li>
@@ -2132,15 +2254,37 @@ echo $API_KEY</code></pre>
   </div>
 
   <div class="doc-sub-card">
+    <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-file-earmark-plus"></i></div><h3 class="doc-sub-card-title"><code>touch</code> — Create or Update File</h3></div>
+    <div class="doc-sub-card-body">
+      <p><strong>What it does:</strong> Create a new empty file or update the timestamp of an existing file.</p>
+      <p><strong>Full Syntax:</strong></p>
+      <code>touch [OPTIONS] FILE</code>
+      <pre class="doc-code-block"><code class="language-bash">touch newfile.txt
+touch file1.txt file2.txt file3.txt
+touch -c file.txt
+touch -t 202501151430 file.txt</code></pre>
+      <p><strong>Noob Example:</strong> <code>touch myfile.txt</code> creates an empty file called myfile.txt if it doesn't exist, or updates its timestamp if it does.</p>
+      <p><strong>Common Uses:</strong></p>
+      <ul><li><code>touch file.txt</code> — Create a new empty file</li>
+      <li><code>touch file1 file2 file3</code> — Create multiple files at once</li>
+      <li><code>touch -c file.txt</code> — Update timestamp only if file exists (don't create)</li>
+      <li><code>touch -a file.txt</code> — Update only the access time</li>
+      <li><code>touch -m file.txt</code> — Update only the modification time</li></ul>
+      <p><strong>Pro Tip:</strong> Often used in scripts to create placeholder files or to trigger file-watch systems. Very useful with <code>git</code> to force file synchronization.</p>
+    </div>
+  </div>
+
+  <div class="doc-sub-card">
     <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-gear"></i></div><h3 class="doc-sub-card-title"><code>export</code> — Set Environment Variables</h3></div>
     <div class="doc-sub-card-body">
       <p><strong>What it does:</strong> Create environment variables that programs can access.</p>
-      <p><strong>Noob Example:</strong> <code>export API_KEY="secret123"</code> creates a variable that stays available while you're in that terminal.</p>
       <p><strong>Full Syntax:</strong></p>
-      <code>nohup COMMAND [ARGS] &</code>
-      <pre class="doc-code-block"><code class="language-bash">nohup python app.py &
-nohup ./script.sh > output.log 2>&1 &
-nohup npm start > server.log &</code></pre>
+      <code>export [NAME=VALUE]</code>
+      <pre class="doc-code-block"><code class="language-bash">export API_KEY="secret123"
+export PATH=$PATH:/usr/local/bin
+export -p
+echo $API_KEY</code></pre>
+      <p><strong>Noob Example:</strong> <code>export API_KEY="secret123"</code> creates a variable that stays available while you're in that terminal.</p>
       <p><strong>Common Usage:</strong></p>
       <ul><li><code>export VAR_NAME=value</code> — Set a variable</li>
       <li><code>echo $VAR_NAME</code> — See the value</li>
@@ -2243,6 +2387,341 @@ whereis -s docker</code></pre>
       <li><code>-m</code> — Search only for manual pages</li>
       <li><code>-s</code> — Search only for source files</li></ul>
       <p><strong>Difference from which:</strong> <code>which</code> is simpler and only shows the executable path, <code>whereis</code> shows binaries, sources, and docs</p>
+    </div>
+  </div>
+</div>`,
+                        order: 2,
+                    },
+                ],
+            },
+        },
+    });
+
+    // ── Practice: Linux Commands ───────────────────────────────────────────────
+    const pPracticeLinuxCommands = await prisma.page.create({
+        data: {
+            title: "Practice: Linux Commands",
+            slug: "/practice/linux-commands",
+            description: "Interactive challenges to practice Linux commands. Solve challenges in your terminal and expand answers to verify your solution.",
+            components: {
+                create: [
+                    {
+                        type: "heading",
+                        heading: "Linux Commands Practice",
+                        icon: "bi-pencil-square",
+                        content: "<p>Test your Linux skills with these hands-on challenges. Solve each challenge in your local terminal, then expand the answer to verify your solution. Start simple and work your way up!</p>",
+                        order: 1,
+                    },
+                    {
+                        type: "paragraph",
+                        content: `<div style="margin-top: 1.5rem;">
+  <!-- BEGINNER CHALLENGES -->
+  <h5 style="color: #58a6ff; margin-top: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 700;">
+    <i class="bi bi-play-circle-fill" style="color: #58a6ff; font-size: 1.1rem;"></i> Beginner Challenges
+  </h5>
+
+  <!-- Challenge 1 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 1: Navigate and List Files</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Navigate to your home directory and list all files including hidden ones in long format. What are the permissions on your .bashrc file?</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans1" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans1" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">cd ~
+ls -la
+# Look at the .bashrc line for permissions</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">cd ~</code> — Go to your home directory (~ is a shortcut for /home/yourname)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">ls</code> — List files command</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-l</code> — Long format (shows permissions, size, date, owner)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-a</code> — All files (including hidden ones starting with .)</li>
+            </ul>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">Expected output:</strong> Your .bashrc permissions will look like: <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-rw-r--r--</code> (read+write for you, read-only for others)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 2 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 2: Create Nested Directories</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Create a nested directory structure: <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">projects/my-app/src/components</code> in your home directory with a single command.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans2" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans2" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">mkdir -p ~/projects/my-app/src/components
+ls -R ~/projects
+# Verify the folder structure was created</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">mkdir</code> — Create directory (folder)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-p</code> — Parent flag (creates all missing folders in the path, doesn't error if they exist)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">~</code> — Home directory shortcut</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-R</code> — Recursive list (show folders inside folders)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 3 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 3: Print Your Current Path</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">You're somewhere deep in your file system and lost. Show the absolute path to your current location.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans3" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans3" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">pwd</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What it does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">pwd</code> — Print Working Directory (shows where you are)</li>
+            </ul>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">Expected output:</strong> Something like: <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">/home/username/projects/my-app</code></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERMEDIATE CHALLENGES -->
+  <h5 style="color: #58a6ff; margin-top: 2.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 700;">
+    <i class="bi bi-arrow-right-circle-fill" style="color: #58a6ff; font-size: 1.1rem;"></i> Intermediate Challenges
+  </h5>
+
+  <!-- Challenge 4 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 4: Find and Count Files</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">In your home directory, how many files have a <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">.txt</code> extension? Use a pipe to count them.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans4" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans4" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">find ~ -name "*.txt" | wc -l</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">find ~</code> — Search in home directory</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-name "*.txt"</code> — Match files ending in .txt (asterisk * means any characters)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">|</code> — Pipe (send results to next command)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">wc -l</code> — Count lines (each file = one line)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 5 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 5: Copy and Preserve Permissions</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Copy a file from your home directory to an archive folder while preserving its original permissions and timestamps.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans5" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans5" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">mkdir -p ~/archive
+cp -p ~/myfile.txt ~/archive/myfile.txt
+ls -l ~/myfile.txt ~/archive/myfile.txt
+# Compare the timestamps and permissions</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">mkdir -p ~/archive</code> — Create archive folder if it doesn't exist</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">cp</code> — Copy file</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-p</code> — Preserve flag (keeps original permissions, ownership, timestamps)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">ls -l</code> — List to verify permissions match</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 6 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 6: Search Text in Files</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Find all lines containing the word "error" (case-insensitive) in a log file, then count how many there are.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans6" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans6" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">grep -i "error" logfile.log | wc -l
+# Or to see the actual lines:
+grep -i "error" logfile.log</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">grep</code> — Search for text in a file</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-i</code> — Ignore case (matches ERROR, Error, error, etc.)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">"error"</code> — The text pattern to search for</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">logfile.log</code> — The file to search in</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADVANCED CHALLENGES -->
+  <h5 style="color: #58a6ff; margin-top: 2.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 700;">
+    <i class="bi bi-lightning-charge-fill" style="color: #58a6ff; font-size: 1.1rem;"></i> Advanced Challenges
+  </h5>
+
+  <!-- Challenge 7 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 7: Batch File Operations</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Find all <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">.log</code> files in your entire home directory that are older than 30 days and display them with their sizes.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans7" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans7" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">find ~ -type f -name "*.log" -mtime +30 -ls</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">find ~</code> — Search starting from home directory</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-type f</code> — Only files (not directories)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-name "*.log"</code> — Match .log files</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-mtime +30</code> — Modified more than 30 days ago (+ means older than)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-ls</code> — Display results in long format (shows size)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 8 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 8: Secure File Removal</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Remove all files from a directory but ask for confirmation before removing each one to be extra safe.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans8" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans8" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">rm -i directory_name/*
+# -i will prompt before deleting each file
+# Answer 'y' to delete or 'n' to skip</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">rm</code> — Remove command</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">-i</code> — Interactive mode (asks before deleting)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">directory_name/*</code> — All files in the directory (asterisk * matches everything)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 9 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 9: Analyze File Content</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Display the last 20 lines of a log file, then filter to only show "WARNING" lines, sort them alphabetically, and remove duplicates.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans9" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans9" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">tail -20 logfile.log | grep "WARNING" | sort | uniq</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does (left to right):</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">tail -20</code> — Show last 20 lines of the file</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">|</code> — Pipe (send output to next command)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">grep "WARNING"</code> — Keep only lines containing "WARNING"</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">sort</code> — Sort alphabetically</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">uniq</code> — Remove duplicate lines</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenge 10 -->
+  <div style="background: rgba(22, 27, 34, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); border-radius: 12px; margin-bottom: 1.5rem; padding: 1.5rem;">
+    <h4 style="color: #58a6ff; margin-top: 0; margin-bottom: 0.75rem; font-weight: 600;">Challenge 10: Combine and Verify Files</h4>
+    <p style="margin: 0.75rem 0; color: #e6edf3;"><strong>Your Task:</strong></p>
+    <p style="margin: 0.75rem 0; color: #c9d1d9;">Combine all <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">*.txt</code> files in your current directory into one file called <code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">combined.txt</code>, then verify its size and line count.</p>
+    <div class="accordion accordion-flush" style="margin-top: 1rem;">
+      <div class="accordion-item" style="background: transparent; border: none; border-top: 1px solid rgba(82, 121, 255, 0.15);">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ans10" aria-expanded="false" style="background: transparent; color: #79c0ff; padding: 0.5rem 0; font-weight: 500;">
+            <i class="bi bi-chevron-down" style="color: #79c0ff;"></i> Show Answer
+          </button>
+        </h2>
+        <div id="ans10" class="accordion-collapse collapse">
+          <div class="accordion-body" style="padding: 1rem 0;">
+            <pre class="doc-code-block"><code class="language-bash">cat *.txt > combined.txt
+# Verify the result:
+ls -lh combined.txt
+wc -l combined.txt</code></pre>
+            <p style="margin: 1rem 0 0 0; color: #8b949e;"><strong style="color: #d2a8ff;">What each part does:</strong></p>
+            <ul style="color: #8b949e; margin: 0.5rem 0;">
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">cat *.txt</code> — Read and display all .txt files</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">></code> — Redirect (save output to a file instead of showing it)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">combined.txt</code> — Save everything into this new file</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">ls -lh</code> — List file with human-readable size (-h = human readable)</li>
+              <li><code style="background: rgba(13, 17, 23, 0.8); border: 1px solid rgba(82, 121, 255, 0.2); padding: 0.1rem 0.4rem; border-radius: 4px; color: #79c0ff;">wc -l</code> — Count lines in the file</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>`,
@@ -2361,20 +2840,19 @@ whereis -s docker</code></pre>
                     },
                     {
                         type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
+                        content: "", order: 80,
                     },
                     {
                         type: "paragraph",
                         content: flagTable([
-                            { flag: "-t / --tag NAME:TAG", type: "Option", description: "Name and tag the resulting image. You can use -t multiple times to apply multiple tags." },
-                            { flag: "-f / --file PATH", type: "Option", description: "Path to the Dockerfile. Defaults to ./Dockerfile in the build context." },
-                            { flag: "--build-arg KEY=VALUE", type: "Option", description: "Pass a build-time variable that the Dockerfile can access with the ARG instruction." },
-                            { flag: "--no-cache", type: "Flag", description: "Ignore layer cache and rebuild every step from scratch." },
-                            { flag: "--target STAGE", type: "Option", description: "For multi-stage builds: stop building at a specific stage instead of building the final stage." },
-                            { flag: "--platform", type: "Option", description: "Specify the target platform, e.g. linux/amd64 or linux/arm64." },
-                            { flag: "PATH", type: "Argument", description: "The build context. Docker sends all files in this directory to the daemon. Use . for the current directory." },
+                            { flag: "-f PATH", type: "Option", description: "Specify a different Dockerfile location (default: ./Dockerfile)." },
+                            { flag: "-t TAG", type: "Option", description: "Tag the resulting image with a name and optional version, e.g. my-app:1.0." },
+                            { flag: "--build-arg KEY=VALUE", type: "Option", description: "Pass a variable at build time that Dockerfile can access with ARG instructions." },
+                            { flag: "--no-cache", type: "Flag", description: "Ignore Docker's layer cache and rebuild everything from scratch." },
+                            { flag: "--target STAGE", type: "Option", description: "Stop at a specific stage in a multi-stage Dockerfile." },
+                            { flag: "PATH | URL", type: "Argument", description: "The build context: usually '.' (current directory) or a URL to a git repo." },
                         ]),
-                        order: 80,
+                        order: 90,
                     },
                 ],
             },
@@ -3631,6 +4109,7 @@ Use export/import for lightweight filesystem transfer. Use save/load when you ne
     await prisma.menuItem.createMany({
         data: [
             { label: "Common Linux Commands", icon: "bi-terminal-fill", parentId: menuCommonLinuxCommands.id, pageId: pCommonLinuxCommands.id, order: 1 },
+            { label: "Practice Challenges", icon: "bi-pencil-square", parentId: menuCommonLinuxCommands.id, pageId: pPracticeLinuxCommands.id, order: 2 },
         ],
     });
 
