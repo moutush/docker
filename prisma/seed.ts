@@ -8,13 +8,13 @@ const prisma = new PrismaClient({ adapter });
 
 // ─── Shared helper: builds an HTML flag/parameter reference table ─────────────
 function flagTable(rows: { flag: string; type: string; description: string }[]) {
-    const rowsHtml = rows.map(r => `
+  const rowsHtml = rows.map(r => `
         <tr>
             <td><code>${r.flag}</code></td>
             <td><span class="badge bg-secondary">${r.type}</span></td>
             <td>${r.description}</td>
         </tr>`).join("");
-    return `
+  return `
         <div class="doc-table-wrapper shadow-sm">
             <table class="table table-dark table-hover doc-table mb-0">
                 <thead>
@@ -30,77 +30,77 @@ function flagTable(rows: { flag: string; type: string; description: string }[]) 
 }
 
 async function main() {
-    console.log("🌱 Seeding database...");
+  console.log("🌱 Seeding database...");
 
-    // ── Cleanup ───────────────────────────────────────────────────────────────
-    await prisma.menuItem.deleteMany();
-    await prisma.pageComponent.deleteMany();
-    await prisma.page.deleteMany();
+  // ── Cleanup ───────────────────────────────────────────────────────────────
+  await prisma.menuItem.deleteMany();
+  await prisma.pageComponent.deleteMany();
+  await prisma.page.deleteMany();
 
-    // =========================================================================
-    // PAGES — GETTING STARTED
-    // =========================================================================
+  // =========================================================================
+  // PAGES — GETTING STARTED
+  // =========================================================================
 
-    // 1. Introduction to Docker
-    const pIntro = await prisma.page.create({
-        data: {
-            title: "Introduction to Docker",
-            slug: "/introduction",
-            description: "Learn what Docker is and why it's a game-changer for modern development.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "Introduction to Docker",
-                        icon: "bi-info-square-fill",
-                        content: "",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Normally, when you write a program (like a website), it works on your computer but might break on your friend's computer because they have a different version of Python, a different Windows update, or missing files.</p>",
-                        order: 2,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Docker allows you to \"wrap\" your code, along with every single tiny file and setting it needs to run, into one neat package called an <strong>Image</strong>.</p>",
-                        order: 3,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Real World Example",
-                        icon: "bi-lightbulb-fill",
-                        content: "",
-                        order: 4,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Imagine you want to send a delicate strawberry cake from India to a friend in London.</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<h3>The Old Way (Without Containers):</h3>",
-                        order: 6,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>You put the cake on a ship. But the ship also carries heavy iron pipes, smelly fish, and chemicals. The pipes might crush your cake, or the smell of the fish might ruin the flavor. Plus, the ship in London might be a different size, and your cake box doesn't fit the crane. Everything breaks.</p>",
-                        order: 7,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<h3>The Docker Way (The Shipping Container):</h3>",
-                        order: 8,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>You put your cake inside a standard Shipping Container. This container has its own cooling system and strong walls. It doesn't matter if the ship is carrying fish or iron; the cake is safe inside its own \"little world.\" Whether the ship is big, small, or a truck, the Container fits perfectly because it is a standard size.</p>",
-                        order: 9,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `
+  // 1. Introduction to Docker
+  const pIntro = await prisma.page.create({
+    data: {
+      title: "Introduction to Docker",
+      slug: "/introduction",
+      description: "Learn what Docker is and why it's a game-changer for modern development.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "Introduction to Docker",
+            icon: "bi-info-square-fill",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Normally, when you write a program (like a website), it works on your computer but might break on your friend's computer because they have a different version of Python, a different Windows update, or missing files.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Docker allows you to \"wrap\" your code, along with every single tiny file and setting it needs to run, into one neat package called an <strong>Image</strong>.</p>",
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "Real World Example",
+            icon: "bi-lightbulb-fill",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Imagine you want to send a delicate strawberry cake from India to a friend in London.</p>",
+            order: 5,
+          },
+          {
+            type: "paragraph",
+            content: "<h3>The Old Way (Without Containers):</h3>",
+            order: 6,
+          },
+          {
+            type: "paragraph",
+            content: "<p>You put the cake on a ship. But the ship also carries heavy iron pipes, smelly fish, and chemicals. The pipes might crush your cake, or the smell of the fish might ruin the flavor. Plus, the ship in London might be a different size, and your cake box doesn't fit the crane. Everything breaks.</p>",
+            order: 7,
+          },
+          {
+            type: "paragraph",
+            content: "<h3>The Docker Way (The Shipping Container):</h3>",
+            order: 8,
+          },
+          {
+            type: "paragraph",
+            content: "<p>You put your cake inside a standard Shipping Container. This container has its own cooling system and strong walls. It doesn't matter if the ship is carrying fish or iron; the cake is safe inside its own \"little world.\" Whether the ship is big, small, or a truck, the Container fits perfectly because it is a standard size.</p>",
+            order: 9,
+          },
+          {
+            type: "paragraph",
+            content: `
                         <div class="doc-table-wrapper shadow-sm">
                             <table class="table table-dark table-hover doc-table mb-0">
                                 <thead>
@@ -129,49 +129,49 @@ async function main() {
                                 </tbody>
                             </table>
                         </div>`,
-                        order: 10,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The Three Main Parts of Docker",
-                        icon: "bi-grid-3x3-gap-fill",
-                        content: "<p>To be a pro, you just need to understand these three words:</p>",
-                        order: 11,
-                    },
-                    { type: "paragraph", content: "<p><strong>1. The Dockerfile (The Recipe)</strong></p>", order: 12 },
-                    { type: "paragraph", content: "<p>Think of this as a text file where you write step-by-step instructions for building your image.</p>", order: 13 },
-                    { type: "paragraph", content: "<p><strong>2. The Image (The Frozen Meal)</strong></p>", order: 14 },
-                    { type: "paragraph", content: "<p>When you \"build\" your Dockerfile, it creates an Image — like a frozen pizza. It has all the ingredients, but it is not \"alive\" yet. You can send this image to anyone in the world.</p>", order: 15 },
-                    { type: "paragraph", content: "<p><strong>3. The Container (The Cooked Meal)</strong></p>", order: 16 },
-                    { type: "paragraph", content: "<p>When you \"run\" an image, it becomes a Container. This is the living, breathing process running on your computer. You can start, stop, or delete it without affecting your actual computer's files.</p>", order: 17 },
-                ],
-            },
-        },
-    });
+            order: 10,
+          },
+          {
+            type: "heading",
+            heading: "The Three Main Parts of Docker",
+            icon: "bi-grid-3x3-gap-fill",
+            content: "<p>To be a pro, you just need to understand these three words:</p>",
+            order: 11,
+          },
+          { type: "paragraph", content: "<p><strong>1. The Dockerfile (The Recipe)</strong></p>", order: 12 },
+          { type: "paragraph", content: "<p>Think of this as a text file where you write step-by-step instructions for building your image.</p>", order: 13 },
+          { type: "paragraph", content: "<p><strong>2. The Image (The Frozen Meal)</strong></p>", order: 14 },
+          { type: "paragraph", content: "<p>When you \"build\" your Dockerfile, it creates an Image — like a frozen pizza. It has all the ingredients, but it is not \"alive\" yet. You can send this image to anyone in the world.</p>", order: 15 },
+          { type: "paragraph", content: "<p><strong>3. The Container (The Cooked Meal)</strong></p>", order: 16 },
+          { type: "paragraph", content: "<p>When you \"run\" an image, it becomes a Container. This is the living, breathing process running on your computer. You can start, stop, or delete it without affecting your actual computer's files.</p>", order: 17 },
+        ],
+      },
+    },
+  });
 
-    // 2. Docker Architecture
-    const pDockerArchitecture = await prisma.page.create({
-        data: {
-            title: "Docker Architecture",
-            slug: "/docker-architecture",
-            description: "Understand how Docker works under the hood - client-server model, namespaces, cgroups, and union file system.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "How Docker Actually Works (The Architecture)",
-                        icon: "bi-cpu-fill",
-                        content: "",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Docker isn't one single program; its a team of components working together in a <strong>Client-Server relationship</strong>.</p>",
-                        order: 2,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+  // 2. Docker Architecture
+  const pDockerArchitecture = await prisma.page.create({
+    data: {
+      title: "Docker Architecture",
+      slug: "/docker-architecture",
+      description: "Understand how Docker works under the hood - client-server model, namespaces, cgroups, and union file system.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "How Docker Actually Works (The Architecture)",
+            icon: "bi-cpu-fill",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Docker isn't one single program; its a team of components working together in a <strong>Client-Server relationship</strong>.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-terminal-fill"></i></div>
@@ -202,23 +202,23 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 3,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The \"Secret Sauce\" (Linux Magic)",
-                        icon: "bi-magic",
-                        content: "",
-                        order: 4,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Docker doesn't invent \"containers\" from scratch; it uses two powerful features already built into the Linux Kernel to create the \"illusion\" of an isolated computer.</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "The \"Secret Sauce\" (Linux Magic)",
+            icon: "bi-magic",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Docker doesn't invent \"containers\" from scratch; it uses two powerful features already built into the Linux Kernel to create the \"illusion\" of an isolated computer.</p>",
+            order: 5,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-eye-slash-fill"></i></div>
@@ -253,23 +253,23 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 6,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The \"Union File System\" (The Layer Cake)",
-                        icon: "bi-layers-fill",
-                        content: "",
-                        order: 7,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>This is how Docker stays so tiny (MBs instead of GBs). Images are made of <strong>Layers</strong>.</p>",
-                        order: 8,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-card">
+            order: 6,
+          },
+          {
+            type: "heading",
+            heading: "The \"Union File System\" (The Layer Cake)",
+            icon: "bi-layers-fill",
+            content: "",
+            order: 7,
+          },
+          {
+            type: "paragraph",
+            content: "<p>This is how Docker stays so tiny (MBs instead of GBs). Images are made of <strong>Layers</strong>.</p>",
+            order: 8,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-card">
   <div class="doc-sub-card-body">
     <p><strong>Example: Creating a PHP App on Ubuntu</strong></p>
     <p>Imagine you are building a website using PHP. Here is how Docker stacks those layers:</p>
@@ -283,23 +283,23 @@ async function main() {
     <p><strong>Why is this cool?</strong> If you have 10 different PHP apps all based on the same "Ubuntu + PHP" image, Docker only stores <strong>one copy</strong> of those bottom layers on your hard drive. They all "share" the heavy stuff and only keep their own unique code and temporary data in the tiny top layer.</p>
   </div>
 </div>`,
-                        order: 9,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The Immutability Secret (Cattle vs. Pets)",
-                        icon: "bi-shield-check",
-                        content: "",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>In the Docker world, we don't treat containers like \"Pets\" that we nurse back to health. We treat them like <strong>Cattle</strong>: if one is broken, we replace it with a fresh one.</p>",
-                        order: 11,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+            order: 9,
+          },
+          {
+            type: "heading",
+            heading: "The Immutability Secret (Cattle vs. Pets)",
+            icon: "bi-shield-check",
+            content: "",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p>In the Docker world, we don't treat containers like \"Pets\" that we nurse back to health. We treat them like <strong>Cattle</strong>: if one is broken, we replace it with a fresh one.</p>",
+            order: 11,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
 <div class="doc-sub-card">
 <div class="doc-sub-card-header">
 <div class="doc-sub-card-icon"><i class="bi bi-pencil-square"></i></div>
@@ -335,60 +335,60 @@ async function main() {
 </div>
 </div>
 </div>`,
-                        order: 12,
-                    },
-                ],
-            },
-        },
-    });
+            order: 12,
+          },
+        ],
+      },
+    },
+  });
 
-    // 3. Images and Containers
-    const pImagesContainers = await prisma.page.create({
-        data: {
-            title: "Images and Containers",
-            slug: "/images-containers",
-            description: "Understand the fundamental difference between Docker images (blueprints) and containers (running instances).",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "So, What Exactly is an Image?",
-                        icon: "bi-layers-fill",
-                        content: "",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>A Docker Image is the <strong>blueprint</strong>. It is a read-only, static snapshot that contains everything needed to run your app.</p>",
-                        order: 2,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Think of it like a <strong>class in programming</strong> — it's the definition, not the running thing. Or think of it as a <strong>frozen pizza</strong>: it has all the ingredients, but it's not \"food\" yet until you put it in the oven.</p>",
-                        order: 3,
-                    },
-                    {
-                        type: "heading",
-                        heading: "And What is a Container?",
-                        icon: "bi-box-seam-fill",
-                        content: "",
-                        order: 4,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>A container is the <strong>running instance</strong>. It's a live, isolated process on your machine spawned from an image.</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The Comparison Table",
-                        icon: "bi-table",
-                        content: "",
-                        order: 6,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-table-wrapper shadow-sm">
+  // 3. Images and Containers
+  const pImagesContainers = await prisma.page.create({
+    data: {
+      title: "Images and Containers",
+      slug: "/images-containers",
+      description: "Understand the fundamental difference between Docker images (blueprints) and containers (running instances).",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "So, What Exactly is an Image?",
+            icon: "bi-layers-fill",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>A Docker Image is the <strong>blueprint</strong>. It is a read-only, static snapshot that contains everything needed to run your app.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Think of it like a <strong>class in programming</strong> — it's the definition, not the running thing. Or think of it as a <strong>frozen pizza</strong>: it has all the ingredients, but it's not \"food\" yet until you put it in the oven.</p>",
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "And What is a Container?",
+            icon: "bi-box-seam-fill",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>A container is the <strong>running instance</strong>. It's a live, isolated process on your machine spawned from an image.</p>",
+            order: 5,
+          },
+          {
+            type: "heading",
+            heading: "The Comparison Table",
+            icon: "bi-table",
+            content: "",
+            order: 6,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-table-wrapper shadow-sm">
 <table class="table table-dark table-hover doc-table mb-0">
 <thead>
 <tr>
@@ -421,18 +421,18 @@ async function main() {
 </tbody>
 </table>
 </div>`,
-                        order: 7,
-                    },
-                    {
-                        type: "heading",
-                        heading: "How an Image Becomes a Container (The Mechanical Process)",
-                        icon: "bi-lightning-charge-fill",
-                        content: "<p>Think of this as <strong>\"The 4-Step Magic Trick.\"</strong> When you hit Enter on <code>docker run</code>, the Docker Engine performs these steps in milliseconds:</p>",
-                        order: 8,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+            order: 7,
+          },
+          {
+            type: "heading",
+            heading: "How an Image Becomes a Container (The Mechanical Process)",
+            icon: "bi-lightning-charge-fill",
+            content: "<p>Think of this as <strong>\"The 4-Step Magic Trick.\"</strong> When you hit Enter on <code>docker run</code>, the Docker Engine performs these steps in milliseconds:</p>",
+            order: 8,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-layers-fill"></i></div>
@@ -478,23 +478,23 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 9,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<div class=\"alert alert-info mt-4\"><strong>Crucial Rule:</strong> A Container only stays alive as long as its Main Process is running. If your Python script finishes or your Database crashes, the \"Life Spark\" goes out, and the container stops immediately.</div>",
-                        order: 10,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Interview Corner: Can a Container Run Forever?",
-                        icon: "bi-question-circle-fill",
-                        content: "<p>This is a classic \"Senior Docker Engineer\" interview question. The answer is <strong>Yes</strong>, but you must understand the \"Foreground Rule.\"</p>",
-                        order: 11,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+            order: 9,
+          },
+          {
+            type: "paragraph",
+            content: "<div class=\"alert alert-info mt-4\"><strong>Crucial Rule:</strong> A Container only stays alive as long as its Main Process is running. If your Python script finishes or your Database crashes, the \"Life Spark\" goes out, and the container stops immediately.</div>",
+            order: 10,
+          },
+          {
+            type: "heading",
+            heading: "Interview Corner: Can a Container Run Forever?",
+            icon: "bi-question-circle-fill",
+            content: "<p>This is a classic \"Senior Docker Engineer\" interview question. The answer is <strong>Yes</strong>, but you must understand the \"Foreground Rule.\"</p>",
+            order: 11,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-cpu"></i></div>
@@ -522,61 +522,61 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 12,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<div class=\"alert alert-warning mt-4\"><strong>Common Pitfall:</strong> Running <code>service nginx start</code> usually fails because it starts the service in the <em>background</em>. The start command then finishes, and Docker kills the container immediately.</div>",
-                        order: 13,
-                    },
-                ],
-            },
-        },
-    });
+            order: 12,
+          },
+          {
+            type: "paragraph",
+            content: "<div class=\"alert alert-warning mt-4\"><strong>Common Pitfall:</strong> Running <code>service nginx start</code> usually fails because it starts the service in the <em>background</em>. The start command then finishes, and Docker kills the container immediately.</div>",
+            order: 13,
+          },
+        ],
+      },
+    },
+  });
 
-    // 5. Layers and Images
-    const pLayers = await prisma.page.create({
-        data: {
-            title: "Layers and Images",
-            slug: "/layers",
-            description: "Deep dive into Docker layers, the Union File System, layer caching, and the architecture that makes Docker efficient.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "What is a Docker Image?",
-                        icon: "bi-layers-fill",
-                        content: "",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>A Docker Image is a <strong>read-only template</strong> containing instructions for creating a container. It is not a single large file (like an .iso); it is a collection of stacked, immutable layers.</p>",
-                        order: 2,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-info">
+  // 5. Layers and Images
+  const pLayers = await prisma.page.create({
+    data: {
+      title: "Layers and Images",
+      slug: "/layers",
+      description: "Deep dive into Docker layers, the Union File System, layer caching, and the architecture that makes Docker efficient.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "What is a Docker Image?",
+            icon: "bi-layers-fill",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>A Docker Image is a <strong>read-only template</strong> containing instructions for creating a container. It is not a single large file (like an .iso); it is a collection of stacked, immutable layers.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-info">
   <i class="bi bi-info-circle-fill"></i>
   <div><strong>The Pizza Analogy:</strong> Think of an image as a <strong>Frozen Pizza</strong>. It's a finished product in the freezer. You can't change the toppings once it's frozen, but you use it as a template to create a hot meal (the container).</div>
 </div>`,
-                        order: 3,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Why not one big file?",
-                        icon: "bi-exclamation-triangle-fill",
-                        content: "",
-                        order: 4,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>If images were monolithic \"bricks\" (one big file), we would run into massive efficiency problems:</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "Why not one big file?",
+            icon: "bi-exclamation-triangle-fill",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>If images were monolithic \"bricks\" (one big file), we would run into massive efficiency problems:</p>",
+            order: 5,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-hdd-fill"></i></div>
@@ -596,61 +596,61 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 6,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-success">
+            order: 6,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-success">
   <i class="bi bi-check-circle-fill"></i>
   <div><strong>The Solution:</strong> Layers allow Docker to <strong>share</strong> parts of images. 
   <br><br>
   <strong>The Pizza Analogy:</strong> Instead of a 50kg solid brick of pre-mixed dough and sauce, Docker keeps them separate. To change pepperoni to mushrooms, you only swap the 1kg topping layer, not the 49kg base.</div>
 </div>`,
-                        order: 7,
-                    },
-                    {
-                        type: "heading",
-                        heading: "How Layers Work (Step-by-Step)",
-                        icon: "bi-stack-overflow",
-                        content: "",
-                        order: 8,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Each instruction in a <code>Dockerfile</code> creates a new layer. These layers are <strong>Read-Only</strong> and <strong>Immutable</strong>.</p>",
-                        order: 9,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Example: Building a FastAPI Image</p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<ul style="color:var(--text-secondary);line-height:2;padding-left:1.5rem; margin-bottom: 2rem;">
+            order: 7,
+          },
+          {
+            type: "heading",
+            heading: "How Layers Work (Step-by-Step)",
+            icon: "bi-stack-overflow",
+            content: "",
+            order: 8,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Each instruction in a <code>Dockerfile</code> creates a new layer. These layers are <strong>Read-Only</strong> and <strong>Immutable</strong>.</p>",
+            order: 9,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Example: Building a FastAPI Image</p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: `<ul style="color:var(--text-secondary);line-height:2;padding-left:1.5rem; margin-bottom: 2rem;">
   <li><code>FROM python:3.9</code>: <strong>The Crust.</strong> This is your foundation.</li>
   <li><code>RUN apt install ...</code>: <strong>The Sauce.</strong> Spread over the base.</li>
   <li><code>COPY requirements.txt .</code>: <strong>The Cheese.</strong> Essential before the "fun" stuff.</li>
   <li><code>RUN pip install ...</code>: <strong>The Seasoning.</strong> Baked into the cheese.</li>
   <li><code>COPY . .</code>: <strong>The Toppings.</strong> (Your FastAPI code). What makes your pizza unique.</li>
 </ul>`,
-                        order: 11,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The \"Copy-on-Write\" (CoW) Strategy",
-                        icon: "bi-file-earmark-diff",
-                        content: "",
-                        order: 12,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>When you start a container, Docker adds one <strong>thin, writable layer</strong> on top of the Read-Only stack.</p>",
-                        order: 13,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-info">
+            order: 11,
+          },
+          {
+            type: "heading",
+            heading: "The \"Copy-on-Write\" (CoW) Strategy",
+            icon: "bi-file-earmark-diff",
+            content: "",
+            order: 12,
+          },
+          {
+            type: "paragraph",
+            content: "<p>When you start a container, Docker adds one <strong>thin, writable layer</strong> on top of the Read-Only stack.</p>",
+            order: 13,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-info">
   <i class="bi bi-info-circle-fill"></i>
   <div><strong>The Pizza Analogy:</strong> Imagine placing a sheet of <strong>Transparent Plastic Foil</strong> over the pizza.
   <ul style="margin-top:0.5rem; margin-bottom:0px;">
@@ -660,43 +660,59 @@ async function main() {
   </ul>
   </div>
 </div>`,
-                        order: 14,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Layer Caching: The DevOps Secret",
-                        icon: "bi-lightning-charge-fill",
-                        content: "",
-                        order: 15,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Docker caches each layer. If a layer hasn't changed, Docker skips the work. <strong>The Rule:</strong> If one layer changes, all layers below it must be rebuilt.</p>",
-                        order: 16,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-warning">
+            order: 14,
+          },
+          {
+            type: "heading",
+            heading: "Layer Caching: The DevOps Secret",
+            icon: "bi-lightning-charge-fill",
+            content: "",
+            order: 15,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Docker caches each layer. If a layer hasn't changed, Docker skips the work.<br/><strong>The Rule:</strong> If one layer changes, all layers above it must be rebuilt. <br/> <strong>The DevOps Secret:</strong> This is why we order our Dockerfile from bottom to top (copying code last). If we copy code first, any tiny typo invalidates the entire cache, and the build takes forever. </p>",
+            order: 16,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-warning">
   <i class="bi bi-exclamation-circle-fill"></i>
-  <div><strong>The Pizza Analogy:</strong> You keep a stack of Pre-Baked crusts with sauce. When an order comes in, you just throw on cheese. But if you change the sauce recipe, you must throw away all pre-baked crusts and start from the bottom.</div>
+  <div><strong>The Pizza Analogy:</strong>
+  You prepare pizzas like this:
+  <ul>
+    <li>Dough</li>
+    <li>Sauce</li>
+    <li>Cheese</li>
+    <li>Toppings</li>
+  </ul>
+  If the sauce recipe changes:
+  <ul>
+    <li>You must redo:</li>
+    <li>Sauce</li>
+    <li>Cheese</li> 
+    <li>Toppings</li>
+  </ul>
+  But you don't redo the dough.
+  </div>
 </div>`,
-                        order: 17,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The Union File System (UnionFS)",
-                        icon: "bi-diagram-3",
-                        content: "",
-                        order: 18,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>This is the technology that \"squashes\" these layers together into a single view.</p>",
-                        order: 19,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-secondary">
+            order: 17,
+          },
+          {
+            type: "heading",
+            heading: "The Union File System (UnionFS)",
+            icon: "bi-diagram-3",
+            content: "",
+            order: 18,
+          },
+          {
+            type: "paragraph",
+            content: "<p>This is the technology that \"squashes\" these layers together into a single view.</p>",
+            order: 19,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-secondary">
   <i class="bi bi-cpu-fill"></i>
   <div><strong>How Overlay2 Works (The Tech):</strong> Overlay2 divides your file system into three main parts:
     <ul class="mt-2 mb-0">
@@ -706,11 +722,11 @@ async function main() {
     </ul>
   </div>
 </div>`,
-                        order: 20,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-info mt-3">
+            order: 20,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-info mt-3">
   <i class="bi bi-eye-fill"></i>
   <div><strong>The Tracing Paper Analogy (Noob-Friendly):</strong> 
     <p class="mt-2 mb-1">Imagine you have a beautiful <strong>Base Drawing</strong> (your <code>lowerdir</code>). You want to add a hat to the character but don't want to ruin the original art.</p>
@@ -721,38 +737,38 @@ async function main() {
     </ul>
   </div>
 </div>`,
-                        order: 21,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-success mt-3">
+            order: 21,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-success mt-3">
   <i class="bi bi-lightning-charge-fill"></i>
   <div><strong>Why it's fast:</strong> Overlay2 doesn't copy the whole "Base Drawing." It only records the "Hat" you drew. If you try to change a building in the background, it "Copies-on-Write" (CoW) just that building onto your tracing paper and modifies it there.</div>
 </div>`,
-                        order: 22,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Inter-Container Layer Sharing",
-                        icon: "bi-diagram-2",
-                        content: "",
-                        order: 23,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><strong>The Pizza Analogy:</strong> If \"Wolf's Shop\" and \"Gemini's Shop\" both use the same brand of frozen crust, we share one warehouse for those crusts. This is why you can run 50 containers without filling your hard drive; they all point to the same physical \"crust\" bytes.</p>",
-                        order: 24,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Tricky Questions (DevOps Prep)",
-                        icon: "bi-question-circle-fill",
-                        content: "",
-                        order: 25,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
+            order: 22,
+          },
+          {
+            type: "heading",
+            heading: "Inter-Container Layer Sharing",
+            icon: "bi-diagram-2",
+            content: "",
+            order: 23,
+          },
+          {
+            type: "paragraph",
+            content: "<p><strong>The Pizza Analogy:</strong> If \"Wolf's Shop\" and \"Gemini's Shop\" both use the same brand of frozen crust, we share one warehouse for those crusts. This is why you can run 50 containers without filling your hard drive; they all point to the same physical \"crust\" bytes.</p>",
+            order: 24,
+          },
+          {
+            type: "heading",
+            heading: "Tricky Questions (DevOps Prep)",
+            icon: "bi-question-circle-fill",
+            content: "",
+            order: 25,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-trash3-fill"></i></div>
@@ -796,26 +812,26 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 26,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The 127-Layer Limit",
-                        icon: "bi-gear-fill",
-                        content: "",
-                        order: 27,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-info">
+            order: 26,
+          },
+          {
+            type: "heading",
+            heading: "The 127-Layer Limit",
+            icon: "bi-gear-fill",
+            content: "",
+            order: 27,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-info">
   <i class="bi bi-gear-fill"></i>
   <div><strong>Technical Fact:</strong> The 127-layer limit isn't just an arbitrary number; it's a structural limitation of storage drivers like <strong>AUFS</strong> or <strong>Overlay2</strong>. Each layer adds overhead for the file system to track. This is why we use <code>&&</code> to squash commands into a single layer.</div>
 </div>`,
-                        order: 28,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-success mt-3">
+            order: 28,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-success mt-3">
   <i class="bi bi-lightbulb-fill"></i>
   <div><strong>Noob-Friendly Example:</strong> 
   <p class="mt-2 mb-1">Imagine you're making 50 small pizzas for a party. You have two choices:</p>
@@ -825,26 +841,26 @@ async function main() {
   </ul>
   </div>
 </div>`,
-                        order: 29,
-                    },
-                    {
-                        type: "heading",
-                        heading: "How Docker Identifies Layers (SHA256)",
-                        icon: "bi-fingerprint",
-                        content: "",
-                        order: 30,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-info">
+            order: 29,
+          },
+          {
+            type: "heading",
+            heading: "How Docker Identifies Layers (SHA256)",
+            icon: "bi-fingerprint",
+            content: "",
+            order: 30,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-info">
   <i class="bi bi-fingerprint"></i>
   <div><strong>The Digital Fingerprint:</strong> Docker doesn't identify layers by human names (like "Sauce Layer"). Instead, it uses a <strong>SHA256 Hash</strong>—a unique string generated from the <em>exact</em> contents of that layer.</div>
 </div>`,
-                        order: 31,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-card mt-3">
+            order: 31,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-card mt-3">
   <div class="doc-sub-card-header">
     <div class="doc-sub-card-icon"><i class="bi bi-clock-history"></i></div>
     <h3 class="doc-sub-card-title">The Cache Ripple Effect</h3>
@@ -859,26 +875,26 @@ async function main() {
     <p><strong>Pizza Logic:</strong> If you change the brand of sauce, the crust stays the same (below), but you must re-add the cheese and toppings (above) because they sit on top of the new sauce!</p>
   </div>
 </div>`,
-                        order: 32,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Volumes: Persistence Outside the Stack",
-                        icon: "bi-database-fill-check",
-                        content: "",
-                        order: 33,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-warning">
+            order: 32,
+          },
+          {
+            type: "heading",
+            heading: "Volumes: Persistence Outside the Stack",
+            icon: "bi-database-fill-check",
+            content: "",
+            order: 33,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-warning">
   <i class="bi bi-database-fill-check"></i>
   <div><strong>Wait, what about my data?</strong> If layers are immutable and "foil" layers are deleted when the container stops, how do we save data? <strong>Volumes.</strong></div>
 </div>`,
-                        order: 34,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-card mt-3">
+            order: 34,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-card mt-3">
   <div class="doc-sub-card-header">
     <div class="doc-sub-card-icon"><i class="bi bi-box-seam-fill"></i></div>
     <h3 class="doc-sub-card-title">Layers vs. Volumes</h3>
@@ -888,61 +904,61 @@ async function main() {
     <p><strong>Pizza Logic:</strong> Imagine your pizza is in a <strong>Storage Bin</strong>. You can change the pizza, throw it away, or swap it for a different one—but the storage bin and everything else in it stays exactly as it was. The bin is the <strong>Volume</strong>; the pizza is the <strong>Container</strong>.</p>
   </div>
 </div>`,
-                        order: 35,
-                    },
-                ],
-            },
-        },
-    });
+            order: 35,
+          },
+        ],
+      },
+    },
+  });
 
-    // 6. Volumes and Bind Mounts
-    const pVolumesBindMounts = await prisma.page.create({
-        data: {
-            title: "Volumes and Bind Mounts",
-            slug: "/volumes-bind-mounts",
-            description: "Master data persistence in Docker - understand volumes for production, bind mounts for development, and Docker Compose.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "Docker Volume",
-                        icon: "bi-hdd-fill",
-                        content: "",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>In the world of Docker, a volume is the preferred mechanism for persisting data generated by and used by Docker containers.</p>",
-                        order: 2,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>By default, any files created inside a container are stored on a writable container layer. This presents two problems: the data doesn't persist if the container is deleted, and it is difficult to get that data out of the container for another process to use. Volumes solve this by decoupling the storage from the container's lifecycle.</p>",
-                        order: 3,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The Problem: The \"Amnesia\" Effect",
-                        icon: "bi-exclamation-triangle-fill",
-                        content: "",
-                        order: 4,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Imagine you are building a FastAPI project. You write code that allows users to upload profile pictures.</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-warning" style="margin-top:1rem; margin-bottom:1rem;">
+  // 6. Volumes and Bind Mounts
+  const pVolumesBindMounts = await prisma.page.create({
+    data: {
+      title: "Volumes and Bind Mounts",
+      slug: "/volumes-bind-mounts",
+      description: "Master data persistence in Docker - understand volumes for production, bind mounts for development, and Docker Compose.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "Docker Volume",
+            icon: "bi-hdd-fill",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>In the world of Docker, a volume is the preferred mechanism for persisting data generated by and used by Docker containers.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: "<p>By default, any files created inside a container are stored on a writable container layer. This presents two problems: the data doesn't persist if the container is deleted, and it is difficult to get that data out of the container for another process to use. Volumes solve this by decoupling the storage from the container's lifecycle.</p>",
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "The Problem: The \"Amnesia\" Effect",
+            icon: "bi-exclamation-triangle-fill",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Imagine you are building a FastAPI project. You write code that allows users to upload profile pictures.</p>",
+            order: 5,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-warning" style="margin-top:1rem; margin-bottom:1rem;">
   <i class="bi bi-info-circle-fill"></i>
   <div><strong>The Goldfish Memory Effect:</strong> Just like a goldfish is said to have a 3-second memory, a container forgets everything that happened inside it the moment it is deleted or restarted. It starts completely fresh every time.</div>
 </div>`,
-                        order: 6,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+            order: 6,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-1-circle-fill"></i></div>
@@ -973,74 +989,74 @@ async function main() {
     </div>
   </div>
 </div>`,
-                        order: 7,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<div class=\"doc-alert doc-alert-warning\" style=\"margin-top:1rem\"><i class=\"bi bi-exclamation-circle-fill\"></i><div><strong>The Problem Statement:</strong> Containers are \"ephemeral\" (temporary). Anything written inside them disappears when the container is removed.</div></div>",
-                        order: 8,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The Solution: Volumes (The \"External Hard Drive\")",
-                        icon: "bi-safe-fill",
-                        content: "",
-                        order: 9,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>A volume acts like an external hard drive for your container. You tell Docker: <em>\"Hey, even though this folder looks like it's inside the container, actually save everything to this specific spot on my physical computer.\"</em></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Noob-Friendly Example: The FastAPI Uploads",
-                        icon: "bi-lightbulb-fill",
-                        content: "<p>Instead of saving directly to the container's temporary memory, you \"mount\" a volume:</p>",
-                        order: 11,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<ul style="color:var(--text-secondary);line-height:2;padding-left:1.5rem">
+            order: 7,
+          },
+          {
+            type: "paragraph",
+            content: "<div class=\"doc-alert doc-alert-warning\" style=\"margin-top:1rem\"><i class=\"bi bi-exclamation-circle-fill\"></i><div><strong>The Problem Statement:</strong> Containers are \"ephemeral\" (temporary). Anything written inside them disappears when the container is removed.</div></div>",
+            order: 8,
+          },
+          {
+            type: "heading",
+            heading: "The Solution: Volumes (The \"External Hard Drive\")",
+            icon: "bi-safe-fill",
+            content: "",
+            order: 9,
+          },
+          {
+            type: "paragraph",
+            content: "<p>A volume acts like an external hard drive for your container. You tell Docker: <em>\"Hey, even though this folder looks like it's inside the container, actually save everything to this specific spot on my physical computer.\"</em></p>",
+            order: 10,
+          },
+          {
+            type: "heading",
+            heading: "Noob-Friendly Example: The FastAPI Uploads",
+            icon: "bi-lightbulb-fill",
+            content: "<p>Instead of saving directly to the container's temporary memory, you \"mount\" a volume:</p>",
+            order: 11,
+          },
+          {
+            type: "paragraph",
+            content: `<ul style="color:var(--text-secondary);line-height:2;padding-left:1.5rem">
   <li><strong>Step 1:</strong> You create a volume named <code>user_data</code>.</li>
   <li><strong>Step 2:</strong> You tell Docker: "Link <code>user_data</code> to the container's <code>/app/uploads</code> folder."</li>
   <li><strong>Step 3:</strong> Now, when a user uploads a photo, it bypasses the container's temporary storage and goes straight into <code>user_data</code>.</li>
   <li><strong>Step 4:</strong> You can delete, update, or crash the container 100 times. When the new container starts and links to <code>user_data</code>, the photos are still there waiting for it.</li>
 </ul>`,
-                        order: 12,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Practical CLI Example",
-                        icon: "bi-terminal-fill",
-                        content: "<p>When running your FastAPI image:</p>",
-                        order: 13,
-                    },
-                    {
-                        type: "code",
-                        content: `docker run -p 8000:8000 -v user_data:/app/uploads my-fastapi-app`,
-                        language: "bash",
-                        order: 14,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<ul style="color:var(--text-secondary);line-height:2;padding-left:1.5rem">
+            order: 12,
+          },
+          {
+            type: "heading",
+            heading: "Practical CLI Example",
+            icon: "bi-terminal-fill",
+            content: "<p>When running your FastAPI image:</p>",
+            order: 13,
+          },
+          {
+            type: "code",
+            content: `docker run -p 8000:8000 -v user_data:/app/uploads my-fastapi-app`,
+            language: "bash",
+            order: 14,
+          },
+          {
+            type: "paragraph",
+            content: `<ul style="color:var(--text-secondary);line-height:2;padding-left:1.5rem">
   <li><code>-v</code>: This flag creates the volume connection.</li>
   <li><code>user_data</code>: The name of your persistent storage.</li>
   <li><code>/app/uploads</code>: The path inside your FastAPI project where the app expects to find files.</li>
 </ul>`,
-                        order: 15,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Concept-Clearing Q&A",
-                        icon: "bi-question-circle-fill",
-                        content: "<p>Common questions when starting out with Volumes.</p>",
-                        order: 16,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3">
+            order: 15,
+          },
+          {
+            type: "heading",
+            heading: "Concept-Clearing Q&A",
+            icon: "bi-question-circle-fill",
+            content: "<p>Common questions when starting out with Volumes.</p>",
+            order: 16,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3">
 
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
@@ -1140,18 +1156,18 @@ async function main() {
   </div>
 
 </div>`,
-                        order: 17,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Summary Table",
-                        icon: "bi-table",
-                        content: "",
-                        order: 18,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-table-wrapper shadow-sm">
+            order: 17,
+          },
+          {
+            type: "heading",
+            heading: "Summary Table",
+            icon: "bi-table",
+            content: "",
+            order: 18,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-table-wrapper shadow-sm">
   <table class="table table-dark table-hover doc-table mb-0">
     <thead>
       <tr>
@@ -1184,33 +1200,33 @@ async function main() {
     </tbody>
   </table>
 </div>`,
-                        order: 19,
-                    },
-                    {
-                        type: "heading",
-                        heading: "The \"All-in-One\" Solution: Docker Compose",
-                        icon: "bi-stack",
-                        content: "",
-                        order: 20,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Since you're moving from pure coding toward DevOps, seeing how a database and an app live together is the next logical step. Instead of running two separate, massive commands, we use Docker Compose.</p>",
-                        order: 21,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Think of Docker Compose as a blueprint for your entire project. Instead of remembering which volume goes to which container, you write it down once in a file named <code>docker-compose.yml</code>.</p>",
-                        order: 22,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Here is how you would set up your FastAPI app and a Postgres Database together:</p>",
-                        order: 23,
-                    },
-                    {
-                        type: "code",
-                        content: `version: '3.8'
+            order: 19,
+          },
+          {
+            type: "heading",
+            heading: "The \"All-in-One\" Solution: Docker Compose",
+            icon: "bi-stack",
+            content: "",
+            order: 20,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Since you're moving from pure coding toward DevOps, seeing how a database and an app live together is the next logical step. Instead of running two separate, massive commands, we use Docker Compose.</p>",
+            order: 21,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Think of Docker Compose as a blueprint for your entire project. Instead of remembering which volume goes to which container, you write it down once in a file named <code>docker-compose.yml</code>.</p>",
+            order: 22,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Here is how you would set up your FastAPI app and a Postgres Database together:</p>",
+            order: 23,
+          },
+          {
+            type: "code",
+            content: `version: '3.8'
 
 services:
   # Service 1: The Database
@@ -1234,44 +1250,44 @@ services:
 volumes:
   postgres_data:  # This stays safe even if the DB container is deleted
   user_uploads:   # This stays safe even if the FastAPI container is deleted`,
-                        language: "yaml",
-                        order: 24,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Wait, What About Bind Mounts?",
-                        icon: "bi-lightning-charge-fill",
-                        content: "",
-                        order: 25,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Volumes are great for databases and permanent storage. But what if you are actively coding and want to see your changes instantly? Enter <strong>Bind Mounts</strong>.</p>",
-                        order: 26,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>A Bind Mount is like opening a direct \"window\" from the container into a specific folder on your actual laptop (like <code>/Users/you/project</code>).</p>",
-                        order: 27,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-alert doc-alert-info" style="margin-top:1rem; margin-bottom:1.5rem">
+            language: "yaml",
+            order: 24,
+          },
+          {
+            type: "heading",
+            heading: "Wait, What About Bind Mounts?",
+            icon: "bi-lightning-charge-fill",
+            content: "",
+            order: 25,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Volumes are great for databases and permanent storage. But what if you are actively coding and want to see your changes instantly? Enter <strong>Bind Mounts</strong>.</p>",
+            order: 26,
+          },
+          {
+            type: "paragraph",
+            content: "<p>A Bind Mount is like opening a direct \"window\" from the container into a specific folder on your actual laptop (like <code>/Users/you/project</code>).</p>",
+            order: 27,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-alert doc-alert-info" style="margin-top:1rem; margin-bottom:1.5rem">
   <i class="bi bi-lightbulb-fill"></i>
   <div><strong>Developer Superpower:</strong> If you change a line of code on your laptop, the container sees it instantly through the window. This gives you Live Reloading!</div>
 </div>`,
-                        order: 28,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Volume vs. Bind Mount (The Short Version)",
-                        icon: "bi-diagram-2",
-                        content: "<p>If you're ever confused about which one to pick, use this simple cheat sheet:</p>",
-                        order: 29,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid">
+            order: 28,
+          },
+          {
+            type: "heading",
+            heading: "Volume vs. Bind Mount (The Short Version)",
+            icon: "bi-diagram-2",
+            content: "<p>If you're ever confused about which one to pick, use this simple cheat sheet:</p>",
+            order: 29,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-safe-fill"></i></div>
@@ -1300,36 +1316,36 @@ volumes:
     </div>
   </div>
 </div>`,
-                        order: 30,
-                    },
-                ],
-            },
-        },
-    });
+            order: 30,
+          },
+        ],
+      },
+    },
+  });
 
-    // 6. Rules and Case Studies
-    const pRulesAndCaseStudies = await prisma.page.create({
-        data: {
-            title: "10 Essential Rules and Real-World Case Studies",
-            slug: "/rules-and-case-studies",
-            description: "Master Docker with 10 essential rules and learn from 8 real-world case studies that show how to apply them in production.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "10 Essential Rules for Docker Mastery",
-                        icon: "bi-lightbulb-fill",
-                        content: "",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Master these rules to avoid common pitfalls and excel in Docker certifications and interviews.</p>",
-                        order: 2,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
+  // 6. Rules and Case Studies
+  const pRulesAndCaseStudies = await prisma.page.create({
+    data: {
+      title: "10 Essential Rules and Real-World Case Studies",
+      slug: "/rules-and-case-studies",
+      description: "Master Docker with 10 essential rules and learn from 8 real-world case studies that show how to apply them in production.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "10 Essential Rules for Docker Mastery",
+            icon: "bi-lightbulb-fill",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Master these rules to avoid common pitfalls and excel in Docker certifications and interviews.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-eye-slash-fill"></i></div>
@@ -1465,23 +1481,23 @@ volumes:
     </div>
   </div>
 </div>`,
-                        order: 3,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Real-World Case Studies",
-                        icon: "bi-briefcase-fill",
-                        content: "",
-                        order: 4,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>Apply the rules above to solve these common production scenarios.</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3">
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "Real-World Case Studies",
+            icon: "bi-briefcase-fill",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Apply the rules above to solve these common production scenarios.</p>",
+            order: 5,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
       <div class="doc-sub-card-icon"><i class="bi bi-database-exclamation"></i></div>
@@ -1586,31 +1602,31 @@ volumes:
     </div>
   </div>
 </div>`,
-                        order: 6,
-                    },
-                ],
-            },
-        },
-    });
+            order: 6,
+          },
+        ],
+      },
+    },
+  });
 
-    // 7. Installation
-    const pInstall = await prisma.page.create({
-        data: {
-            title: "Installing Docker",
-            slug: "/installation",
-            description: "Step-by-step guide to install Docker on Windows, Linux, and macOS with proper configuration.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "Installing Docker",
-                        icon: "bi-download",
-                        content: "<p>Before diving into containers, you need to set up the engine. Installation looks completely different depending on your operating system (Windows vs Linux) and your preference (Server vs Graphical Interface).</p>",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<h3 style="color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">Docker Engine vs. Docker Desktop (GUI)</h3>
+  // 7. Installation
+  const pInstall = await prisma.page.create({
+    data: {
+      title: "Installing Docker",
+      slug: "/installation",
+      description: "Step-by-step guide to install Docker on Windows, Linux, and macOS with proper configuration.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "Installing Docker",
+            icon: "bi-download",
+            content: "<p>Before diving into containers, you need to set up the engine. Installation looks completely different depending on your operating system (Windows vs Linux) and your preference (Server vs Graphical Interface).</p>",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: `<h3 style="color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0.5rem;">Docker Engine vs. Docker Desktop (GUI)</h3>
 <div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header">
@@ -1640,18 +1656,18 @@ volumes:
     </div>
   </div>
 </div>`,
-                        order: 2,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Installation on Windows (WSL2)",
-                        icon: "bi-windows",
-                        content: "<p>Docker containers are deeply tied to the Linux Kernel. Because Windows does not have a Linux Kernel by default, Docker cannot run natively. To solve this, Microsoft created <strong>WSL2 (Windows Subsystem for Linux 2)</strong>—a highly optimized, invisible Linux virtual machine inside Windows. Docker Desktop uses this WSL2 backbone to run its engine.</p>",
-                        order: 3,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<h4 style="color: var(--text-primary); margin-top: 1rem; margin-bottom: 0.8rem;">Windows Setup Steps</h4>
+            order: 2,
+          },
+          {
+            type: "heading",
+            heading: "Installation on Windows (WSL2)",
+            icon: "bi-windows",
+            content: "<p>Docker containers are deeply tied to the Linux Kernel. Because Windows does not have a Linux Kernel by default, Docker cannot run natively. To solve this, Microsoft created <strong>WSL2 (Windows Subsystem for Linux 2)</strong>—a highly optimized, invisible Linux virtual machine inside Windows. Docker Desktop uses this WSL2 backbone to run its engine.</p>",
+            order: 3,
+          },
+          {
+            type: "paragraph",
+            content: `<h4 style="color: var(--text-primary); margin-top: 1rem; margin-bottom: 0.8rem;">Windows Setup Steps</h4>
 <ol style="color:var(--text-secondary);line-height:2.2;padding-left:1.5rem">
   <li><strong>Step 1: Install WSL2.</strong> Open your Windows terminal (PowerShell or Command Prompt) as Administrator and run:<br>
     <pre class="doc-code-block"><code class="language-bash">wsl --install</code></pre>
@@ -1662,26 +1678,26 @@ volumes:
   <li><strong>Step 4: Launch.</strong> Open Docker Desktop from your start menu. You will see the Docker whale icon in your system tray on the bottom right.</li>
   <li><strong>Step 5: Verify.</strong> Open PowerShell and type <code>docker --version</code>. If it spits out a version number, you're ready to go!</li>
 </ol>`,
-                        order: 4,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Installation on Linux (Debian/Ubuntu)",
-                        icon: "bi-terminal-fill",
-                        content: "<p>Linux is Docker's native home! It runs directly on the kernel without any virtual machines. However, you must choose between installing just the Engine (Servers) or the Desktop GUI (Workstations).</p>",
-                        order: 5,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Method A: Docker Engine (The Server Way)",
-                        icon: "bi-server",
-                        content: "<p>This is the standard approach for cloud servers and developers who prefer the terminal. We will use the official <code>apt</code> repository.</p>",
-                        order: 6,
-                    },
-                    {
-                        type: "code",
-                        language: "bash",
-                        content: `# 1. Uninstall old, conflicting packages
+            order: 4,
+          },
+          {
+            type: "heading",
+            heading: "Installation on Linux (Debian/Ubuntu)",
+            icon: "bi-terminal-fill",
+            content: "<p>Linux is Docker's native home! It runs directly on the kernel without any virtual machines. However, you must choose between installing just the Engine (Servers) or the Desktop GUI (Workstations).</p>",
+            order: 5,
+          },
+          {
+            type: "heading",
+            heading: "Method A: Docker Engine (The Server Way)",
+            icon: "bi-server",
+            content: "<p>This is the standard approach for cloud servers and developers who prefer the terminal. We will use the official <code>apt</code> repository.</p>",
+            order: 6,
+          },
+          {
+            type: "code",
+            language: "bash",
+            content: `# 1. Uninstall old, conflicting packages
 for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
 # 2. Add Docker's official GPG key
@@ -1700,28 +1716,28 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 # 5. Verify Installation
 sudo docker run hello-world`,
-                        order: 7,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div style="background: rgba(88, 166, 255, 0.1); border-left: 3px solid var(--accent-blue); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
+            order: 7,
+          },
+          {
+            type: "paragraph",
+            content: `<div style="background: rgba(88, 166, 255, 0.1); border-left: 3px solid var(--accent-blue); padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; margin-bottom: 1.5rem;">
   <div style="color: var(--accent-blue); margin-bottom: 0.5rem; font-weight: 600;">Linux Pro-Tip: Running without sudo</div>
   <p style="color: var(--text-secondary); margin: 0;">By default, the Docker daemon binds to a Unix socket owned by the <code>root</code> user. If you want to run <code>docker start</code> without typing <code>sudo</code> every time, you must add your user to the <code>docker</code> group:</p>
   <pre class="doc-code-block" style="margin-top: 0.5rem;"><code class="language-bash">sudo usermod -aG docker $USER</code></pre>
   <p style="color: var(--text-secondary); margin-top: 0.5rem; margin-bottom: 0;">Then log out and log back in!</p>
 </div>`,
-                        order: 8,
-                    },
-                    {
-                        type: "heading",
-                        heading: "Method B: Docker Desktop (The GUI Way)",
-                        icon: "bi-mouse-fill",
-                        content: "<p>If you are running Ubuntu or Debian with a graphical Desktop Environment (like GNOME or KDE) on your personal laptop, you can install the visual dashboard.</p>",
-                        order: 9,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<ol style="color:var(--text-secondary);line-height:2.2;padding-left:1.5rem">
+            order: 8,
+          },
+          {
+            type: "heading",
+            heading: "Method B: Docker Desktop (The GUI Way)",
+            icon: "bi-mouse-fill",
+            content: "<p>If you are running Ubuntu or Debian with a graphical Desktop Environment (like GNOME or KDE) on your personal laptop, you can install the visual dashboard.</p>",
+            order: 9,
+          },
+          {
+            type: "paragraph",
+            content: `<ol style="color:var(--text-secondary);line-height:2.2;padding-left:1.5rem">
   <li>Ensure your CPU supports virtualization.</li>
   <li>Download the <code>.deb</code> package for Docker Desktop from the Docker docs.</li>
   <li>Run the installer using the package manager:
@@ -1730,35 +1746,35 @@ sudo apt-get install ./docker-desktop-<version>-<arch>.deb</code></pre>
   </li>
   <li>Search your application launcher for "Docker Desktop" and start it.</li>
 </ol>`,
-                        order: 10,
-                    },
-                ],
-            },
-        },
-    });
+            order: 10,
+          },
+        ],
+      },
+    },
+  });
 
-    // =========================================================================
-    // PAGES — COMMANDS
-    // =========================================================================
+  // =========================================================================
+  // PAGES — COMMANDS
+  // =========================================================================
 
-    // ── Common Linux Commands ──────────────────────────────────────────────────
-    const pCommonLinuxCommands = await prisma.page.create({
-        data: {
-            title: "Common Linux Commands (Debian-Based)",
-            slug: "/common-linux-commands",
-            description: "Essential Linux commands for Docker developers - covers file operations, navigation, permissions, processes, and more on Debian/Ubuntu systems.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "Common Linux Commands",
-                        icon: "bi-terminal-fill",
-                        content: "<p>Master these essential Debian/Ubuntu commands to work efficiently in Docker containers and Linux environments. Each command is shown with its technical purpose, a beginner-friendly example, and all parameter meanings.</p>",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
+  // ── Common Linux Commands ──────────────────────────────────────────────────
+  const pCommonLinuxCommands = await prisma.page.create({
+    data: {
+      title: "Common Linux Commands (Debian-Based)",
+      slug: "/common-linux-commands",
+      description: "Essential Linux commands for Docker developers - covers file operations, navigation, permissions, processes, and more on Debian/Ubuntu systems.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "Common Linux Commands",
+            icon: "bi-terminal-fill",
+            content: "<p>Master these essential Debian/Ubuntu commands to work efficiently in Docker containers and Linux environments. Each command is shown with its technical purpose, a beginner-friendly example, and all parameter meanings.</p>",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
   <div class="doc-sub-card">
     <div class="doc-sub-card-header"><div class="doc-sub-card-icon"><i class="bi bi-person-circle"></i></div><h3 class="doc-sub-card-title"><code>whoami</code> — Show Current User</h3></div>
     <div class="doc-sub-card-body">
@@ -2517,31 +2533,31 @@ whereis -s docker</code></pre>
     </div>
   </div>
 </div>`,
-                        order: 2,
-                    },
-                ],
-            },
-        },
-    });
+            order: 2,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── Practice: Linux Commands ───────────────────────────────────────────────
-    const pPracticeLinuxCommands = await prisma.page.create({
-        data: {
-            title: "Practice: Linux Commands",
-            slug: "/practice/linux-commands",
-            description: "Interactive challenges to practice Linux commands. Solve challenges in your terminal and expand answers to verify your solution.",
-            components: {
-                create: [
-                    {
-                        type: "heading",
-                        heading: "Linux Commands Practice",
-                        icon: "bi-pencil-square",
-                        content: "<p>Test your Linux skills with these hands-on challenges. Solve each challenge in your local terminal, then expand the answer to verify your solution. Start simple and work your way up!</p>",
-                        order: 1,
-                    },
-                    {
-                        type: "paragraph",
-                        content: `<div style="margin-top: 1.5rem;">
+  // ── Practice: Linux Commands ───────────────────────────────────────────────
+  const pPracticeLinuxCommands = await prisma.page.create({
+    data: {
+      title: "Practice: Linux Commands",
+      slug: "/practice/linux-commands",
+      description: "Interactive challenges to practice Linux commands. Solve challenges in your terminal and expand answers to verify your solution.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "Linux Commands Practice",
+            icon: "bi-pencil-square",
+            content: "<p>Test your Linux skills with these hands-on challenges. Solve each challenge in your local terminal, then expand the answer to verify your solution. Start simple and work your way up!</p>",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: `<div style="margin-top: 1.5rem;">
   <!-- BEGINNER CHALLENGES -->
   <h5 style="color: #58a6ff; margin-top: 2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-weight: 700;">
     <i class="bi bi-play-circle-fill" style="color: #58a6ff; font-size: 1.1rem;"></i> Beginner Challenges
@@ -2852,1490 +2868,1596 @@ wc -l combined.txt</code></pre>
     </div>
   </div>
 </div>`,
-                        order: 2,
-                    },
-                ],
-            },
-        },
-    });
+            order: 2,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker run ────────────────────────────────────────────────────────────
-    const pRun = await prisma.page.create({
-        data: {
-            title: "docker run",
-            slug: "/commands/run",
-            description: "Create and start a container from an image in a single step.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker run</code> is the most common Docker command. It does two things at once: it <strong>creates</strong> a brand new container from an image, then immediately <strong>starts</strong> it.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Think of a Docker image like a video game disc. <code>docker run</code> is you putting that disc into your console and pressing Play — the game (container) starts running instantly. If you press Play again, a second, completely separate game session starts. Each session is its own world.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Run the official "hello-world" image — the simplest possible test\ndocker run hello-world`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>A real-world scenario: run an Nginx web server in the background, map port 8080 on your machine to port 80 inside the container, and give it a name so you can reference it later.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `docker run -d -p 8080:80 --name my-nginx nginx:alpine`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p>After running this, opening <code>http://localhost:8080</code> in your browser will show the Nginx welcome page.</p>",
-                        order: 70,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 80,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "-d / --detach", type: "Flag", description: "Run the container in the background (detached mode). You get your terminal prompt back immediately." },
-                            { flag: "-p HOST:CONTAINER", type: "Option", description: "Publish a port. Maps a port on your machine (HOST) to a port inside the container (CONTAINER)." },
-                            { flag: "--name NAME", type: "Option", description: "Assign a human-readable name to the container instead of a random one." },
-                            { flag: "-e KEY=VALUE", type: "Option", description: "Set an environment variable inside the container." },
-                            { flag: "-v HOST_PATH:CONTAINER_PATH", type: "Option", description: "Mount a volume. Binds a folder on your machine into the container's filesystem." },
-                            { flag: "--rm", type: "Flag", description: "Automatically remove the container when it exits. Keeps things clean." },
-                            { flag: "-it", type: "Flag", description: "Attach an interactive terminal (-i keeps stdin open, -t allocates a pseudo-TTY). Used when you want a shell inside the container." },
-                            { flag: "--network NETWORK", type: "Option", description: "Connect the container to a specific Docker network." },
-                            { flag: "IMAGE", type: "Argument", description: "The name (and optional tag) of the image to run, e.g. nginx:alpine or ubuntu:22.04." },
-                            { flag: "COMMAND", type: "Argument", description: "Override the default command the container runs on startup." },
-                        ]),
-                        order: 90,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker run ────────────────────────────────────────────────────────────
+  const pRun = await prisma.page.create({
+    data: {
+      title: "docker run",
+      slug: "/commands/run",
+      description: "Create and start a container from an image in a single step.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker run</code> is the most common Docker command. It does two things at once: it <strong>creates</strong> a brand new container from an image, then immediately <strong>starts</strong> it.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Think of a Docker image like a video game disc. <code>docker run</code> is you putting that disc into your console and pressing Play — the game (container) starts running instantly. If you press Play again, a second, completely separate game session starts. Each session is its own world.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Run the official "hello-world" image — the simplest possible test\ndocker run hello-world`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>A real-world scenario: run an Nginx web server in the background, map port 8080 on your machine to port 80 inside the container, and give it a name so you can reference it later.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `docker run -d -p 8080:80 --name my-nginx nginx:alpine`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "paragraph",
+            content: "<p>After running this, opening <code>http://localhost:8080</code> in your browser will show the Nginx welcome page.</p>",
+            order: 70,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 80,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "-d / --detach", type: "Flag", description: "Run the container in the background (detached mode). You get your terminal prompt back immediately." },
+              { flag: "-p HOST:CONTAINER", type: "Option", description: "Publish a port. Maps a port on your machine (HOST) to a port inside the container (CONTAINER)." },
+              { flag: "--name NAME", type: "Option", description: "Assign a human-readable name to the container instead of a random one." },
+              { flag: "-e KEY=VALUE", type: "Option", description: "Set an environment variable inside the container." },
+              { flag: "-v HOST_PATH:CONTAINER_PATH", type: "Option", description: "Mount a volume. Binds a folder on your machine into the container's filesystem." },
+              { flag: "--rm", type: "Flag", description: "Automatically remove the container when it exits. Keeps things clean." },
+              { flag: "-it", type: "Flag", description: "Attach an interactive terminal (-i keeps stdin open, -t allocates a pseudo-TTY). Used when you want a shell inside the container." },
+              { flag: "--network NETWORK", type: "Option", description: "Connect the container to a specific Docker network." },
+              { flag: "IMAGE", type: "Argument", description: "The name (and optional tag) of the image to run, e.g. nginx:alpine or ubuntu:22.04." },
+              { flag: "COMMAND", type: "Argument", description: "Override the default command the container runs on startup." },
+            ]),
+            order: 90,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker build ──────────────────────────────────────────────────────────
-    const pBuild = await prisma.page.create({
-        data: {
-            title: "docker build",
-            slug: "/commands/build",
-            description: "Build a Docker image from a Dockerfile.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker build [OPTIONS] PATH | URL</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker build</code> reads a <code>Dockerfile</code> and executes each instruction in it to produce a reusable, shareable <strong>image</strong>. The image is stored locally and can later be run as a container or pushed to a registry.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>If an Image is a frozen meal, then a <code>Dockerfile</code> is the recipe card, and <code>docker build</code> is the chef who follows that recipe and produces the frozen meal. Once the chef is done, you have a meal (image) you can give to anyone.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Build an image and tag it as "my-app:latest"\n# The dot (.) means "look for a Dockerfile in the current directory"\ndocker build -t my-app:latest .`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Build a production image from a Dockerfile that lives in a subfolder, without including development files, using a build argument to embed the app version.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Build from a specific Dockerfile in a subdirectory\n# Pass a build-time argument and tag the resulting image\ndocker build \\\n  -f ./docker/Dockerfile.prod \\\n  --build-arg APP_VERSION=2.1.0 \\\n  -t my-org/my-app:2.1.0 \\\n  .`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 80,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "-f PATH", type: "Option", description: "Specify a different Dockerfile location (default: ./Dockerfile)." },
-                            { flag: "-t TAG", type: "Option", description: "Tag the resulting image with a name and optional version, e.g. my-app:1.0." },
-                            { flag: "--build-arg KEY=VALUE", type: "Option", description: "Pass a variable at build time that Dockerfile can access with ARG instructions." },
-                            { flag: "--no-cache", type: "Flag", description: "Ignore Docker's layer cache and rebuild everything from scratch." },
-                            { flag: "--target STAGE", type: "Option", description: "Stop at a specific stage in a multi-stage Dockerfile." },
-                            { flag: "PATH | URL", type: "Argument", description: "The build context: usually '.' (current directory) or a URL to a git repo." },
-                        ]),
-                        order: 90,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker build ──────────────────────────────────────────────────────────
+  const pBuild = await prisma.page.create({
+    data: {
+      title: "docker build",
+      slug: "/commands/build",
+      description: "Build a Docker image from a Dockerfile.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker build [OPTIONS] PATH | URL</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker build</code> reads a <code>Dockerfile</code> and executes each instruction in it to produce a reusable, shareable <strong>image</strong>. The image is stored locally and can later be run as a container or pushed to a registry.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>If an Image is a frozen meal, then a <code>Dockerfile</code> is the recipe card, and <code>docker build</code> is the chef who follows that recipe and produces the frozen meal. Once the chef is done, you have a meal (image) you can give to anyone.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Build an image and tag it as "my-app:latest"\n# The dot (.) means "look for a Dockerfile in the current directory"\ndocker build -t my-app:latest .`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Build a production image from a Dockerfile that lives in a subfolder, without including development files, using a build argument to embed the app version.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Build from a specific Dockerfile in a subdirectory\n# Pass a build-time argument and tag the resulting image\ndocker build \\\n  -f ./docker/Dockerfile.prod \\\n  --build-arg APP_VERSION=2.1.0 \\\n  -t my-org/my-app:2.1.0 \\\n  .`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 80,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "-f PATH", type: "Option", description: "Specify a different Dockerfile location (default: ./Dockerfile)." },
+              { flag: "-t TAG", type: "Option", description: "Tag the resulting image with a name and optional version, e.g. my-app:1.0." },
+              { flag: "--build-arg KEY=VALUE", type: "Option", description: "Pass a variable at build time that Dockerfile can access with ARG instructions." },
+              { flag: "--no-cache", type: "Flag", description: "Ignore Docker's layer cache and rebuild everything from scratch." },
+              { flag: "--target STAGE", type: "Option", description: "Stop at a specific stage in a multi-stage Dockerfile." },
+              { flag: "PATH | URL", type: "Argument", description: "The build context: usually '.' (current directory) or a URL to a git repo." },
+            ]),
+            order: 90,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker pull ───────────────────────────────────────────────────────────
-    const pPull = await prisma.page.create({
-        data: {
-            title: "docker pull",
-            slug: "/commands/pull",
-            description: "Download an image from a container registry to your local machine.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker pull</code> downloads an image from a registry (Docker Hub by default) to your local machine. If you do not specify a tag, Docker pulls the <code>latest</code> tag.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Think of Docker Hub like an App Store for server software. <code>docker pull</code> is you tapping the Download button. Once downloaded, the app (image) lives on your phone (machine) and you can launch it anytime without re-downloading it.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Download the official Ubuntu 22.04 image\ndocker pull ubuntu:22.04`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Pull a specific image by digest (a cryptographic hash) to guarantee you get an exact, immutable version — no surprises from a floating <code>latest</code> tag.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Pull a private image from a custom registry\ndocker pull registry.mycompany.com/backend-api:v3.4.1\n\n# Pull by digest for total reproducibility\ndocker pull nginx@sha256:a5e4a503d9f93bce98e5f316eca7c84a89e01e0d75e5b5d1c9e2de1b63cdb1f4`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "NAME", type: "Argument", description: "The image name, e.g. nginx or ubuntu. Defaults to Docker Hub if no registry is specified." },
-                            { flag: ":TAG", type: "Argument", description: "Optional version tag, e.g. :22.04 or :alpine. Defaults to :latest if omitted." },
-                            { flag: "@DIGEST", type: "Argument", description: "Pull by exact SHA-256 digest instead of a tag, guaranteeing reproducibility." },
-                            { flag: "--all-tags / -a", type: "Flag", description: "Download all tagged versions of the image from the registry." },
-                            { flag: "--platform", type: "Option", description: "Pull an image for a specific OS/architecture, e.g. linux/arm64." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker pull ───────────────────────────────────────────────────────────
+  const pPull = await prisma.page.create({
+    data: {
+      title: "docker pull",
+      slug: "/commands/pull",
+      description: "Download an image from a container registry to your local machine.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker pull [OPTIONS] NAME[:TAG|@DIGEST]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker pull</code> downloads an image from a registry (Docker Hub by default) to your local machine. If you do not specify a tag, Docker pulls the <code>latest</code> tag.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Think of Docker Hub like an App Store for server software. <code>docker pull</code> is you tapping the Download button. Once downloaded, the app (image) lives on your phone (machine) and you can launch it anytime without re-downloading it.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Download the official Ubuntu 22.04 image\ndocker pull ubuntu:22.04`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Pull a specific image by digest (a cryptographic hash) to guarantee you get an exact, immutable version — no surprises from a floating <code>latest</code> tag.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Pull a private image from a custom registry\ndocker pull registry.mycompany.com/backend-api:v3.4.1\n\n# Pull by digest for total reproducibility\ndocker pull nginx@sha256:a5e4a503d9f93bce98e5f316eca7c84a89e01e0d75e5b5d1c9e2de1b63cdb1f4`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "NAME", type: "Argument", description: "The image name, e.g. nginx or ubuntu. Defaults to Docker Hub if no registry is specified." },
+              { flag: ":TAG", type: "Argument", description: "Optional version tag, e.g. :22.04 or :alpine. Defaults to :latest if omitted." },
+              { flag: "@DIGEST", type: "Argument", description: "Pull by exact SHA-256 digest instead of a tag, guaranteeing reproducibility." },
+              { flag: "--all-tags / -a", type: "Flag", description: "Download all tagged versions of the image from the registry." },
+              { flag: "--platform", type: "Option", description: "Pull an image for a specific OS/architecture, e.g. linux/arm64." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker push ───────────────────────────────────────────────────────────
-    const pPush = await prisma.page.create({
-        data: {
-            title: "docker push",
-            slug: "/commands/push",
-            description: "Upload a local image to a container registry to share it with others.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker push [OPTIONS] NAME[:TAG]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker push</code> is the opposite of <code>docker pull</code>. It uploads a locally built image to a registry so others (or your CI/CD pipeline) can pull and run it.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>You baked a cake (built an image). <code>docker push</code> is mailing that cake to a shared pantry (the registry). Anyone who has the address of that pantry can later grab a copy of your cake using <code>docker pull</code>.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# First, log in to Docker Hub (one-time setup)\ndocker login\n\n# Tag your image with your Docker Hub username\ndocker tag my-app:latest yourusername/my-app:latest\n\n# Push it\ndocker push yourusername/my-app:latest`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>In a CI/CD pipeline, after building and testing, push the image with both a version tag and <code>latest</code> so downstream services always pull the most recent stable build.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Authenticate with a private registry using environment variables\necho "$REGISTRY_PASSWORD" | docker login registry.mycompany.com -u "$REGISTRY_USER" --password-stdin\n\n# Push with two tags simultaneously\ndocker push registry.mycompany.com/backend-api:v3.4.1\ndocker push registry.mycompany.com/backend-api:latest`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "NAME[:TAG]", type: "Argument", description: "The full image name including registry, repository, and tag, e.g. registry.io/org/app:1.0." },
-                            { flag: "--all-tags / -a", type: "Flag", description: "Push all locally tagged versions of this image to the registry at once." },
-                            { flag: "--quiet / -q", type: "Flag", description: "Suppress verbose push progress output." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker push ───────────────────────────────────────────────────────────
+  const pPush = await prisma.page.create({
+    data: {
+      title: "docker push",
+      slug: "/commands/push",
+      description: "Upload a local image to a container registry to share it with others.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker push [OPTIONS] NAME[:TAG]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker push</code> is the opposite of <code>docker pull</code>. It uploads a locally built image to a registry so others (or your CI/CD pipeline) can pull and run it.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>You baked a cake (built an image). <code>docker push</code> is mailing that cake to a shared pantry (the registry). Anyone who has the address of that pantry can later grab a copy of your cake using <code>docker pull</code>.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# First, log in to Docker Hub (one-time setup)\ndocker login\n\n# Tag your image with your Docker Hub username\ndocker tag my-app:latest yourusername/my-app:latest\n\n# Push it\ndocker push yourusername/my-app:latest`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>In a CI/CD pipeline, after building and testing, push the image with both a version tag and <code>latest</code> so downstream services always pull the most recent stable build.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Authenticate with a private registry using environment variables\necho "$REGISTRY_PASSWORD" | docker login registry.mycompany.com -u "$REGISTRY_USER" --password-stdin\n\n# Push with two tags simultaneously\ndocker push registry.mycompany.com/backend-api:v3.4.1\ndocker push registry.mycompany.com/backend-api:latest`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "NAME[:TAG]", type: "Argument", description: "The full image name including registry, repository, and tag, e.g. registry.io/org/app:1.0." },
+              { flag: "--all-tags / -a", type: "Flag", description: "Push all locally tagged versions of this image to the registry at once." },
+              { flag: "--quiet / -q", type: "Flag", description: "Suppress verbose push progress output." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker ps ─────────────────────────────────────────────────────────────
-    const pPs = await prisma.page.create({
-        data: {
-            title: "docker ps",
-            slug: "/commands/ps",
-            description: "List containers — running by default, all with the -a flag.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker ps [OPTIONS]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker ps</code> shows a table of your containers. By default it only shows <strong>running</strong> containers. The output includes Container ID, the image it came from, the command it is running, when it was created, its status, ports, and names.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Think of <code>docker ps</code> as the Task Manager (Windows) or Activity Monitor (Mac) for your containers. It shows you which ones are alive and running right now.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Show only running containers\ndocker ps\n\n# Show ALL containers, including stopped ones\ndocker ps -a`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Extract just the container IDs of all stopped containers and pipe them to <code>docker rm</code> for bulk cleanup.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Filter to show only exited containers\ndocker ps -a --filter "status=exited"\n\n# Get just the IDs (quiet mode) and remove all stopped containers\ndocker rm $(docker ps -aq --filter "status=exited")`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "-a / --all", type: "Flag", description: "Show all containers, not just running ones. Includes stopped, exited, and created containers." },
-                            { flag: "-q / --quiet", type: "Flag", description: "Print only container IDs. Useful for scripting and piping into other commands." },
-                            { flag: "--filter KEY=VALUE", type: "Option", description: "Filter output by a condition. Common keys: status (running, exited), name, label, ancestor." },
-                            { flag: "--format STRING", type: "Option", description: "Pretty-print containers using a Go template, e.g. --format '{{.Names}}\\t{{.Status}}'." },
-                            { flag: "-n N / --last N", type: "Option", description: "Show only the last N created containers (regardless of status)." },
-                            { flag: "-s / --size", type: "Flag", description: "Display the total file sizes used by each container." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker ps ─────────────────────────────────────────────────────────────
+  const pPs = await prisma.page.create({
+    data: {
+      title: "docker ps",
+      slug: "/commands/ps",
+      description: "List containers — running by default, all with the -a flag.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker ps [OPTIONS]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker ps</code> shows a table of your containers. By default it only shows <strong>running</strong> containers. The output includes Container ID, the image it came from, the command it is running, when it was created, its status, ports, and names.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Think of <code>docker ps</code> as the Task Manager (Windows) or Activity Monitor (Mac) for your containers. It shows you which ones are alive and running right now.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Show only running containers\ndocker ps\n\n# Show ALL containers, including stopped ones\ndocker ps -a`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Extract just the container IDs of all stopped containers and pipe them to <code>docker rm</code> for bulk cleanup.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Filter to show only exited containers\ndocker ps -a --filter "status=exited"\n\n# Get just the IDs (quiet mode) and remove all stopped containers\ndocker rm $(docker ps -aq --filter "status=exited")`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "-a / --all", type: "Flag", description: "Show all containers, not just running ones. Includes stopped, exited, and created containers." },
+              { flag: "-q / --quiet", type: "Flag", description: "Print only container IDs. Useful for scripting and piping into other commands." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Filter output by a condition. Common keys: status (running, exited), name, label, ancestor." },
+              { flag: "--format STRING", type: "Option", description: "Pretty-print containers using a Go template, e.g. --format '{{.Names}}\\t{{.Status}}'." },
+              { flag: "-n N / --last N", type: "Option", description: "Show only the last N created containers (regardless of status)." },
+              { flag: "-s / --size", type: "Flag", description: "Display the total file sizes used by each container." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker images ─────────────────────────────────────────────────────────
-    const pImages = await prisma.page.create({
-        data: {
-            title: "docker images",
-            slug: "/commands/images",
-            description: "List all Docker images stored on your local machine.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker images [OPTIONS] [REPOSITORY[:TAG]]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker images</code> shows the images you have downloaded or built locally. The output shows the repository name, tag, image ID, when it was created, and its compressed disk size.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Your local hard drive is like a freezer. Every image you have pulled or built is a frozen meal stored in that freezer. <code>docker images</code> opens the freezer door and reads out the label on every box — what it is, what version, and how big it is.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# List all local images\ndocker images\n\n# List only Ubuntu images\ndocker images ubuntu`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Find all dangling images (untagged layers left over from old builds) and delete them to reclaim disk space.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Show only dangling (untagged) images\ndocker images --filter "dangling=true"\n\n# Remove all dangling images\ndocker image prune`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "REPOSITORY[:TAG]", type: "Argument", description: "Filter output to only show images matching this name/tag." },
-                            { flag: "-a / --all", type: "Flag", description: "Show all images including intermediate layers (hidden by default)." },
-                            { flag: "-q / --quiet", type: "Flag", description: "Print only image IDs. Useful for scripting." },
-                            { flag: "--filter KEY=VALUE", type: "Option", description: "Filter images. E.g. dangling=true shows untagged images; before=IMAGE shows older images." },
-                            { flag: "--format STRING", type: "Option", description: "Format the output using a Go template." },
-                            { flag: "--no-trunc", type: "Flag", description: "Do not truncate output — show full image IDs." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker images ─────────────────────────────────────────────────────────
+  const pImages = await prisma.page.create({
+    data: {
+      title: "docker images",
+      slug: "/commands/images",
+      description: "List all Docker images stored on your local machine.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker images [OPTIONS] [REPOSITORY[:TAG]]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker images</code> shows the images you have downloaded or built locally. The output shows the repository name, tag, image ID, when it was created, and its compressed disk size.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Your local hard drive is like a freezer. Every image you have pulled or built is a frozen meal stored in that freezer. <code>docker images</code> opens the freezer door and reads out the label on every box — what it is, what version, and how big it is.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# List all local images\ndocker images\n\n# List only Ubuntu images\ndocker images ubuntu`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Find all dangling images (untagged layers left over from old builds) and delete them to reclaim disk space.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Show only dangling (untagged) images\ndocker images --filter "dangling=true"\n\n# Remove all dangling images\ndocker image prune`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "REPOSITORY[:TAG]", type: "Argument", description: "Filter output to only show images matching this name/tag." },
+              { flag: "-a / --all", type: "Flag", description: "Show all images including intermediate layers (hidden by default)." },
+              { flag: "-q / --quiet", type: "Flag", description: "Print only image IDs. Useful for scripting." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Filter images. E.g. dangling=true shows untagged images; before=IMAGE shows older images." },
+              { flag: "--format STRING", type: "Option", description: "Format the output using a Go template." },
+              { flag: "--no-trunc", type: "Flag", description: "Do not truncate output — show full image IDs." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker stop ───────────────────────────────────────────────────────────
-    const pStop = await prisma.page.create({
-        data: {
-            title: "docker stop",
-            slug: "/commands/stop",
-            description: "Gracefully stop one or more running containers.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker stop</code> sends a <strong>SIGTERM</strong> signal to the main process inside the container, giving it time to shut down cleanly. If the container does not stop within the timeout window, Docker sends a <strong>SIGKILL</strong> to force-quit it.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Imagine a container is a running application on your phone. <code>docker stop</code> is pressing the home button — the app gets a polite nudge to save its work and close. It is not forced-quit; it gets a few seconds to clean up first.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Stop a container by name\ndocker stop my-nginx\n\n# Stop a container by ID\ndocker stop a3f5c821b90d`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Stop all currently running containers in a single command for a quick teardown of your local development environment.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Stop all running containers\ndocker stop $(docker ps -q)\n\n# Stop with a shorter timeout (2 seconds instead of default 10)\ndocker stop --time 2 my-nginx`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "CONTAINER", type: "Argument", description: "Container name or ID to stop. You can pass multiple IDs/names separated by spaces." },
-                            { flag: "-t N / --time N", type: "Option", description: "Number of seconds to wait for the container to stop before sending SIGKILL. Default is 10." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker stop ───────────────────────────────────────────────────────────
+  const pStop = await prisma.page.create({
+    data: {
+      title: "docker stop",
+      slug: "/commands/stop",
+      description: "Gracefully stop one or more running containers.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker stop [OPTIONS] CONTAINER [CONTAINER...]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker stop</code> sends a <strong>SIGTERM</strong> signal to the main process inside the container, giving it time to shut down cleanly. If the container does not stop within the timeout window, Docker sends a <strong>SIGKILL</strong> to force-quit it.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Imagine a container is a running application on your phone. <code>docker stop</code> is pressing the home button — the app gets a polite nudge to save its work and close. It is not forced-quit; it gets a few seconds to clean up first.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Stop a container by name\ndocker stop my-nginx\n\n# Stop a container by ID\ndocker stop a3f5c821b90d`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Stop all currently running containers in a single command for a quick teardown of your local development environment.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Stop all running containers\ndocker stop $(docker ps -q)\n\n# Stop with a shorter timeout (2 seconds instead of default 10)\ndocker stop --time 2 my-nginx`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Container name or ID to stop. You can pass multiple IDs/names separated by spaces." },
+              { flag: "-t N / --time N", type: "Option", description: "Number of seconds to wait for the container to stop before sending SIGKILL. Default is 10." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker rm ─────────────────────────────────────────────────────────────
-    const pRm = await prisma.page.create({
-        data: {
-            title: "docker rm",
-            slug: "/commands/rm",
-            description: "Remove one or more stopped containers from your system.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker rm</code> deletes a container. The container must be stopped first (unless you use <code>-f</code>). Removing a container does <strong>not</strong> delete the image it was created from — only the running instance.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>A container is like a tent you pitched in your garden. <code>docker stop</code> packs your stuff inside the tent. <code>docker rm</code> takes the tent down entirely and puts the poles and canvas back in storage. The blueprint for the tent (the image) still exists — you can pitch a new one anytime.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Remove a single stopped container\ndocker rm my-nginx`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Force-remove a running container (skips stop), and also remove its anonymous volumes at the same time.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Force remove a running container along with its anonymous volumes\ndocker rm -f -v my-nginx\n\n# Remove all stopped containers at once\ndocker container prune`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "CONTAINER", type: "Argument", description: "Container name or ID to remove. Multiple values are accepted." },
-                            { flag: "-f / --force", type: "Flag", description: "Force-remove a running container by sending SIGKILL before deleting it." },
-                            { flag: "-v / --volumes", type: "Flag", description: "Remove anonymous volumes attached to the container along with the container itself." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker rm ─────────────────────────────────────────────────────────────
+  const pRm = await prisma.page.create({
+    data: {
+      title: "docker rm",
+      slug: "/commands/rm",
+      description: "Remove one or more stopped containers from your system.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker rm [OPTIONS] CONTAINER [CONTAINER...]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker rm</code> deletes a container. The container must be stopped first (unless you use <code>-f</code>). Removing a container does <strong>not</strong> delete the image it was created from — only the running instance.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>A container is like a tent you pitched in your garden. <code>docker stop</code> packs your stuff inside the tent. <code>docker rm</code> takes the tent down entirely and puts the poles and canvas back in storage. The blueprint for the tent (the image) still exists — you can pitch a new one anytime.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Remove a single stopped container\ndocker rm my-nginx`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Force-remove a running container (skips stop), and also remove its anonymous volumes at the same time.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Force remove a running container along with its anonymous volumes\ndocker rm -f -v my-nginx\n\n# Remove all stopped containers at once\ndocker container prune`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Container name or ID to remove. Multiple values are accepted." },
+              { flag: "-f / --force", type: "Flag", description: "Force-remove a running container by sending SIGKILL before deleting it." },
+              { flag: "-v / --volumes", type: "Flag", description: "Remove anonymous volumes attached to the container along with the container itself." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker rmi ────────────────────────────────────────────────────────────
-    const pRmi = await prisma.page.create({
-        data: {
-            title: "docker rmi",
-            slug: "/commands/rmi",
-            description: "Remove one or more images from your local storage.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker rmi [OPTIONS] IMAGE [IMAGE...]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker rmi</code> removes an image from your local machine. You cannot remove an image while a container (even a stopped one) is using it — you must remove the container first with <code>docker rm</code>.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Images take up disk space — sometimes several hundred megabytes each. <code>docker rmi</code> is like deleting a game from your hard drive because you no longer play it. The console (Docker) is still there, you just freed up some storage.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Remove an image by name and tag\ndocker rmi nginx:alpine\n\n# Remove by image ID\ndocker rmi a3f5c821b90d`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>After a CI build, clean up old build images to keep the build server lean.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Remove all dangling (untagged) images\ndocker image prune\n\n# Remove ALL unused images (not just dangling ones)\ndocker image prune -a\n\n# Force remove a specific image without confirmation\ndocker rmi -f my-org/my-app:old-version`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "IMAGE", type: "Argument", description: "Image name:tag or image ID to remove. Multiple values accepted." },
-                            { flag: "-f / --force", type: "Flag", description: "Force removal even if a stopped container references the image." },
-                            { flag: "--no-prune", type: "Flag", description: "Do not delete untagged parent layers." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker rmi ────────────────────────────────────────────────────────────
+  const pRmi = await prisma.page.create({
+    data: {
+      title: "docker rmi",
+      slug: "/commands/rmi",
+      description: "Remove one or more images from your local storage.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker rmi [OPTIONS] IMAGE [IMAGE...]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker rmi</code> removes an image from your local machine. You cannot remove an image while a container (even a stopped one) is using it — you must remove the container first with <code>docker rm</code>.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Images take up disk space — sometimes several hundred megabytes each. <code>docker rmi</code> is like deleting a game from your hard drive because you no longer play it. The console (Docker) is still there, you just freed up some storage.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Remove an image by name and tag\ndocker rmi nginx:alpine\n\n# Remove by image ID\ndocker rmi a3f5c821b90d`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>After a CI build, clean up old build images to keep the build server lean.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Remove all dangling (untagged) images\ndocker image prune\n\n# Remove ALL unused images (not just dangling ones)\ndocker image prune -a\n\n# Force remove a specific image without confirmation\ndocker rmi -f my-org/my-app:old-version`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "IMAGE", type: "Argument", description: "Image name:tag or image ID to remove. Multiple values accepted." },
+              { flag: "-f / --force", type: "Flag", description: "Force removal even if a stopped container references the image." },
+              { flag: "--no-prune", type: "Flag", description: "Do not delete untagged parent layers." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker exec ───────────────────────────────────────────────────────────
-    const pExec = await prisma.page.create({
-        data: {
-            title: "docker exec",
-            slug: "/commands/exec",
-            description: "Run a command inside an already-running container.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker exec [OPTIONS] CONTAINER COMMAND [ARG...]</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker exec</code> lets you run an additional command inside a container that is already running. The most common use is to open an interactive shell so you can inspect or debug the container from the inside.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Imagine the container is a locked room with a person (process) inside. <code>docker exec</code> is you knocking on the door and handing a note through a slot — you can ask the person to do something without disturbing their main task. Opening a shell is like being teleported inside the room.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# Open an interactive bash shell inside a running container\ndocker exec -it my-nginx bash`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Run a one-off database command inside a running Postgres container without opening a full shell session.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Run psql inside a running Postgres container as the postgres user\ndocker exec -it my-postgres psql -U postgres -c "SELECT version();"\n\n# Run a command as a specific user inside the container\ndocker exec -u www-data my-nginx nginx -t`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "CONTAINER", type: "Argument", description: "Name or ID of the already-running container to target." },
-                            { flag: "COMMAND", type: "Argument", description: "The command to run inside the container, e.g. bash, sh, ls, psql." },
-                            { flag: "-i / --interactive", type: "Flag", description: "Keep stdin open so you can type input to the command." },
-                            { flag: "-t / --tty", type: "Flag", description: "Allocate a pseudo-terminal. Use with -i (-it) for an interactive shell." },
-                            { flag: "-d / --detach", type: "Flag", description: "Run the command in the background and return immediately." },
-                            { flag: "-e KEY=VALUE", type: "Option", description: "Set an environment variable for this exec session only." },
-                            { flag: "-u USER", type: "Option", description: "Run the command as a specific user or UID inside the container." },
-                            { flag: "-w DIR", type: "Option", description: "Set the working directory inside the container for this command." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker exec ───────────────────────────────────────────────────────────
+  const pExec = await prisma.page.create({
+    data: {
+      title: "docker exec",
+      slug: "/commands/exec",
+      description: "Run a command inside an already-running container.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker exec [OPTIONS] CONTAINER COMMAND [ARG...]</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker exec</code> lets you run an additional command inside a container that is already running. The most common use is to open an interactive shell so you can inspect or debug the container from the inside.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Imagine the container is a locked room with a person (process) inside. <code>docker exec</code> is you knocking on the door and handing a note through a slot — you can ask the person to do something without disturbing their main task. Opening a shell is like being teleported inside the room.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# Open an interactive bash shell inside a running container\ndocker exec -it my-nginx bash`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Run a one-off database command inside a running Postgres container without opening a full shell session.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Run psql inside a running Postgres container as the postgres user\ndocker exec -it my-postgres psql -U postgres -c "SELECT version();"\n\n# Run a command as a specific user inside the container\ndocker exec -u www-data my-nginx nginx -t`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the already-running container to target." },
+              { flag: "COMMAND", type: "Argument", description: "The command to run inside the container, e.g. bash, sh, ls, psql." },
+              { flag: "-i / --interactive", type: "Flag", description: "Keep stdin open so you can type input to the command." },
+              { flag: "-t / --tty", type: "Flag", description: "Allocate a pseudo-terminal. Use with -i (-it) for an interactive shell." },
+              { flag: "-d / --detach", type: "Flag", description: "Run the command in the background and return immediately." },
+              { flag: "-e KEY=VALUE", type: "Option", description: "Set an environment variable for this exec session only." },
+              { flag: "-u USER", type: "Option", description: "Run the command as a specific user or UID inside the container." },
+              { flag: "-w DIR", type: "Option", description: "Set the working directory inside the container for this command." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker logs ───────────────────────────────────────────────────────────
-    const pLogs = await prisma.page.create({
-        data: {
-            title: "docker logs",
-            slug: "/commands/logs",
-            description: "Fetch and stream the log output from a container.",
-            components: {
-                create: [
-                    {
-                        type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
-                        content: "<p>Syntax: <code>docker logs [OPTIONS] CONTAINER</code></p>",
-                        order: 10,
-                    },
-                    {
-                        type: "paragraph",
-                        content: "<p><code>docker logs</code> fetches the stdout and stderr output produced by a container's main process. You can view all past output, tail the last N lines, or follow the output live like <code>tail -f</code>.</p>",
-                        order: 20,
-                    },
-                    {
-                        type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
-                        content: "<p>Every container is like a worker quietly doing a job in a sealed room. <code>docker logs</code> is a microphone you hold up to the room's air vent — you can hear everything the worker said since they started, or stay and listen live.</p>",
-                        order: 30,
-                    },
-                    {
-                        type: "code",
-                        content: `# View all logs from a container\ndocker logs my-nginx\n\n# Follow live log output (like tail -f)\ndocker logs -f my-nginx`,
-                        language: "bash", order: 40,
-                    },
-                    {
-                        type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
-                        content: "<p>Debug a crashing container by viewing the last 50 lines of logs with timestamps, so you can see exactly when and what error occurred before it exited.</p>",
-                        order: 50,
-                    },
-                    {
-                        type: "code",
-                        content: `# Show last 50 lines with timestamps\ndocker logs --tail 50 --timestamps my-app\n\n# Show logs since a specific time (useful after a deployment)\ndocker logs --since "2024-01-15T10:00:00" my-app\n\n# Follow logs AND show the last 20 lines as a starting point\ndocker logs -f --tail 20 my-app`,
-                        language: "bash", order: 60,
-                    },
-                    {
-                        type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
-                        content: "", order: 70,
-                    },
-                    {
-                        type: "paragraph",
-                        content: flagTable([
-                            { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to fetch logs from." },
-                            { flag: "-f / --follow", type: "Flag", description: "Stream log output continuously. New lines appear in real-time. Press Ctrl+C to stop." },
-                            { flag: "--tail N", type: "Option", description: "Show only the last N lines of logs instead of the full history. Use all for everything." },
-                            { flag: "-t / --timestamps", type: "Flag", description: "Prefix each log line with the timestamp of when it was produced." },
-                            { flag: "--since TIMESTAMP", type: "Option", description: "Show logs produced after a specific timestamp or duration (e.g. 10m, 1h, 2024-01-15T10:00:00)." },
-                            { flag: "--until TIMESTAMP", type: "Option", description: "Show logs produced before a specific timestamp or duration." },
-                        ]),
-                        order: 80,
-                    },
-                ],
-            },
-        },
-    });
+  // ── docker logs ───────────────────────────────────────────────────────────
+  const pLogs = await prisma.page.create({
+    data: {
+      title: "docker logs",
+      slug: "/commands/logs",
+      description: "Fetch and stream the log output from a container.",
+      components: {
+        create: [
+          {
+            type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill",
+            content: "<p>Syntax: <code>docker logs [OPTIONS] CONTAINER</code></p>",
+            order: 10,
+          },
+          {
+            type: "paragraph",
+            content: "<p><code>docker logs</code> fetches the stdout and stderr output produced by a container's main process. You can view all past output, tail the last N lines, or follow the output live like <code>tail -f</code>.</p>",
+            order: 20,
+          },
+          {
+            type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill",
+            content: "<p>Every container is like a worker quietly doing a job in a sealed room. <code>docker logs</code> is a microphone you hold up to the room's air vent — you can hear everything the worker said since they started, or stay and listen live.</p>",
+            order: 30,
+          },
+          {
+            type: "code",
+            content: `# View all logs from a container\ndocker logs my-nginx\n\n# Follow live log output (like tail -f)\ndocker logs -f my-nginx`,
+            language: "bash", order: 40,
+          },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash",
+            content: "<p>Debug a crashing container by viewing the last 50 lines of logs with timestamps, so you can see exactly when and what error occurred before it exited.</p>",
+            order: 50,
+          },
+          {
+            type: "code",
+            content: `# Show last 50 lines with timestamps\ndocker logs --tail 50 --timestamps my-app\n\n# Show logs since a specific time (useful after a deployment)\ndocker logs --since "2024-01-15T10:00:00" my-app\n\n# Follow logs AND show the last 20 lines as a starting point\ndocker logs -f --tail 20 my-app`,
+            language: "bash", order: 60,
+          },
+          {
+            type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table",
+            content: "", order: 70,
+          },
+          {
+            type: "paragraph",
+            content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to fetch logs from." },
+              { flag: "-f / --follow", type: "Flag", description: "Stream log output continuously. New lines appear in real-time. Press Ctrl+C to stop." },
+              { flag: "--tail N", type: "Option", description: "Show only the last N lines of logs instead of the full history. Use all for everything." },
+              { flag: "-t / --timestamps", type: "Flag", description: "Prefix each log line with the timestamp of when it was produced." },
+              { flag: "--since TIMESTAMP", type: "Option", description: "Show logs produced after a specific timestamp or duration (e.g. 10m, 1h, 2024-01-15T10:00:00)." },
+              { flag: "--until TIMESTAMP", type: "Option", description: "Show logs produced before a specific timestamp or duration." },
+            ]),
+            order: 80,
+          },
+        ],
+      },
+    },
+  });
 
-    // =========================================================================
-    // PAGES — DEBUGGING
-    // =========================================================================
+  // =========================================================================
+  // PAGES — DEBUGGING
+  // =========================================================================
 
-    // ── docker inspect ────────────────────────────────────────────────────────
-    const pInspect = await prisma.page.create({
-        data: {
-            title: "docker inspect",
-            slug: "/debugging/inspect",
-            description: "Return detailed low-level information about containers, images, volumes, or networks in JSON format.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker inspect [OPTIONS] NAME|ID [NAME|ID...]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker inspect</code> dumps a detailed JSON structure about any Docker object — containers, images, volumes, or networks. It exposes everything: IP addresses, environment variables, mount points, restart policies, health checks, and much more.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Think of a container as a mystery box. <code>docker ps</code> tells you the box label. <code>docker inspect</code> opens the box and X-rays everything inside — every wire, spring, and screw. It is the go-to command when something is not working and you need to know exactly how Docker configured something.</p>", order: 30 },
-                    { type: "code", content: `# Inspect a container by name\ndocker inspect my-nginx\n\n# Pretty-print only the IP address using a Go template\ndocker inspect --format '{{.NetworkSettings.IPAddress}}' my-nginx`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Extract just the environment variables of a container to audit secrets and config without entering the container.</p>", order: 50 },
-                    { type: "code", content: `# Get all environment variables of a running container\ndocker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' my-app\n\n# Check the restart policy\ndocker inspect --format '{{.HostConfig.RestartPolicy.Name}}' my-app\n\n# Inspect multiple objects at once\ndocker inspect my-nginx my-postgres`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "NAME|ID", type: "Argument", description: "Name or ID of any Docker object: container, image, volume, or network. Multiple accepted." },
-                        { flag: "--format STRING", type: "Option", description: "Format the output using a Go template. Extracts specific fields instead of showing the entire JSON." },
-                        { flag: "--type STRING", type: "Option", description: "Disambiguate when a name refers to multiple object types: container, image, volume, network, node, service, task." },
-                        { flag: "-s / --size", type: "Flag", description: "For containers: display the total file sizes (SizeRootFs and SizeRw)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker inspect ────────────────────────────────────────────────────────
+  const pInspect = await prisma.page.create({
+    data: {
+      title: "docker inspect",
+      slug: "/debugging/inspect",
+      description: "Return detailed low-level information about containers, images, volumes, or networks in JSON format.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker inspect [OPTIONS] NAME|ID [NAME|ID...]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker inspect</code> dumps a detailed JSON structure about any Docker object — containers, images, volumes, or networks. It exposes everything: IP addresses, environment variables, mount points, restart policies, health checks, and much more.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Think of a container as a mystery box. <code>docker ps</code> tells you the box label. <code>docker inspect</code> opens the box and X-rays everything inside — every wire, spring, and screw. It is the go-to command when something is not working and you need to know exactly how Docker configured something.</p>", order: 30 },
+          { type: "code", content: `# Inspect a container by name\ndocker inspect my-nginx\n\n# Pretty-print only the IP address using a Go template\ndocker inspect --format '{{.NetworkSettings.IPAddress}}' my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Extract just the environment variables of a container to audit secrets and config without entering the container.</p>", order: 50 },
+          { type: "code", content: `# Get all environment variables of a running container\ndocker inspect --format '{{range .Config.Env}}{{println .}}{{end}}' my-app\n\n# Check the restart policy\ndocker inspect --format '{{.HostConfig.RestartPolicy.Name}}' my-app\n\n# Inspect multiple objects at once\ndocker inspect my-nginx my-postgres`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "NAME|ID", type: "Argument", description: "Name or ID of any Docker object: container, image, volume, or network. Multiple accepted." },
+              { flag: "--format STRING", type: "Option", description: "Format the output using a Go template. Extracts specific fields instead of showing the entire JSON." },
+              { flag: "--type STRING", type: "Option", description: "Disambiguate when a name refers to multiple object types: container, image, volume, network, node, service, task." },
+              { flag: "-s / --size", type: "Flag", description: "For containers: display the total file sizes (SizeRootFs and SizeRw)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker stats ──────────────────────────────────────────────────────────
-    const pStats = await prisma.page.create({
-        data: {
-            title: "docker stats",
-            slug: "/debugging/stats",
-            description: "Display a live stream of container resource usage: CPU, memory, network I/O, and disk I/O.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker stats [OPTIONS] [CONTAINER...]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker stats</code> streams live metrics from one or more containers. It is Docker's built-in <code>top</code>-like resource monitor — showing CPU %, memory usage/limit, network I/O, and block I/O, updating every second.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker stats</code> is like the Activity Monitor or Task Manager, but only for your Docker containers. You can watch in real time if a container is eating too much CPU or RAM and causing trouble.</p>", order: 30 },
-                    { type: "code", content: `# Watch live stats for ALL running containers\ndocker stats\n\n# Watch stats for only one container\ndocker stats my-nginx`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Take a one-shot snapshot of all container stats (no live update) and output it as JSON for ingestion into a monitoring pipeline.</p>", order: 50 },
-                    { type: "code", content: `# One-shot snapshot (no streaming) in JSON format\ndocker stats --no-stream --format json\n\n# Custom table format: name, CPU, and memory\ndocker stats --format "table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}"`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "CONTAINER", type: "Argument", description: "Container name or ID. Omit to show stats for all running containers." },
-                        { flag: "--no-stream", type: "Flag", description: "Print a single snapshot of stats and exit. No continuous live update." },
-                        { flag: "--no-trunc", type: "Flag", description: "Do not truncate container IDs or names in the output." },
-                        { flag: "--format STRING", type: "Option", description: "Format the output using a Go template or the special value json." },
-                        { flag: "-a / --all", type: "Flag", description: "Show stats for all containers, including stopped ones (which show zeroes)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker stats ──────────────────────────────────────────────────────────
+  const pStats = await prisma.page.create({
+    data: {
+      title: "docker stats",
+      slug: "/debugging/stats",
+      description: "Display a live stream of container resource usage: CPU, memory, network I/O, and disk I/O.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker stats [OPTIONS] [CONTAINER...]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker stats</code> streams live metrics from one or more containers. It is Docker's built-in <code>top</code>-like resource monitor — showing CPU %, memory usage/limit, network I/O, and block I/O, updating every second.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker stats</code> is like the Activity Monitor or Task Manager, but only for your Docker containers. You can watch in real time if a container is eating too much CPU or RAM and causing trouble.</p>", order: 30 },
+          { type: "code", content: `# Watch live stats for ALL running containers\ndocker stats\n\n# Watch stats for only one container\ndocker stats my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Take a one-shot snapshot of all container stats (no live update) and output it as JSON for ingestion into a monitoring pipeline.</p>", order: 50 },
+          { type: "code", content: `# One-shot snapshot (no streaming) in JSON format\ndocker stats --no-stream --format json\n\n# Custom table format: name, CPU, and memory\ndocker stats --format "table {{.Name}}\\t{{.CPUPerc}}\\t{{.MemUsage}}"`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Container name or ID. Omit to show stats for all running containers." },
+              { flag: "--no-stream", type: "Flag", description: "Print a single snapshot of stats and exit. No continuous live update." },
+              { flag: "--no-trunc", type: "Flag", description: "Do not truncate container IDs or names in the output." },
+              { flag: "--format STRING", type: "Option", description: "Format the output using a Go template or the special value json." },
+              { flag: "-a / --all", type: "Flag", description: "Show stats for all containers, including stopped ones (which show zeroes)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker top ────────────────────────────────────────────────────────────
-    const pTop = await prisma.page.create({
-        data: {
-            title: "docker top",
-            slug: "/debugging/top",
-            description: "Display the running processes inside a container, like the unix 'ps' command.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker top CONTAINER [ps OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker top</code> shows the processes currently running inside a container, using the host's <code>ps</code> command under the hood. It answers the question: \"what is actually running inside this container right now?\"</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine you hired a worker (container) and locked them in a room. <code>docker top</code> lets you look through a window and see exactly what they are doing at this moment — are they working, sleeping, or running something suspicious?</p>", order: 30 },
-                    { type: "code", content: `# List processes inside a running container\ndocker top my-nginx`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Pass custom <code>ps</code> options to get a more detailed process view including threads and full command paths.</p>", order: 50 },
-                    { type: "code", content: `# Show all processes with full command and user info\ndocker top my-app aux\n\n# Show processes with threads\ndocker top my-app -eLf`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "CONTAINER", type: "Argument", description: "Name or ID of the running container to inspect." },
-                        { flag: "[ps OPTIONS]", type: "Argument", description: "Optional arguments passed directly to the unix ps command, e.g. aux, -eLf, -o pid,cmd." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker top ────────────────────────────────────────────────────────────
+  const pTop = await prisma.page.create({
+    data: {
+      title: "docker top",
+      slug: "/debugging/top",
+      description: "Display the running processes inside a container, like the unix 'ps' command.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker top CONTAINER [ps OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker top</code> shows the processes currently running inside a container, using the host's <code>ps</code> command under the hood. It answers the question: \"what is actually running inside this container right now?\"</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine you hired a worker (container) and locked them in a room. <code>docker top</code> lets you look through a window and see exactly what they are doing at this moment — are they working, sleeping, or running something suspicious?</p>", order: 30 },
+          { type: "code", content: `# List processes inside a running container\ndocker top my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Pass custom <code>ps</code> options to get a more detailed process view including threads and full command paths.</p>", order: 50 },
+          { type: "code", content: `# Show all processes with full command and user info\ndocker top my-app aux\n\n# Show processes with threads\ndocker top my-app -eLf`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the running container to inspect." },
+              { flag: "[ps OPTIONS]", type: "Argument", description: "Optional arguments passed directly to the unix ps command, e.g. aux, -eLf, -o pid,cmd." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker events ─────────────────────────────────────────────────────────
-    const pEvents = await prisma.page.create({
-        data: {
-            title: "docker events",
-            slug: "/debugging/events",
-            description: "Stream real-time events from the Docker daemon — container starts, stops, image pulls, and more.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker events [OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker events</code> listens to the Docker daemon and prints every event as it happens — container lifecycle events (start, stop, die, kill), image events (pull, push, delete), volume and network events.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Think of the Docker daemon as a busy office. <code>docker events</code> is a security camera feed — you can watch everything that happens in real time. Every time a container starts, crashes, or a new image is downloaded, it shows up on the feed.</p>", order: 30 },
-                    { type: "code", content: `# Stream ALL live events from Docker\ndocker events`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Filter events to only show container die/crash events from the last hour, useful for post-mortem debugging of a flapping service.</p>", order: 50 },
-                    { type: "code", content: `# Watch only container 'die' events from the last hour\ndocker events --since "1h" --filter "event=die" --filter "type=container"\n\n# Capture events in JSON format for log ingestion\ndocker events --format '{{json .}}' --filter "type=container"`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "--since TIMESTAMP", type: "Option", description: "Show events logged after a timestamp or duration (e.g. 1h, 2024-01-15T10:00:00)." },
-                        { flag: "--until TIMESTAMP", type: "Option", description: "Stop streaming after a given timestamp or duration." },
-                        { flag: "--filter KEY=VALUE", type: "Option", description: "Filter events by type (container, image, volume, network), event name, or container/image name." },
-                        { flag: "--format STRING", type: "Option", description: "Format output using a Go template. Use {{json .}} for full JSON output." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker events ─────────────────────────────────────────────────────────
+  const pEvents = await prisma.page.create({
+    data: {
+      title: "docker events",
+      slug: "/debugging/events",
+      description: "Stream real-time events from the Docker daemon — container starts, stops, image pulls, and more.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker events [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker events</code> listens to the Docker daemon and prints every event as it happens — container lifecycle events (start, stop, die, kill), image events (pull, push, delete), volume and network events.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Think of the Docker daemon as a busy office. <code>docker events</code> is a security camera feed — you can watch everything that happens in real time. Every time a container starts, crashes, or a new image is downloaded, it shows up on the feed.</p>", order: 30 },
+          { type: "code", content: `# Stream ALL live events from Docker\ndocker events`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Filter events to only show container die/crash events from the last hour, useful for post-mortem debugging of a flapping service.</p>", order: 50 },
+          { type: "code", content: `# Watch only container 'die' events from the last hour\ndocker events --since "1h" --filter "event=die" --filter "type=container"\n\n# Capture events in JSON format for log ingestion\ndocker events --format '{{json .}}' --filter "type=container"`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "--since TIMESTAMP", type: "Option", description: "Show events logged after a timestamp or duration (e.g. 1h, 2024-01-15T10:00:00)." },
+              { flag: "--until TIMESTAMP", type: "Option", description: "Stop streaming after a given timestamp or duration." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Filter events by type (container, image, volume, network), event name, or container/image name." },
+              { flag: "--format STRING", type: "Option", description: "Format output using a Go template. Use {{json .}} for full JSON output." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker diff ───────────────────────────────────────────────────────────
-    const pDiff = await prisma.page.create({
-        data: {
-            title: "docker diff",
-            slug: "/debugging/diff",
-            description: "Show all filesystem changes made inside a container since it was started.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker diff CONTAINER</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker diff</code> lists all files and directories that have been <strong>Added (A)</strong>, <strong>Changed (C)</strong>, or <strong>Deleted (D)</strong> inside a container's writable layer since the container was created. It compares the current state against the original image.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine Docker gave you a pristine hotel room (the image). <code>docker diff</code> is housekeeping's checklist of everything you moved, added, or broke since you checked in. It only tracks what changed — the original furniture (base image) is not listed.</p>", order: 30 },
-                    { type: "code", content: `# See what files changed inside my-nginx since it started\ndocker diff my-nginx\n\n# Example output:\n# C /etc/nginx/nginx.conf     (C = changed)\n# A /var/log/nginx/access.log  (A = added)\n# D /tmp/cache                 (D = deleted)`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Use <code>docker diff</code> during a debugging session to confirm that a config file was correctly written into a running container before committing it into a new image layer.</p>", order: 50 },
-                    { type: "code", content: `# 1. Start a container and make a change\ndocker exec my-app sh -c "echo 'debug=true' >> /app/config.ini"\n\n# 2. Verify the change was recorded\ndocker diff my-app\n# A /app/config.ini\n\n# 3. If happy, commit the container state as a new image\ndocker commit my-app my-app:with-debug-config`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to inspect." },
-                        { flag: "A", type: "Output prefix", description: "File or directory was Added (did not exist in the original image)." },
-                        { flag: "C", type: "Output prefix", description: "File or directory was Changed (exists in the original image but was modified)." },
-                        { flag: "D", type: "Output prefix", description: "File or directory was Deleted (existed in the original image but was removed inside the container)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker diff ───────────────────────────────────────────────────────────
+  const pDiff = await prisma.page.create({
+    data: {
+      title: "docker diff",
+      slug: "/debugging/diff",
+      description: "Show all filesystem changes made inside a container since it was started.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker diff CONTAINER</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker diff</code> lists all files and directories that have been <strong>Added (A)</strong>, <strong>Changed (C)</strong>, or <strong>Deleted (D)</strong> inside a container's writable layer since the container was created. It compares the current state against the original image.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine Docker gave you a pristine hotel room (the image). <code>docker diff</code> is housekeeping's checklist of everything you moved, added, or broke since you checked in. It only tracks what changed — the original furniture (base image) is not listed.</p>", order: 30 },
+          { type: "code", content: `# See what files changed inside my-nginx since it started\ndocker diff my-nginx\n\n# Example output:\n# C /etc/nginx/nginx.conf     (C = changed)\n# A /var/log/nginx/access.log  (A = added)\n# D /tmp/cache                 (D = deleted)`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Use <code>docker diff</code> during a debugging session to confirm that a config file was correctly written into a running container before committing it into a new image layer.</p>", order: 50 },
+          { type: "code", content: `# 1. Start a container and make a change\ndocker exec my-app sh -c "echo 'debug=true' >> /app/config.ini"\n\n# 2. Verify the change was recorded\ndocker diff my-app\n# A /app/config.ini\n\n# 3. If happy, commit the container state as a new image\ndocker commit my-app my-app:with-debug-config`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to inspect." },
+              { flag: "A", type: "Output prefix", description: "File or directory was Added (did not exist in the original image)." },
+              { flag: "C", type: "Output prefix", description: "File or directory was Changed (exists in the original image but was modified)." },
+              { flag: "D", type: "Output prefix", description: "File or directory was Deleted (existed in the original image but was removed inside the container)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // =========================================================================
-    // PAGES — CLEANUP
-    // =========================================================================
+  // =========================================================================
+  // PAGES — CLEANUP
+  // =========================================================================
 
-    // ── docker system prune ───────────────────────────────────────────────────
-    const pSystemPrune = await prisma.page.create({
-        data: {
-            title: "docker system prune",
-            slug: "/cleanup/system-prune",
-            description: "The nuclear option — remove all stopped containers, dangling images, unused networks, and build cache in one command.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker system prune [OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker system prune</code> is the all-in-one cleanup command. By default it removes: all <strong>stopped containers</strong>, all <strong>dangling images</strong> (untagged layers), all <strong>unused networks</strong>, and the entire <strong>build cache</strong>. Adding <code>-a</code> also removes any image not referenced by a running container.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>After weeks of experimenting with Docker, your machine accumulates junk — old containers you forgot to delete, half-built images, cached layers. <code>docker system prune</code> is the \"clean my room\" button. One command and all the mess is gone.</p>", order: 30 },
-                    { type: "code", content: `# Interactive cleanup (will ask for confirmation)\ndocker system prune\n\n# Skip confirmation prompt\ndocker system prune -f`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>On a CI build server, aggressively reclaim disk space after every pipeline run by removing all unused images and volumes.</p>", order: 50 },
-                    { type: "code", content: `# Remove EVERYTHING unused, including all untagged AND unreferenced images\ndocker system prune -a -f\n\n# Also remove unused volumes (adds --volumes flag)\ndocker system prune -a -f --volumes\n\n# See how much space would be freed before committing\ndocker system df`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "-a / --all", type: "Flag", description: "Remove all unused images, not just dangling ones. This is the biggest space saver." },
-                        { flag: "-f / --force", type: "Flag", description: "Skip the confirmation prompt. Use in scripts and CI pipelines." },
-                        { flag: "--volumes", type: "Flag", description: "Also remove unused volumes. Not included by default to prevent accidental data loss." },
-                        { flag: "--filter KEY=VALUE", type: "Option", description: "Only prune objects matching a filter — e.g. until=24h removes objects older than 24 hours." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker system prune ───────────────────────────────────────────────────
+  const pSystemPrune = await prisma.page.create({
+    data: {
+      title: "docker system prune",
+      slug: "/cleanup/system-prune",
+      description: "The nuclear option — remove all stopped containers, dangling images, unused networks, and build cache in one command.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker system prune [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker system prune</code> is the all-in-one cleanup command. By default it removes: all <strong>stopped containers</strong>, all <strong>dangling images</strong> (untagged layers), all <strong>unused networks</strong>, and the entire <strong>build cache</strong>. Adding <code>-a</code> also removes any image not referenced by a running container.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>After weeks of experimenting with Docker, your machine accumulates junk — old containers you forgot to delete, half-built images, cached layers. <code>docker system prune</code> is the \"clean my room\" button. One command and all the mess is gone.</p>", order: 30 },
+          { type: "code", content: `# Interactive cleanup (will ask for confirmation)\ndocker system prune\n\n# Skip confirmation prompt\ndocker system prune -f`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>On a CI build server, aggressively reclaim disk space after every pipeline run by removing all unused images and volumes.</p>", order: 50 },
+          { type: "code", content: `# Remove EVERYTHING unused, including all untagged AND unreferenced images\ndocker system prune -a -f\n\n# Also remove unused volumes (adds --volumes flag)\ndocker system prune -a -f --volumes\n\n# See how much space would be freed before committing\ndocker system df`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "-a / --all", type: "Flag", description: "Remove all unused images, not just dangling ones. This is the biggest space saver." },
+              { flag: "-f / --force", type: "Flag", description: "Skip the confirmation prompt. Use in scripts and CI pipelines." },
+              { flag: "--volumes", type: "Flag", description: "Also remove unused volumes. Not included by default to prevent accidental data loss." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Only prune objects matching a filter — e.g. until=24h removes objects older than 24 hours." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker container prune ────────────────────────────────────────────────
-    const pContainerPrune = await prisma.page.create({
-        data: {
-            title: "docker container prune",
-            slug: "/cleanup/container-prune",
-            description: "Remove all stopped containers, keeping images and volumes intact.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker container prune [OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker container prune</code> deletes all containers that are in a <strong>stopped/exited</strong> state. Running containers are never touched. It is a safer and more targeted alternative to <code>docker system prune</code> when you only want to clean up containers.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Running <code>docker run</code> over and over leaves ghost containers piling up — stopped, doing nothing, but still taking up a small amount of disk space and namespace. <code>docker container prune</code> sweeps them all away in one go.</p>", order: 30 },
-                    { type: "code", content: `# Remove all stopped containers (prompts for confirmation)\ndocker container prune\n\n# Skip confirmation\ndocker container prune -f`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Remove only containers that exited more than 24 hours ago, leaving recently stopped containers intact for inspection.</p>", order: 50 },
-                    { type: "code", content: `# Prune only containers older than 24 hours\ndocker container prune --filter "until=24h" -f`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "-f / --force", type: "Flag", description: "Do not prompt for confirmation. Required for scripting." },
-                        { flag: "--filter KEY=VALUE", type: "Option", description: "Filter which stopped containers to remove. Supports until=DURATION and label=KEY." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker container prune ────────────────────────────────────────────────
+  const pContainerPrune = await prisma.page.create({
+    data: {
+      title: "docker container prune",
+      slug: "/cleanup/container-prune",
+      description: "Remove all stopped containers, keeping images and volumes intact.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker container prune [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker container prune</code> deletes all containers that are in a <strong>stopped/exited</strong> state. Running containers are never touched. It is a safer and more targeted alternative to <code>docker system prune</code> when you only want to clean up containers.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Running <code>docker run</code> over and over leaves ghost containers piling up — stopped, doing nothing, but still taking up a small amount of disk space and namespace. <code>docker container prune</code> sweeps them all away in one go.</p>", order: 30 },
+          { type: "code", content: `# Remove all stopped containers (prompts for confirmation)\ndocker container prune\n\n# Skip confirmation\ndocker container prune -f`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Remove only containers that exited more than 24 hours ago, leaving recently stopped containers intact for inspection.</p>", order: 50 },
+          { type: "code", content: `# Prune only containers older than 24 hours\ndocker container prune --filter "until=24h" -f`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "-f / --force", type: "Flag", description: "Do not prompt for confirmation. Required for scripting." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Filter which stopped containers to remove. Supports until=DURATION and label=KEY." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker image prune ────────────────────────────────────────────────────
-    const pImagePrune = await prisma.page.create({
-        data: {
-            title: "docker image prune",
-            slug: "/cleanup/image-prune",
-            description: "Remove dangling or unused images to free up disk space.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker image prune [OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker image prune</code> removes <strong>dangling images</strong> by default — these are untagged image layers left behind when you rebuild an image with the same tag. They have no name, no tag, and nothing references them. They are pure wasted disk space.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Every time you rebuild an image using the same tag, the old version loses its label and becomes a \"ghost\" image. Over time these ghosts pile up and eat gigabytes. <code>docker image prune</code> exorcises all the ghosts.</p>", order: 30 },
-                    { type: "code", content: `# Remove only dangling (untagged) images\ndocker image prune\n\n# Remove ALL unused images (not just dangling)\ndocker image prune -a`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>On a build server, remove all images older than 48 hours that are no longer referenced by a running or stopped container.</p>", order: 50 },
-                    { type: "code", content: `# Remove all unused images older than 48 hours without prompting\ndocker image prune -a --filter "until=48h" -f`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "-a / --all", type: "Flag", description: "Remove all images not referenced by any container (running or stopped), not just dangling ones." },
-                        { flag: "-f / --force", type: "Flag", description: "Skip the confirmation prompt." },
-                        { flag: "--filter KEY=VALUE", type: "Option", description: "Only prune images matching a condition, e.g. until=48h removes images older than 48 hours." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker image prune ────────────────────────────────────────────────────
+  const pImagePrune = await prisma.page.create({
+    data: {
+      title: "docker image prune",
+      slug: "/cleanup/image-prune",
+      description: "Remove dangling or unused images to free up disk space.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker image prune [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker image prune</code> removes <strong>dangling images</strong> by default — these are untagged image layers left behind when you rebuild an image with the same tag. They have no name, no tag, and nothing references them. They are pure wasted disk space.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Every time you rebuild an image using the same tag, the old version loses its label and becomes a \"ghost\" image. Over time these ghosts pile up and eat gigabytes. <code>docker image prune</code> exorcises all the ghosts.</p>", order: 30 },
+          { type: "code", content: `# Remove only dangling (untagged) images\ndocker image prune\n\n# Remove ALL unused images (not just dangling)\ndocker image prune -a`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>On a build server, remove all images older than 48 hours that are no longer referenced by a running or stopped container.</p>", order: 50 },
+          { type: "code", content: `# Remove all unused images older than 48 hours without prompting\ndocker image prune -a --filter "until=48h" -f`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "-a / --all", type: "Flag", description: "Remove all images not referenced by any container (running or stopped), not just dangling ones." },
+              { flag: "-f / --force", type: "Flag", description: "Skip the confirmation prompt." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Only prune images matching a condition, e.g. until=48h removes images older than 48 hours." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker volume prune ───────────────────────────────────────────────────
-    const pVolumePrune = await prisma.page.create({
-        data: {
-            title: "docker volume prune",
-            slug: "/cleanup/volume-prune",
-            description: "Remove all unused volumes — volumes not mounted by any container.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker volume prune [OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker volume prune</code> deletes all volumes that are not currently mounted by any container (running or stopped). Volumes can hold databases and important data — use this command with care.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Volumes are like USB drives plugged into your containers. When you delete a container without its volume, the \"USB drive\" stays behind, floating and unconnected. <code>docker volume prune</code> throws away all the disconnected drives. Be careful — if the drive had important data (like a database), it is gone permanently.</p>", order: 30 },
-                    { type: "code", content: `# See which volumes exist and their sizes\ndocker volume ls\n\n# Remove all unused volumes (CAUTION: data is permanently deleted)\ndocker volume prune -f`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>After a full environment teardown in a staging environment, prune volumes that are no longer needed — but only those not labeled as persistent.</p>", order: 50 },
-                    { type: "code", content: `# Only prune volumes that do NOT have the label 'keep=true'\ndocker volume prune --filter "label!=keep=true" -f`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "-f / --force", type: "Flag", description: "Skip the confirmation prompt. Essential for automation." },
-                        { flag: "--filter KEY=VALUE", type: "Option", description: "Only prune volumes matching a filter. Supports label and until conditions." },
-                        { flag: "-a / --all", type: "Flag", description: "Remove all unused volumes, including those with names (default only removes anonymous volumes in newer Docker versions)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker volume prune ───────────────────────────────────────────────────
+  const pVolumePrune = await prisma.page.create({
+    data: {
+      title: "docker volume prune",
+      slug: "/cleanup/volume-prune",
+      description: "Remove all unused volumes — volumes not mounted by any container.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker volume prune [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker volume prune</code> deletes all volumes that are not currently mounted by any container (running or stopped). Volumes can hold databases and important data — use this command with care.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Volumes are like USB drives plugged into your containers. When you delete a container without its volume, the \"USB drive\" stays behind, floating and unconnected. <code>docker volume prune</code> throws away all the disconnected drives. Be careful — if the drive had important data (like a database), it is gone permanently.</p>", order: 30 },
+          { type: "code", content: `# See which volumes exist and their sizes\ndocker volume ls\n\n# Remove all unused volumes (CAUTION: data is permanently deleted)\ndocker volume prune -f`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>After a full environment teardown in a staging environment, prune volumes that are no longer needed — but only those not labeled as persistent.</p>", order: 50 },
+          { type: "code", content: `# Only prune volumes that do NOT have the label 'keep=true'\ndocker volume prune --filter "label!=keep=true" -f`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "-f / --force", type: "Flag", description: "Skip the confirmation prompt. Essential for automation." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Only prune volumes matching a filter. Supports label and until conditions." },
+              { flag: "-a / --all", type: "Flag", description: "Remove all unused volumes, including those with names (default only removes anonymous volumes in newer Docker versions)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // =========================================================================
-    // PAGES — NETWORKING
-    // =========================================================================
+  // =========================================================================
+  // PAGES — NETWORKING
+  // =========================================================================
 
-    // ── docker network ls ─────────────────────────────────────────────────────
-    const pNetworkLs = await prisma.page.create({
-        data: {
-            title: "docker network ls",
-            slug: "/networking/ls",
-            description: "List all Docker networks available on this machine.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network ls [OPTIONS]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker network ls</code> lists every network Docker knows about. By default Docker creates three networks: <code>bridge</code> (the default for containers), <code>host</code> (shares the host's networking stack), and <code>none</code> (no networking). Any networks you create also appear here.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Think of Docker networks as Wi-Fi routers. Each router creates its own private network. <code>docker network ls</code> lists all the routers in your Docker house. Containers on the same router can talk to each other; containers on different routers cannot (unless you bridge them).</p>", order: 30 },
-                    { type: "code", content: `# List all networks\ndocker network ls`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Filter to show only user-created bridge networks to audit what custom networks exist in your environment.</p>", order: 50 },
-                    { type: "code", content: `# Show only custom bridge networks\ndocker network ls --filter "driver=bridge" --filter "type=custom"\n\n# Show only network IDs (useful for scripting)\ndocker network ls -q`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "-q / --quiet", type: "Flag", description: "Print only network IDs." },
-                        { flag: "--filter KEY=VALUE", type: "Option", description: "Filter by driver (bridge, overlay, host), type (custom, builtin), name, or id." },
-                        { flag: "--format STRING", type: "Option", description: "Pretty-print the output using a Go template." },
-                        { flag: "--no-trunc", type: "Flag", description: "Do not truncate the output. Shows full network IDs." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker network ls ─────────────────────────────────────────────────────
+  const pNetworkLs = await prisma.page.create({
+    data: {
+      title: "docker network ls",
+      slug: "/networking/ls",
+      description: "List all Docker networks available on this machine.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network ls [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker network ls</code> lists every network Docker knows about. By default Docker creates three networks: <code>bridge</code> (the default for containers), <code>host</code> (shares the host's networking stack), and <code>none</code> (no networking). Any networks you create also appear here.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Think of Docker networks as Wi-Fi routers. Each router creates its own private network. <code>docker network ls</code> lists all the routers in your Docker house. Containers on the same router can talk to each other; containers on different routers cannot (unless you bridge them).</p>", order: 30 },
+          { type: "code", content: `# List all networks\ndocker network ls`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Filter to show only user-created bridge networks to audit what custom networks exist in your environment.</p>", order: 50 },
+          { type: "code", content: `# Show only custom bridge networks\ndocker network ls --filter "driver=bridge" --filter "type=custom"\n\n# Show only network IDs (useful for scripting)\ndocker network ls -q`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "-q / --quiet", type: "Flag", description: "Print only network IDs." },
+              { flag: "--filter KEY=VALUE", type: "Option", description: "Filter by driver (bridge, overlay, host), type (custom, builtin), name, or id." },
+              { flag: "--format STRING", type: "Option", description: "Pretty-print the output using a Go template." },
+              { flag: "--no-trunc", type: "Flag", description: "Do not truncate the output. Shows full network IDs." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker network create ─────────────────────────────────────────────────
-    const pNetworkCreate = await prisma.page.create({
-        data: {
-            title: "docker network create",
-            slug: "/networking/create",
-            description: "Create a custom Docker network so containers can communicate with each other by name.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network create [OPTIONS] NETWORK</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker network create</code> creates a new isolated network. Containers on the same custom network can reach each other using their container names as hostnames — no IP addresses needed. This is the foundation for multi-container applications.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine you are setting up a small office. You create a private Wi-Fi network called <code>office-net</code>. Anyone connected to <code>office-net</code> can talk to each other just by name (\"Hey, printer\" instead of \"Hey, 192.168.1.45\"). That is exactly what a Docker network does for your containers.</p>", order: 30 },
-                    { type: "code", content: `# Create a simple bridge network\ndocker network create my-app-network\n\n# Run containers on that network so they can talk to each other\ndocker run -d --name backend --network my-app-network my-backend-image\ndocker run -d --name frontend --network my-app-network my-frontend-image\n# The frontend container can now reach the backend at http://backend:3000`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Create a custom bridge network with a specific subnet and gateway for a controlled networking environment.</p>", order: 50 },
-                    { type: "code", content: `# Create a network with a specific subnet and gateway\ndocker network create \\\n  --driver bridge \\\n  --subnet 172.20.0.0/16 \\\n  --gateway 172.20.0.1 \\\n  --ip-range 172.20.240.0/20 \\\n  production-net`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "NETWORK", type: "Argument", description: "The name to give the new network." },
-                        { flag: "-d / --driver STRING", type: "Option", description: "Network driver to use. bridge (default, single-host), overlay (multi-host Swarm), macvlan, none." },
-                        { flag: "--subnet STRING", type: "Option", description: "CIDR block for the network, e.g. 172.20.0.0/16." },
-                        { flag: "--gateway STRING", type: "Option", description: "IPv4 or IPv6 gateway for the subnet." },
-                        { flag: "--ip-range STRING", type: "Option", description: "Allocate container IPs from a sub-range of the subnet." },
-                        { flag: "--internal", type: "Flag", description: "Restrict external access — containers on this network cannot reach the internet." },
-                        { flag: "--attachable", type: "Flag", description: "Allow standalone containers to attach to this network (required for overlay networks outside Swarm)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker network create ─────────────────────────────────────────────────
+  const pNetworkCreate = await prisma.page.create({
+    data: {
+      title: "docker network create",
+      slug: "/networking/create",
+      description: "Create a custom Docker network so containers can communicate with each other by name.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network create [OPTIONS] NETWORK</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker network create</code> creates a new isolated network. Containers on the same custom network can reach each other using their container names as hostnames — no IP addresses needed. This is the foundation for multi-container applications.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine you are setting up a small office. You create a private Wi-Fi network called <code>office-net</code>. Anyone connected to <code>office-net</code> can talk to each other just by name (\"Hey, printer\" instead of \"Hey, 192.168.1.45\"). That is exactly what a Docker network does for your containers.</p>", order: 30 },
+          { type: "code", content: `# Create a simple bridge network\ndocker network create my-app-network\n\n# Run containers on that network so they can talk to each other\ndocker run -d --name backend --network my-app-network my-backend-image\ndocker run -d --name frontend --network my-app-network my-frontend-image\n# The frontend container can now reach the backend at http://backend:3000`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Create a custom bridge network with a specific subnet and gateway for a controlled networking environment.</p>", order: 50 },
+          { type: "code", content: `# Create a network with a specific subnet and gateway\ndocker network create \\\n  --driver bridge \\\n  --subnet 172.20.0.0/16 \\\n  --gateway 172.20.0.1 \\\n  --ip-range 172.20.240.0/20 \\\n  production-net`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "NETWORK", type: "Argument", description: "The name to give the new network." },
+              { flag: "-d / --driver STRING", type: "Option", description: "Network driver to use. bridge (default, single-host), overlay (multi-host Swarm), macvlan, none." },
+              { flag: "--subnet STRING", type: "Option", description: "CIDR block for the network, e.g. 172.20.0.0/16." },
+              { flag: "--gateway STRING", type: "Option", description: "IPv4 or IPv6 gateway for the subnet." },
+              { flag: "--ip-range STRING", type: "Option", description: "Allocate container IPs from a sub-range of the subnet." },
+              { flag: "--internal", type: "Flag", description: "Restrict external access — containers on this network cannot reach the internet." },
+              { flag: "--attachable", type: "Flag", description: "Allow standalone containers to attach to this network (required for overlay networks outside Swarm)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker network inspect ────────────────────────────────────────────────
-    const pNetworkInspect = await prisma.page.create({
-        data: {
-            title: "docker network inspect",
-            slug: "/networking/inspect",
-            description: "Display detailed information about a Docker network, including connected containers and their IPs.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network inspect [OPTIONS] NETWORK [NETWORK...]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker network inspect</code> prints a detailed JSON description of a network: its driver, subnet, gateway, and most importantly — every container currently connected to it along with their assigned IP addresses.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>If a Docker network is a Wi-Fi router, <code>docker network inspect</code> is the router's admin panel — it shows you the network settings, which devices are connected, and what IP address each device has been assigned.</p>", order: 30 },
-                    { type: "code", content: `# Inspect a network by name\ndocker network inspect my-app-network`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Extract just the list of container names and their IPs on a given network using a Go template — useful for scripted service discovery.</p>", order: 50 },
-                    { type: "code", content: `# Extract container names and IPs from a network\ndocker network inspect my-app-network \\\n  --format '{{range .Containers}}{{.Name}}: {{.IPv4Address}}{{println}}{{end}}'`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "NETWORK", type: "Argument", description: "Network name or ID. Multiple can be specified." },
-                        { flag: "--format STRING", type: "Option", description: "Format output with a Go template to extract specific fields." },
-                        { flag: "-v / --verbose", type: "Flag", description: "Show detailed information including services (useful in Swarm mode)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker network inspect ────────────────────────────────────────────────
+  const pNetworkInspect = await prisma.page.create({
+    data: {
+      title: "docker network inspect",
+      slug: "/networking/inspect",
+      description: "Display detailed information about a Docker network, including connected containers and their IPs.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network inspect [OPTIONS] NETWORK [NETWORK...]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker network inspect</code> prints a detailed JSON description of a network: its driver, subnet, gateway, and most importantly — every container currently connected to it along with their assigned IP addresses.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>If a Docker network is a Wi-Fi router, <code>docker network inspect</code> is the router's admin panel — it shows you the network settings, which devices are connected, and what IP address each device has been assigned.</p>", order: 30 },
+          { type: "code", content: `# Inspect a network by name\ndocker network inspect my-app-network`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Extract just the list of container names and their IPs on a given network using a Go template — useful for scripted service discovery.</p>", order: 50 },
+          { type: "code", content: `# Extract container names and IPs from a network\ndocker network inspect my-app-network \\\n  --format '{{range .Containers}}{{.Name}}: {{.IPv4Address}}{{println}}{{end}}'`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "NETWORK", type: "Argument", description: "Network name or ID. Multiple can be specified." },
+              { flag: "--format STRING", type: "Option", description: "Format output with a Go template to extract specific fields." },
+              { flag: "-v / --verbose", type: "Flag", description: "Show detailed information including services (useful in Swarm mode)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker network connect / disconnect ───────────────────────────────────
-    const pNetworkConnect = await prisma.page.create({
-        data: {
-            title: "docker network connect",
-            slug: "/networking/connect",
-            description: "Connect a running container to an existing network (or disconnect it) without restarting.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network connect [OPTIONS] NETWORK CONTAINER</code><br>Syntax: <code>docker network disconnect NETWORK CONTAINER</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p>A container can be a member of multiple networks simultaneously. <code>docker network connect</code> plugs a running container into an additional network without restarting it. <code>docker network disconnect</code> does the reverse.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Your laptop can be connected to both your home Wi-Fi and a corporate VPN at the same time. <code>docker network connect</code> does the same for a container — plug it into a second (or third) network while it keeps running normally on its current network.</p>", order: 30 },
-                    { type: "code", content: `# Connect a running container to an additional network\ndocker network connect my-app-network my-nginx\n\n# Disconnect a container from a network\ndocker network disconnect my-app-network my-nginx`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Connect a container to a network and assign it a specific static IP address on that network.</p>", order: 50 },
-                    { type: "code", content: `# Connect with a specific IP address on the network\ndocker network connect --ip 172.20.0.50 production-net backend-container\n\n# Connect and add a network alias (so other containers can find it by alias)\ndocker network connect --alias db production-net postgres-container`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "NETWORK", type: "Argument", description: "Name or ID of the network to connect or disconnect from." },
-                        { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to connect or disconnect." },
-                        { flag: "--ip STRING", type: "Option", description: "Assign a specific IPv4 address to the container on this network." },
-                        { flag: "--alias STRING", type: "Option", description: "Add a network-scoped alias — other containers on the network can reach this container by the alias." },
-                        { flag: "--link CONTAINER:ALIAS", type: "Option", description: "Add a legacy link (deprecated; prefer DNS-based service discovery)." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker network connect / disconnect ───────────────────────────────────
+  const pNetworkConnect = await prisma.page.create({
+    data: {
+      title: "docker network connect",
+      slug: "/networking/connect",
+      description: "Connect a running container to an existing network (or disconnect it) without restarting.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network connect [OPTIONS] NETWORK CONTAINER</code><br>Syntax: <code>docker network disconnect NETWORK CONTAINER</code></p>", order: 10 },
+          { type: "paragraph", content: "<p>A container can be a member of multiple networks simultaneously. <code>docker network connect</code> plugs a running container into an additional network without restarting it. <code>docker network disconnect</code> does the reverse.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Your laptop can be connected to both your home Wi-Fi and a corporate VPN at the same time. <code>docker network connect</code> does the same for a container — plug it into a second (or third) network while it keeps running normally on its current network.</p>", order: 30 },
+          { type: "code", content: `# Connect a running container to an additional network\ndocker network connect my-app-network my-nginx\n\n# Disconnect a container from a network\ndocker network disconnect my-app-network my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Connect a container to a network and assign it a specific static IP address on that network.</p>", order: 50 },
+          { type: "code", content: `# Connect with a specific IP address on the network\ndocker network connect --ip 172.20.0.50 production-net backend-container\n\n# Connect and add a network alias (so other containers can find it by alias)\ndocker network connect --alias db production-net postgres-container`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "NETWORK", type: "Argument", description: "Name or ID of the network to connect or disconnect from." },
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to connect or disconnect." },
+              { flag: "--ip STRING", type: "Option", description: "Assign a specific IPv4 address to the container on this network." },
+              { flag: "--alias STRING", type: "Option", description: "Add a network-scoped alias — other containers on the network can reach this container by the alias." },
+              { flag: "--link CONTAINER:ALIAS", type: "Option", description: "Add a legacy link (deprecated; prefer DNS-based service discovery)." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker network rm ─────────────────────────────────────────────────────
-    const pNetworkRm = await prisma.page.create({
-        data: {
-            title: "docker network rm",
-            slug: "/networking/rm",
-            description: "Remove one or more Docker networks. Networks must have no active endpoints.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network rm NETWORK [NETWORK...]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker network rm</code> deletes one or more networks. A network cannot be removed while containers are still connected to it — you must disconnect or stop all containers first. The three built-in networks (<code>bridge</code>, <code>host</code>, <code>none</code>) cannot be deleted.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Removing a network is like unplugging a Wi-Fi router. You can only unplug it if all devices on the network are disconnected first — otherwise you would cut active connections. Docker enforces this rule automatically.</p>", order: 30 },
-                    { type: "code", content: `# Remove a network\ndocker network rm my-app-network\n\n# Remove multiple networks at once\ndocker network rm network-one network-two\n\n# Remove all unused networks at once\ndocker network prune -f`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Tear down all custom networks created for a project by filtering on a label that was applied at creation time.</p>", order: 50 },
-                    { type: "code", content: `# Remove all networks labeled with project=myproject\ndocker network prune --filter "label=project=myproject" -f`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "NETWORK", type: "Argument", description: "Name or ID of the network to remove. Multiple accepted." },
-                        { flag: "docker network prune", type: "Related cmd", description: "Removes all unused (no active endpoints) networks at once. Supports --filter and -f flags." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker network rm ─────────────────────────────────────────────────────
+  const pNetworkRm = await prisma.page.create({
+    data: {
+      title: "docker network rm",
+      slug: "/networking/rm",
+      description: "Remove one or more Docker networks. Networks must have no active endpoints.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker network rm NETWORK [NETWORK...]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker network rm</code> deletes one or more networks. A network cannot be removed while containers are still connected to it — you must disconnect or stop all containers first. The three built-in networks (<code>bridge</code>, <code>host</code>, <code>none</code>) cannot be deleted.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Removing a network is like unplugging a Wi-Fi router. You can only unplug it if all devices on the network are disconnected first — otherwise you would cut active connections. Docker enforces this rule automatically.</p>", order: 30 },
+          { type: "code", content: `# Remove a network\ndocker network rm my-app-network\n\n# Remove multiple networks at once\ndocker network rm network-one network-two\n\n# Remove all unused networks at once\ndocker network prune -f`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Tear down all custom networks created for a project by filtering on a label that was applied at creation time.</p>", order: 50 },
+          { type: "code", content: `# Remove all networks labeled with project=myproject\ndocker network prune --filter "label=project=myproject" -f`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "NETWORK", type: "Argument", description: "Name or ID of the network to remove. Multiple accepted." },
+              { flag: "docker network prune", type: "Related cmd", description: "Removes all unused (no active endpoints) networks at once. Supports --filter and -f flags." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // =========================================================================
-    // PAGES — FILE TRANSFER
-    // =========================================================================
+  // =========================================================================
+  // PAGES — FILE TRANSFER
+  // =========================================================================
 
-    // ── docker cp ─────────────────────────────────────────────────────────────
-    const pCp = await prisma.page.create({
-        data: {
-            title: "docker cp",
-            slug: "/file-transfer/cp",
-            description: "Copy files and directories between a container and the local filesystem in either direction.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH</code><br>Syntax: <code>docker cp [OPTIONS] SRC_PATH CONTAINER:DEST_PATH</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker cp</code> copies files or directories between a container's filesystem and your local machine in either direction. The container does not need to be running — it works on stopped containers too. Think of it as <code>scp</code> but for container filesystems.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine the container is a sealed box. <code>docker cp</code> is a hatch in the box that lets you drop files in or pull files out — no need to open the box (enter the container). Great for copying log files out, or dropping a config file in.</p>", order: 30 },
-                    { type: "code", content: `# Copy a log file OUT of the container to your current directory\ndocker cp my-app:/var/log/app.log ./app.log\n\n# Copy a config file INTO the container\ndocker cp ./nginx.conf my-nginx:/etc/nginx/nginx.conf`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Extract an entire directory from a stopped container — useful for recovering build artifacts or database dumps after a container has exited.</p>", order: 50 },
-                    { type: "code", content: `# Copy an entire /app/dist directory OUT of a stopped build container\ndocker cp my-build-container:/app/dist ./local-dist/\n\n# Copy a directory INTO a running container\ndocker cp ./migrations/ my-postgres:/docker-entrypoint-initdb.d/\n\n# Use - to pipe a tar archive (stream mode)\ndocker cp my-app:/etc/nginx/. - | tar x -C ./nginx-backup/`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "CONTAINER:SRC_PATH", type: "Argument", description: "Source inside the container. Use container-name:/path/to/file. Container name and path are separated by a colon." },
-                        { flag: "DEST_PATH", type: "Argument", description: "Destination on your local machine where the file/directory will be copied to." },
-                        { flag: "SRC_PATH", type: "Argument", description: "Source on your local machine when copying INTO the container." },
-                        { flag: "CONTAINER:DEST_PATH", type: "Argument", description: "Destination inside the container when copying in." },
-                        { flag: "-a / --archive", type: "Flag", description: "Archive mode: preserves the original file UIDs, GIDs, and timestamps." },
-                        { flag: "-L / --follow-link", type: "Flag", description: "Follow symbolic links in the source path." },
-                        { flag: "- (dash)", type: "Special", description: "Use - as the destination to stream a tar archive to stdout, or as source to stream from stdin." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
+  // ── docker cp ─────────────────────────────────────────────────────────────
+  const pCp = await prisma.page.create({
+    data: {
+      title: "docker cp",
+      slug: "/file-transfer/cp",
+      description: "Copy files and directories between a container and the local filesystem in either direction.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker cp [OPTIONS] CONTAINER:SRC_PATH DEST_PATH</code><br>Syntax: <code>docker cp [OPTIONS] SRC_PATH CONTAINER:DEST_PATH</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker cp</code> copies files or directories between a container's filesystem and your local machine in either direction. The container does not need to be running — it works on stopped containers too. Think of it as <code>scp</code> but for container filesystems.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Imagine the container is a sealed box. <code>docker cp</code> is a hatch in the box that lets you drop files in or pull files out — no need to open the box (enter the container). Great for copying log files out, or dropping a config file in.</p>", order: 30 },
+          { type: "code", content: `# Copy a log file OUT of the container to your current directory\ndocker cp my-app:/var/log/app.log ./app.log\n\n# Copy a config file INTO the container\ndocker cp ./nginx.conf my-nginx:/etc/nginx/nginx.conf`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Extract an entire directory from a stopped container — useful for recovering build artifacts or database dumps after a container has exited.</p>", order: 50 },
+          { type: "code", content: `# Copy an entire /app/dist directory OUT of a stopped build container\ndocker cp my-build-container:/app/dist ./local-dist/\n\n# Copy a directory INTO a running container\ndocker cp ./migrations/ my-postgres:/docker-entrypoint-initdb.d/\n\n# Use - to pipe a tar archive (stream mode)\ndocker cp my-app:/etc/nginx/. - | tar x -C ./nginx-backup/`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER:SRC_PATH", type: "Argument", description: "Source inside the container. Use container-name:/path/to/file. Container name and path are separated by a colon." },
+              { flag: "DEST_PATH", type: "Argument", description: "Destination on your local machine where the file/directory will be copied to." },
+              { flag: "SRC_PATH", type: "Argument", description: "Source on your local machine when copying INTO the container." },
+              { flag: "CONTAINER:DEST_PATH", type: "Argument", description: "Destination inside the container when copying in." },
+              { flag: "-a / --archive", type: "Flag", description: "Archive mode: preserves the original file UIDs, GIDs, and timestamps." },
+              { flag: "-L / --follow-link", type: "Flag", description: "Follow symbolic links in the source path." },
+              { flag: "- (dash)", type: "Special", description: "Use - as the destination to stream a tar archive to stdout, or as source to stream from stdin." },
+            ]), order: 80
+          },
+        ],
+      },
+    },
+  });
 
-    // ── docker export / import ────────────────────────────────────────────────
-    const pExportImport = await prisma.page.create({
-        data: {
-            title: "docker export / import",
-            slug: "/file-transfer/export-import",
-            description: "Export a container's entire filesystem as a tar archive, or import a tar archive as a new image.",
-            components: {
-                create: [
-                    { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker export CONTAINER > archive.tar</code><br><code>docker import archive.tar [IMAGE[:TAG]]</code></p>", order: 10 },
-                    { type: "paragraph", content: "<p><code>docker export</code> snapshots a container's entire filesystem into a <code>.tar</code> file. <code>docker import</code> does the reverse — it creates a new Docker image from a tar archive. Together they let you transfer or back up container filesystems without using a registry.</p>", order: 20 },
-                    { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Export is like making a zip file of everything inside a container. Import is like unzipping that file and turning it into a fresh image you can run again. Useful for moving containers between machines without internet access to Docker Hub.</p>", order: 30 },
-                    { type: "code", content: `# Export a container's filesystem to a tar file\ndocker export my-container > my-container-backup.tar\n\n# Import the tar file as a new image\ndocker import my-container-backup.tar my-restored-image:latest\n\n# Run the restored image\ndocker run -it my-restored-image:latest bash`, language: "bash", order: 40 },
-                    { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: `<p><strong>export vs save</strong> — an important distinction:
+  // ── docker export / import ────────────────────────────────────────────────
+  const pExportImport = await prisma.page.create({
+    data: {
+      title: "docker export / import",
+      slug: "/file-transfer/export-import",
+      description: "Export a container's entire filesystem as a tar archive, or import a tar archive as a new image.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker export CONTAINER > archive.tar</code><br><code>docker import archive.tar [IMAGE[:TAG]]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker export</code> snapshots a container's entire filesystem into a <code>.tar</code> file. <code>docker import</code> does the reverse — it creates a new Docker image from a tar archive. Together they let you transfer or back up container filesystems without using a registry.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Export is like making a zip file of everything inside a container. Import is like unzipping that file and turning it into a fresh image you can run again. Useful for moving containers between machines without internet access to Docker Hub.</p>", order: 30 },
+          { type: "code", content: `# Export a container's filesystem to a tar file\ndocker export my-container > my-container-backup.tar\n\n# Import the tar file as a new image\ndocker import my-container-backup.tar my-restored-image:latest\n\n# Run the restored image\ndocker run -it my-restored-image:latest bash`, language: "bash", order: 40 },
+          {
+            type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: `<p><strong>export vs save</strong> — an important distinction:
 <ul>
   <li><code>docker export</code> exports a <strong>container</strong> filesystem (flattened, no layer history, no metadata).</li>
   <li><code>docker save</code> exports an <strong>image</strong> with all its layers and history intact.</li>
 </ul>
-Use export/import for lightweight filesystem transfer. Use save/load when you need to preserve the full image layer cache.</p>`, order: 50 },
-                    { type: "code", content: `# Export with compression piped through gzip\ndocker export my-container | gzip > my-container.tar.gz\n\n# Import from a compressed archive\ngunzip -c my-container.tar.gz | docker import - my-image:restored\n\n# Import with a custom CMD instruction\ndocker import --change "CMD [\\"node\\", \\"server.js\\"]" backup.tar my-node-app:latest`, language: "bash", order: 60 },
-                    { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-                    { type: "paragraph", content: flagTable([
-                        { flag: "docker export CONTAINER", type: "Command", description: "Streams the container's filesystem as a tar to stdout. Redirect with > to save to a file." },
-                        { flag: "-o / --output FILE", type: "Option (export)", description: "Write the tar directly to a file instead of stdout." },
-                        { flag: "docker import SOURCE", type: "Command", description: "Source can be a tar file path, a URL, or - to read from stdin." },
-                        { flag: "--change / -c", type: "Option (import)", description: "Apply Dockerfile instructions (CMD, ENV, EXPOSE, etc.) to the imported image." },
-                        { flag: "--message / -m", type: "Option (import)", description: "Set a commit message for the imported image." },
-                    ]), order: 80 },
-                ],
-            },
-        },
-    });
-
-    // =========================================================================
-    // PAGES — CONTAINER LIFECYCLE
-    // =========================================================================
-
-    const pStart = await prisma.page.create({ data: {
-        title: "docker start / restart", slug: "/commands/start-restart",
-        description: "Start a stopped container, or restart a running one.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker start CONTAINER</code><br><code>docker restart [OPTIONS] CONTAINER</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker start</code> starts a container that was previously stopped — its filesystem and settings are preserved from when it stopped. <code>docker restart</code> stops then immediately starts a container, useful for applying config changes without recreating it.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker start</code> is like waking up a sleeping computer — all your files and programs are still there. <code>docker restart</code> is like rebooting it. Use restart when a service inside the container is misbehaving and a fresh start might fix it.</p>", order: 30 },
-            { type: "code", content: `# Start a stopped container\ndocker start my-nginx\n\n# Restart a running container\ndocker restart my-nginx\n\n# Restart with a 5 second delay before stopping\ndocker restart --time 5 my-nginx`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Start multiple stopped containers in one command, or restart all containers in a compose stack after a config change.</p>", order: 50 },
-            { type: "code", content: `# Start multiple containers at once\ndocker start container-a container-b container-c\n\n# Attach to the container's output after starting\ndocker start -a my-app`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container. Multiple accepted by docker start." },
-                { flag: "-a / --attach", type: "Flag (start)", description: "Attach stdout/stderr and forward signals after starting." },
-                { flag: "-i / --interactive", type: "Flag (start)", description: "Attach the container's stdin." },
-                { flag: "--time / -t N", type: "Option (restart)", description: "Seconds to wait before killing the container on restart. Default 10." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    const pKill = await prisma.page.create({ data: {
-        title: "docker kill", slug: "/commands/kill",
-        description: "Send a signal to a running container — by default SIGKILL, which force-terminates it instantly.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker kill [OPTIONS] CONTAINER [CONTAINER...]</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker kill</code> sends a UNIX signal to a container's main process. The default signal is <code>SIGKILL</code>, which terminates the process immediately with no cleanup. You can send any signal — <code>SIGHUP</code> to reload config, <code>SIGUSR1</code> for custom handlers, etc.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker stop</code> is politely asking a process to quit. <code>docker kill</code> is pulling the power plug — instant termination, no questions asked. Use it when a container is frozen and not responding to stop.</p>", order: 30 },
-            { type: "code", content: `# Force-kill a container immediately\ndocker kill my-nginx\n\n# Send SIGHUP instead (e.g. to reload nginx config without restarting)\ndocker kill --signal SIGHUP my-nginx`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>In CI teardown scripts, kill all running containers instantly to ensure a clean state before the next run.</p>", order: 50 },
-            { type: "code", content: `# Kill all running containers at once\ndocker kill $(docker ps -q)`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container. Multiple accepted." },
-                { flag: "-s / --signal SIGNAL", type: "Option", description: "UNIX signal to send. Default is SIGKILL. Examples: SIGHUP, SIGTERM, SIGUSR1, SIGINT." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    const pPause = await prisma.page.create({ data: {
-        title: "docker pause / unpause", slug: "/commands/pause",
-        description: "Suspend all processes in a container (freeze it), then resume them.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker pause CONTAINER</code><br><code>docker unpause CONTAINER</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker pause</code> suspends all processes in the container using the cgroup freezer — the container stays alive and in memory but does zero work. <code>docker unpause</code> resumes it exactly where it left off. No data is lost.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Pausing a container is like hitting Pause on a video game. The world freezes in place — the character, enemies, everything. Unpause and the game continues from the exact same frame. The container uses no CPU while paused but still holds its memory.</p>", order: 30 },
-            { type: "code", content: `# Pause (freeze) a container\ndocker pause my-nginx\n\n# Resume it\ndocker unpause my-nginx`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Pause a database container while taking a filesystem snapshot to get a consistent backup without shutting it down.</p>", order: 50 },
-            { type: "code", content: `# Pause a Postgres container for a consistent snapshot\ndocker pause my-postgres\n# ... take snapshot ...\ndocker unpause my-postgres`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to pause or unpause." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    const pRename = await prisma.page.create({ data: {
-        title: "docker rename", slug: "/commands/rename",
-        description: "Rename an existing container.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker rename CONTAINER NEW_NAME</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker rename</code> changes the name of a container. The container can be running or stopped. Other containers on the same network can reach it by the new name immediately.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>When you run a container without <code>--name</code>, Docker assigns a random name like <code>romantic_curie</code>. <code>docker rename</code> lets you replace that with something meaningful like <code>my-api</code> without recreating the container.</p>", order: 30 },
-            { type: "code", content: `# Rename a container\ndocker rename romantic_curie my-api`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Rename a container to match a naming convention after it was created with a temporary name during a blue/green deployment swap.</p>", order: 50 },
-            { type: "code", content: `# Swap blue/green: rename old to archived, new to active\ndocker rename app-blue app-blue-archived\ndocker rename app-green app-blue`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "CONTAINER", type: "Argument", description: "Current name or ID of the container to rename." },
-                { flag: "NEW_NAME", type: "Argument", description: "The new name to assign. Must be unique among all containers on the host." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    // =========================================================================
-    // PAGES — VOLUMES
-    // =========================================================================
-
-    const pVolumeCreate = await prisma.page.create({ data: {
-        title: "docker volume create", slug: "/commands/volume-create",
-        description: "Create a named volume for persisting data across container lifecycles.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker volume create [OPTIONS] [VOLUME]</code></p>", order: 10 },
-            { type: "paragraph", content: "<p>Volumes are the recommended way to persist data in Docker. Unlike bind mounts, volumes are fully managed by Docker, stored in a Docker-controlled directory on the host, and work the same on Windows, Mac, and Linux.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>A container's internal filesystem is temporary — when you delete the container, all data inside it is gone. A volume is an external hard drive you plug into the container. Delete the container, and the hard drive (volume) still exists with all its data intact.</p>", order: 30 },
-            { type: "code", content: `# Create a named volume\ndocker volume create my-db-data\n\n# Use it when running a container\ndocker run -d -v my-db-data:/var/lib/postgresql/data postgres:16`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Create a volume with a specific driver for network-attached storage in a production environment.</p>", order: 50 },
-            { type: "code", content: `# Create a volume and inspect it\ndocker volume create my-db-data\ndocker volume inspect my-db-data`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "VOLUME", type: "Argument", description: "Name for the volume. Omit for an auto-generated name." },
-                { flag: "--driver / -d STRING", type: "Option", description: "Volume driver. Default is local. Others: nfs, aws-efs, etc." },
-                { flag: "--opt / -o KEY=VALUE", type: "Option", description: "Driver-specific options (e.g. size, type for cloud volumes)." },
-                { flag: "--label KEY=VALUE", type: "Option", description: "Attach metadata labels to the volume for filtering later." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    const pVolumeLs = await prisma.page.create({ data: {
-        title: "docker volume ls / inspect / rm", slug: "/commands/volume-manage",
-        description: "List, inspect, and remove Docker volumes.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker volume ls</code> — list all volumes<br><code>docker volume inspect VOLUME</code> — detailed JSON info<br><code>docker volume rm VOLUME</code> — delete a volume</p>", order: 10 },
-            { type: "paragraph", content: "<p>These three commands let you manage the full lifecycle of volumes. <code>ls</code> shows what exists, <code>inspect</code> shows where data lives on the host and which containers are using it, and <code>rm</code> permanently deletes a volume and all its data.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker volume ls</code> is like checking what hard drives are connected. <code>docker volume inspect</code> opens Device Manager and shows full specs. <code>docker volume rm</code> formats and removes the drive permanently — all data is gone.</p>", order: 30 },
-            { type: "code", content: `# List all volumes\ndocker volume ls\n\n# Inspect a volume (shows mountpoint on host)\ndocker volume inspect my-db-data\n\n# Remove a volume (container must be stopped/removed first)\ndocker volume rm my-db-data`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Find the exact host path of a volume's data to back it up directly from the filesystem.</p>", order: 50 },
-            { type: "code", content: `# Get the mountpoint path of a volume\ndocker volume inspect my-db-data --format '{{.Mountpoint}}'\n# /var/lib/docker/volumes/my-db-data/_data\n\n# Remove all unused volumes\ndocker volume prune -f`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "docker volume ls --filter", type: "Option", description: "Filter volumes: dangling=true (unused), name=<pattern>, label=<key>." },
-                { flag: "docker volume ls -q", type: "Flag", description: "Print only volume names. Useful for piping to docker volume rm." },
-                { flag: "docker volume inspect --format", type: "Option", description: "Extract a specific field using a Go template, e.g. {{.Mountpoint}}." },
-                { flag: "docker volume rm -f", type: "Flag", description: "Force remove (some drivers support this even if a stopped container references the volume)." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    // =========================================================================
-    // PAGES — REGISTRY
-    // =========================================================================
-
-    const pLogin = await prisma.page.create({ data: {
-        title: "docker login / logout", slug: "/commands/login",
-        description: "Authenticate with a container registry (Docker Hub or private) to push and pull private images.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker login [SERVER]</code><br><code>docker logout [SERVER]</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker login</code> stores your registry credentials so Docker can authenticate when pulling private images or pushing to your repositories. Credentials are stored in <code>~/.docker/config.json</code>. <code>docker logout</code> removes the stored credentials for that registry.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Docker Hub is like a private library. Logging in gives you access to your private shelf (private images). Without logging in, you can only access the public section. <code>docker logout</code> is checking out of the library — your credentials are cleared from memory.</p>", order: 30 },
-            { type: "code", content: `# Log in to Docker Hub (prompts for username + password)\ndocker login\n\n# Log in to a private registry\ndocker login registry.mycompany.com\n\n# Log out from Docker Hub\ndocker logout`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>In CI/CD, pass credentials via environment variables without an interactive prompt — the secure way to authenticate in pipelines.</p>", order: 50 },
-            { type: "code", content: `# Non-interactive login using piped password (CI-safe)\necho "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin\n\n# Login to AWS ECR (uses helper tool)\naws ecr get-login-password | docker login --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "SERVER", type: "Argument", description: "Registry URL. Omit for Docker Hub (docker.io)." },
-                { flag: "-u / --username STRING", type: "Option", description: "Registry username." },
-                { flag: "-p / --password STRING", type: "Option", description: "Registry password. Avoid this in scripts — use --password-stdin instead." },
-                { flag: "--password-stdin", type: "Flag", description: "Read the password from stdin. Safe for CI/CD pipelines." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    const pSearch = await prisma.page.create({ data: {
-        title: "docker search / tag", slug: "/commands/search-tag",
-        description: "Search Docker Hub for public images, or tag a local image with a new name.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker search [OPTIONS] TERM</code><br><code>docker tag SOURCE_IMAGE TARGET_IMAGE</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker search</code> queries Docker Hub and returns matching public images with their star ratings and official status. <code>docker tag</code> creates an additional tag pointing to the same image — a way to rename or version an image before pushing it to a registry.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker search</code> is the command-line equivalent of searching Docker Hub's website. <code>docker tag</code> is like putting a second label on a jar — same contents, different name. Use it to retag an image with your Docker Hub username before pushing.</p>", order: 30 },
-            { type: "code", content: `# Search Docker Hub for nginx images\ndocker search nginx\n\n# Tag a local image with your username for pushing\ndocker tag my-app:latest yourusername/my-app:v1.0`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Filter search results to show only official images with at least 1000 stars, then tag and push a local image to a private registry.</p>", order: 50 },
-            { type: "code", content: `# Search for official images only with star count\ndocker search --filter "is-official=true" --filter "stars=1000" python\n\n# Tag an image for a private registry and push\ndocker tag my-app:latest registry.mycompany.com/team/my-app:2.1.0\ndocker push registry.mycompany.com/team/my-app:2.1.0`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "docker search --filter", type: "Option", description: "Filter results: is-official=true, is-automated=true, stars=N." },
-                { flag: "docker search --limit N", type: "Option", description: "Limit results to N images (default 25, max 100)." },
-                { flag: "docker search --format", type: "Option", description: "Format output with a Go template." },
-                { flag: "docker tag SOURCE", type: "Argument", description: "The existing local image name:tag or image ID to retag." },
-                { flag: "docker tag TARGET", type: "Argument", description: "The new name:tag (can include registry host, org, repo, and tag)." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    // =========================================================================
-    // PAGES — SYSTEM INFO
-    // =========================================================================
-
-    const pSystemInfo = await prisma.page.create({ data: {
-        title: "docker info / version / system df", slug: "/commands/system-info",
-        description: "Inspect the Docker daemon configuration, version details, and disk usage.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker info</code> — daemon config &amp; resource summary<br><code>docker version</code> — client and server version detail<br><code>docker system df</code> — disk usage breakdown</p>", order: 10 },
-            { type: "paragraph", content: "<p>These three read-only commands help you understand the current state of your Docker installation without changing anything.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker version</code> is like checking what version of an app you installed. <code>docker info</code> opens the full settings panel — how many containers are running, how much memory Docker can use, what OS it is running on. <code>docker system df</code> is checking how much disk space Docker is consuming overall.</p>", order: 30 },
-            { type: "code", content: `# Show Docker client and server versions\ndocker version\n\n# Show system-wide Docker information\ndocker info\n\n# Show disk usage by images, containers, and volumes\ndocker system df`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Use these commands at the start of a CI job to log the Docker environment, or to audit how much reclaimable space exists on a build server.</p>", order: 50 },
-            { type: "code", content: `# Verbose disk usage (shows each image/container/volume individually)\ndocker system df -v\n\n# Get just the Docker server version as a plain string\ndocker version --format '{{.Server.Version}}'\n\n# Check number of running containers and total memory\ndocker info --format '{{.ContainersRunning}} containers, {{.MemTotal}} bytes RAM'`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "docker info --format", type: "Option", description: "Extract specific fields using a Go template." },
-                { flag: "docker version --format", type: "Option", description: "Format version output. Use json for structured output." },
-                { flag: "docker system df -v", type: "Flag", description: "Show verbose output: breaks down disk usage per individual image, container, and volume." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    // =========================================================================
-    // PAGES — IMAGE TRANSFERS
-    // =========================================================================
-
-    const pSaveLoad = await prisma.page.create({ data: {
-        title: "docker save / load", slug: "/commands/save-load",
-        description: "Export a full image (with all layers) to a tar file, or load it back — no registry required.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker save IMAGE > archive.tar</code><br><code>docker load < archive.tar</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker save</code> exports a full image — all layers, tags, and metadata — into a tar file. <code>docker load</code> imports it back, restoring the image exactly as it was. Unlike <code>docker export</code> (which exports a container filesystem), <code>save</code> preserves the complete image layer cache.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smell-fill", content: "<p>Save/load is a USB stick for Docker images. You build an image, <code>docker save</code> it to a <code>.tar</code> file, copy the file to another machine (even one with no internet), and <code>docker load</code> it. The image appears exactly as if you had built it or pulled it from a registry.</p>", order: 30 },
-            { type: "code", content: `# Save an image to a tar file\ndocker save my-app:latest > my-app.tar\n\n# Load it on another machine\ndocker load < my-app.tar`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Save multiple images into one archive and transfer them to an air-gapped server with no internet connection.</p>", order: 50 },
-            { type: "code", content: `# Save multiple images into one archive\ndocker save my-app:v1 nginx:alpine postgres:16 | gzip > stack-images.tar.gz\n\n# Load on the target machine\ngunzip -c stack-images.tar.gz | docker load\n\n# Save to a file directly (instead of stdout redirect)\ndocker save -o my-app.tar my-app:latest`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "docker save IMAGE [IMAGE...]", type: "Argument", description: "One or more image names/tags to include in the archive." },
-                { flag: "docker save -o FILE", type: "Option", description: "Write to a file directly instead of stdout. Equivalent to > redirect." },
-                { flag: "docker load -i FILE", type: "Option", description: "Load from a file instead of stdin. Equivalent to < redirect." },
-                { flag: "docker load -q", type: "Flag", description: "Suppress output — only print the loaded image names." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    // =========================================================================
-    // PAGES — DOCKER COMPOSE
-    // =========================================================================
-
-    const pComposeUp = await prisma.page.create({ data: {
-        title: "docker compose up / down", slug: "/commands/compose-up-down",
-        description: "Start your entire multi-container application from a compose file, or tear it all down.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker compose up [OPTIONS]</code><br><code>docker compose down [OPTIONS]</code></p>", order: 10 },
-            { type: "paragraph", content: "<p>Docker Compose orchestrates multi-container applications defined in a <code>compose.yaml</code> file. <code>compose up</code> creates and starts all defined services, networks, and volumes. <code>compose down</code> stops and removes them — optionally also removing volumes and images.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Running a modern app usually needs multiple containers: a web server, a database, a cache. Without Compose, you would start each one manually. <code>docker compose up</code> reads a recipe file (<code>compose.yaml</code>) and starts everything at once. <code>compose down</code> shuts everything down cleanly.</p>", order: 30 },
-            { type: "code", content: `# Start all services defined in compose.yaml\ndocker compose up\n\n# Start in background (detached)\ndocker compose up -d\n\n# Stop and remove all containers + networks\ndocker compose down`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Start only a subset of services, force a rebuild of images, and on teardown also remove volumes to get a fully clean state.</p>", order: 50 },
-            { type: "code", content: `# Rebuild images then start (ignores cache)\ndocker compose up -d --build\n\n# Start only the backend service (not frontend or db)\ndocker compose up -d backend\n\n# Tear down: remove containers, networks, AND volumes\ndocker compose down -v\n\n# Tear down and also remove the built images\ndocker compose down --rmi all -v`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "-d / --detach", type: "Flag (up)", description: "Run all services in the background and return the prompt." },
-                { flag: "--build", type: "Flag (up)", description: "Force rebuild of service images before starting containers." },
-                { flag: "--no-deps", type: "Flag (up)", description: "Start only the specified service, without starting its dependencies." },
-                { flag: "--scale SERVICE=N", type: "Option (up)", description: "Override the number of replicas for a service." },
-                { flag: "-v / --volumes", type: "Flag (down)", description: "Remove named and anonymous volumes declared in compose.yaml." },
-                { flag: "--rmi STRING", type: "Option (down)", description: "Remove images. Values: all (all images used), local (only locally built ones)." },
-                { flag: "-f / --file FILE", type: "Option (both)", description: "Specify a non-default compose file, e.g. -f docker-compose.prod.yaml." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    const pComposePsLogs = await prisma.page.create({ data: {
-        title: "docker compose ps / logs", slug: "/commands/compose-ps-logs",
-        description: "Check the status of compose services and view their combined log output.",
-        components: { create: [
-            { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker compose ps</code><br><code>docker compose logs [SERVICE]</code></p>", order: 10 },
-            { type: "paragraph", content: "<p><code>docker compose ps</code> lists the containers managed by the current compose stack and their status. <code>docker compose logs</code> aggregates and streams logs from all services in one view — optionally filtered to a single service.</p>", order: 20 },
-            { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>After running <code>docker compose up -d</code>, your app is running silently in the background. <code>compose ps</code> tells you which services are healthy and running. <code>compose logs</code> opens the combined log stream of all services so you can spot errors across the whole stack at once.</p>", order: 30 },
-            { type: "code", content: `# Check status of all compose services\ndocker compose ps\n\n# View combined logs from all services\ndocker compose logs\n\n# Follow (stream) logs from all services\ndocker compose logs -f`, language: "bash", order: 40 },
-            { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Follow only the backend service's logs with timestamps, and check which compose services have unhealthy health checks.</p>", order: 50 },
-            { type: "code", content: `# Stream logs for only one service with timestamps\ndocker compose logs -f --timestamps backend\n\n# Check services that are not running (exit code != 0)\ndocker compose ps --status exited\n\n# Show only the last 50 lines from each service\ndocker compose logs --tail 50`, language: "bash", order: 60 },
-            { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
-            { type: "paragraph", content: flagTable([
-                { flag: "docker compose ps --status", type: "Option", description: "Filter by status: running, exited, paused, restarting." },
-                { flag: "docker compose ps -q", type: "Flag", description: "Print only container IDs." },
-                { flag: "docker compose logs SERVICE", type: "Argument", description: "Filter logs to a specific service name. Omit for all services." },
-                { flag: "docker compose logs -f", type: "Flag", description: "Follow log output in real-time." },
-                { flag: "docker compose logs --tail N", type: "Option", description: "Show only the last N lines from each service." },
-                { flag: "docker compose logs -t", type: "Flag", description: "Include timestamps on each log line." },
-            ]), order: 80 },
-        ]},
-    }});
-
-    // =========================================================================
-    // MENU ITEMS
-    // =========================================================================
-
-    // Section: Getting Started (order 1)
-    const menuGettingStarted = await prisma.menuItem.create({
-        data: { label: "Getting Started", icon: "bi-rocket-takeoff-fill", order: 1 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "Introduction", icon: "bi-book-fill", parentId: menuGettingStarted.id, pageId: pIntro.id, order: 1 },
-            { label: "Docker Architecture", icon: "bi-cpu-fill", parentId: menuGettingStarted.id, pageId: pDockerArchitecture.id, order: 2 },
-            { label: "Images and Containers", icon: "bi-box-seam-fill", parentId: menuGettingStarted.id, pageId: pImagesContainers.id, order: 3 },
-            { label: "Layers", icon: "bi-layers-fill", parentId: menuGettingStarted.id, pageId: pLayers.id, order: 4 },
-            { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", parentId: menuGettingStarted.id, pageId: pVolumesBindMounts.id, order: 5 },
-            { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", parentId: menuGettingStarted.id, pageId: pRulesAndCaseStudies.id, order: 6 },
-            { label: "Installation", icon: "bi-download", parentId: menuGettingStarted.id, pageId: pInstall.id, order: 7 },
+Use export/import for lightweight filesystem transfer. Use save/load when you need to preserve the full image layer cache.</p>`, order: 50
+          },
+          { type: "code", content: `# Export with compression piped through gzip\ndocker export my-container | gzip > my-container.tar.gz\n\n# Import from a compressed archive\ngunzip -c my-container.tar.gz | docker import - my-image:restored\n\n# Import with a custom CMD instruction\ndocker import --change "CMD [\\"node\\", \\"server.js\\"]" backup.tar my-node-app:latest`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "docker export CONTAINER", type: "Command", description: "Streams the container's filesystem as a tar to stdout. Redirect with > to save to a file." },
+              { flag: "-o / --output FILE", type: "Option (export)", description: "Write the tar directly to a file instead of stdout." },
+              { flag: "docker import SOURCE", type: "Command", description: "Source can be a tar file path, a URL, or - to read from stdin." },
+              { flag: "--change / -c", type: "Option (import)", description: "Apply Dockerfile instructions (CMD, ENV, EXPOSE, etc.) to the imported image." },
+              { flag: "--message / -m", type: "Option (import)", description: "Set a commit message for the imported image." },
+            ]), order: 80
+          },
         ],
-    });
+      },
+    },
+  });
 
-    // Section: Commands (order 2)
-    const menuCommands = await prisma.menuItem.create({
-        data: { label: "Commands", icon: "bi-terminal-fill", order: 2 },
-    });
+  // =========================================================================
+  // PAGES — CONTAINER LIFECYCLE
+  // =========================================================================
 
-    // Subsection: Common Linux Commands
-    const menuCommonLinuxCommands = await prisma.menuItem.create({
-        data: { label: "Common Linux Commands", icon: "bi-terminal-fill", parentId: menuCommands.id, order: 1 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "Common Linux Commands", icon: "bi-terminal-fill", parentId: menuCommonLinuxCommands.id, pageId: pCommonLinuxCommands.id, order: 1 },
-            { label: "Practice Challenges", icon: "bi-pencil-square", parentId: menuCommonLinuxCommands.id, pageId: pPracticeLinuxCommands.id, order: 2 },
-        ],
-    });
+  const pStart = await prisma.page.create({
+    data: {
+      title: "docker start / restart", slug: "/commands/start-restart",
+      description: "Start a stopped container, or restart a running one.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker start CONTAINER</code><br><code>docker restart [OPTIONS] CONTAINER</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker start</code> starts a container that was previously stopped — its filesystem and settings are preserved from when it stopped. <code>docker restart</code> stops then immediately starts a container, useful for applying config changes without recreating it.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker start</code> is like waking up a sleeping computer — all your files and programs are still there. <code>docker restart</code> is like rebooting it. Use restart when a service inside the container is misbehaving and a fresh start might fix it.</p>", order: 30 },
+          { type: "code", content: `# Start a stopped container\ndocker start my-nginx\n\n# Restart a running container\ndocker restart my-nginx\n\n# Restart with a 5 second delay before stopping\ndocker restart --time 5 my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Start multiple stopped containers in one command, or restart all containers in a compose stack after a config change.</p>", order: 50 },
+          { type: "code", content: `# Start multiple containers at once\ndocker start container-a container-b container-c\n\n# Attach to the container's output after starting\ndocker start -a my-app`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container. Multiple accepted by docker start." },
+              { flag: "-a / --attach", type: "Flag (start)", description: "Attach stdout/stderr and forward signals after starting." },
+              { flag: "-i / --interactive", type: "Flag (start)", description: "Attach the container's stdin." },
+              { flag: "--time / -t N", type: "Option (restart)", description: "Seconds to wait before killing the container on restart. Default 10." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
 
-    // Subsection: Core Docker Commands
-    const menuCoreDockerCommands = await prisma.menuItem.create({
-        data: { label: "Core Docker Commands", icon: "bi-play-circle-fill", parentId: menuCommands.id, order: 2 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "docker run",          icon: "bi-play-circle-fill",    parentId: menuCoreDockerCommands.id, pageId: pRun.id,           order: 1 },
-            { label: "docker build",        icon: "bi-hammer",               parentId: menuCoreDockerCommands.id, pageId: pBuild.id,         order: 2 },
-            { label: "docker pull",         icon: "bi-cloud-download-fill",  parentId: menuCoreDockerCommands.id, pageId: pPull.id,          order: 3 },
-            { label: "docker push",         icon: "bi-cloud-upload-fill",    parentId: menuCoreDockerCommands.id, pageId: pPush.id,          order: 4 },
-            { label: "docker ps",           icon: "bi-list-check",           parentId: menuCoreDockerCommands.id, pageId: pPs.id,            order: 5 },
-            { label: "docker images",       icon: "bi-layers-fill",          parentId: menuCoreDockerCommands.id, pageId: pImages.id,        order: 6 },
-            { label: "docker stop",         icon: "bi-stop-circle-fill",     parentId: menuCoreDockerCommands.id, pageId: pStop.id,          order: 7 },
-            { label: "docker rm",           icon: "bi-trash-fill",           parentId: menuCoreDockerCommands.id, pageId: pRm.id,            order: 8 },
-            { label: "docker rmi",          icon: "bi-trash2-fill",          parentId: menuCoreDockerCommands.id, pageId: pRmi.id,           order: 9 },
-            { label: "docker exec",         icon: "bi-terminal",             parentId: menuCoreDockerCommands.id, pageId: pExec.id,          order: 10 },
-            { label: "docker logs",         icon: "bi-file-text-fill",       parentId: menuCoreDockerCommands.id, pageId: pLogs.id,          order: 11 },
-            // Container Lifecycle
-            { label: "start / restart",     icon: "bi-arrow-clockwise",      parentId: menuCoreDockerCommands.id, pageId: pStart.id,         order: 12 },
-            { label: "docker kill",         icon: "bi-x-octagon-fill",       parentId: menuCoreDockerCommands.id, pageId: pKill.id,          order: 13 },
-            { label: "pause / unpause",     icon: "bi-pause-circle-fill",    parentId: menuCoreDockerCommands.id, pageId: pPause.id,         order: 14 },
-            { label: "docker rename",       icon: "bi-pencil-fill",          parentId: menuCoreDockerCommands.id, pageId: pRename.id,        order: 15 },
-            // Volumes
-            { label: "volume create",       icon: "bi-hdd-fill",             parentId: menuCoreDockerCommands.id, pageId: pVolumeCreate.id,  order: 16 },
-            { label: "volume ls/inspect/rm",icon: "bi-hdd-stack-fill",       parentId: menuCoreDockerCommands.id, pageId: pVolumeLs.id,      order: 17 },
-            // Registry
-            { label: "login / logout",      icon: "bi-person-badge-fill",    parentId: menuCoreDockerCommands.id, pageId: pLogin.id,         order: 18 },
-            { label: "search / tag",        icon: "bi-tags-fill",            parentId: menuCoreDockerCommands.id, pageId: pSearch.id,        order: 19 },
-            // System Info
-            { label: "info / version / df", icon: "bi-info-circle-fill",     parentId: menuCoreDockerCommands.id, pageId: pSystemInfo.id,    order: 20 },
-            // Image Transfers
-            { label: "save / load",         icon: "bi-box-arrow-in-down-left",parentId: menuCoreDockerCommands.id, pageId: pSaveLoad.id,     order: 21 },
-            // Docker Compose
-            { label: "compose up / down",   icon: "bi-stack",                parentId: menuCoreDockerCommands.id, pageId: pComposeUp.id,     order: 22 },
-            { label: "compose ps / logs",   icon: "bi-card-list",            parentId: menuCoreDockerCommands.id, pageId: pComposePsLogs.id, order: 23 },
-        ],
-    });
+  const pKill = await prisma.page.create({
+    data: {
+      title: "docker kill", slug: "/commands/kill",
+      description: "Send a signal to a running container — by default SIGKILL, which force-terminates it instantly.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker kill [OPTIONS] CONTAINER [CONTAINER...]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker kill</code> sends a UNIX signal to a container's main process. The default signal is <code>SIGKILL</code>, which terminates the process immediately with no cleanup. You can send any signal — <code>SIGHUP</code> to reload config, <code>SIGUSR1</code> for custom handlers, etc.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker stop</code> is politely asking a process to quit. <code>docker kill</code> is pulling the power plug — instant termination, no questions asked. Use it when a container is frozen and not responding to stop.</p>", order: 30 },
+          { type: "code", content: `# Force-kill a container immediately\ndocker kill my-nginx\n\n# Send SIGHUP instead (e.g. to reload nginx config without restarting)\ndocker kill --signal SIGHUP my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>In CI teardown scripts, kill all running containers instantly to ensure a clean state before the next run.</p>", order: 50 },
+          { type: "code", content: `# Kill all running containers at once\ndocker kill $(docker ps -q)`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container. Multiple accepted." },
+              { flag: "-s / --signal SIGNAL", type: "Option", description: "UNIX signal to send. Default is SIGKILL. Examples: SIGHUP, SIGTERM, SIGUSR1, SIGINT." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
 
-    // Subsection: Debugging (now under Commands)
-    const menuDebugging = await prisma.menuItem.create({
-        data: { label: "Debugging", icon: "bi-bug-fill", parentId: menuCommands.id, order: 3 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "docker inspect", icon: "bi-search",              parentId: menuDebugging.id, pageId: pInspect.id, order: 1 },
-            { label: "docker stats",   icon: "bi-bar-chart-fill",      parentId: menuDebugging.id, pageId: pStats.id,   order: 2 },
-            { label: "docker top",     icon: "bi-cpu-fill",            parentId: menuDebugging.id, pageId: pTop.id,     order: 3 },
-            { label: "docker events",  icon: "bi-activity",            parentId: menuDebugging.id, pageId: pEvents.id,  order: 4 },
-            { label: "docker diff",    icon: "bi-file-diff-fill",      parentId: menuDebugging.id, pageId: pDiff.id,    order: 5 },
-        ],
-    });
+  const pPause = await prisma.page.create({
+    data: {
+      title: "docker pause / unpause", slug: "/commands/pause",
+      description: "Suspend all processes in a container (freeze it), then resume them.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker pause CONTAINER</code><br><code>docker unpause CONTAINER</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker pause</code> suspends all processes in the container using the cgroup freezer — the container stays alive and in memory but does zero work. <code>docker unpause</code> resumes it exactly where it left off. No data is lost.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Pausing a container is like hitting Pause on a video game. The world freezes in place — the character, enemies, everything. Unpause and the game continues from the exact same frame. The container uses no CPU while paused but still holds its memory.</p>", order: 30 },
+          { type: "code", content: `# Pause (freeze) a container\ndocker pause my-nginx\n\n# Resume it\ndocker unpause my-nginx`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Pause a database container while taking a filesystem snapshot to get a consistent backup without shutting it down.</p>", order: 50 },
+          { type: "code", content: `# Pause a Postgres container for a consistent snapshot\ndocker pause my-postgres\n# ... take snapshot ...\ndocker unpause my-postgres`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Name or ID of the container to pause or unpause." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
 
-    // Subsection: Cleanup (now under Commands)
-    const menuCleanup = await prisma.menuItem.create({
-        data: { label: "Cleanup", icon: "bi-trash3-fill", parentId: menuCommands.id, order: 4 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "system prune",    icon: "bi-nuclear",              parentId: menuCleanup.id, pageId: pSystemPrune.id,    order: 1 },
-            { label: "container prune", icon: "bi-box-arrow-right",      parentId: menuCleanup.id, pageId: pContainerPrune.id, order: 2 },
-            { label: "image prune",     icon: "bi-image-fill",           parentId: menuCleanup.id, pageId: pImagePrune.id,     order: 3 },
-            { label: "volume prune",    icon: "bi-device-hdd-fill",      parentId: menuCleanup.id, pageId: pVolumePrune.id,    order: 4 },
-        ],
-    });
+  const pRename = await prisma.page.create({
+    data: {
+      title: "docker rename", slug: "/commands/rename",
+      description: "Rename an existing container.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker rename CONTAINER NEW_NAME</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker rename</code> changes the name of a container. The container can be running or stopped. Other containers on the same network can reach it by the new name immediately.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>When you run a container without <code>--name</code>, Docker assigns a random name like <code>romantic_curie</code>. <code>docker rename</code> lets you replace that with something meaningful like <code>my-api</code> without recreating the container.</p>", order: 30 },
+          { type: "code", content: `# Rename a container\ndocker rename romantic_curie my-api`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Rename a container to match a naming convention after it was created with a temporary name during a blue/green deployment swap.</p>", order: 50 },
+          { type: "code", content: `# Swap blue/green: rename old to archived, new to active\ndocker rename app-blue app-blue-archived\ndocker rename app-green app-blue`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "CONTAINER", type: "Argument", description: "Current name or ID of the container to rename." },
+              { flag: "NEW_NAME", type: "Argument", description: "The new name to assign. Must be unique among all containers on the host." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
 
-    // Subsection: Networking (now under Commands)
-    const menuNetworking = await prisma.menuItem.create({
-        data: { label: "Networking", icon: "bi-diagram-3-fill", parentId: menuCommands.id, order: 5 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "network ls",         icon: "bi-list-ul",           parentId: menuNetworking.id, pageId: pNetworkLs.id,      order: 1 },
-            { label: "network create",     icon: "bi-plus-circle-fill",  parentId: menuNetworking.id, pageId: pNetworkCreate.id,  order: 2 },
-            { label: "network inspect",    icon: "bi-search",            parentId: menuNetworking.id, pageId: pNetworkInspect.id, order: 3 },
-            { label: "network connect",    icon: "bi-plug-fill",         parentId: menuNetworking.id, pageId: pNetworkConnect.id, order: 4 },
-            { label: "network rm",         icon: "bi-trash-fill",        parentId: menuNetworking.id, pageId: pNetworkRm.id,      order: 5 },
-        ],
-    });
+  // =========================================================================
+  // PAGES — VOLUMES
+  // =========================================================================
 
-    // Subsection: File Transfer (now under Commands)
-    const menuFileTransfer = await prisma.menuItem.create({
-        data: { label: "File Transfer", icon: "bi-arrow-left-right", parentId: menuCommands.id, order: 6 },
-    });
-    await prisma.menuItem.createMany({
-        data: [
-            { label: "docker cp",             icon: "bi-clipboard-fill",   parentId: menuFileTransfer.id, pageId: pCp.id,           order: 1 },
-            { label: "export / import",       icon: "bi-box-arrow-in-down",parentId: menuFileTransfer.id, pageId: pExportImport.id, order: 2 },
-        ],
-    });
+  const pVolumeCreate = await prisma.page.create({
+    data: {
+      title: "docker volume create", slug: "/commands/volume-create",
+      description: "Create a named volume for persisting data across container lifecycles.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p>Syntax: <code>docker volume create [OPTIONS] [VOLUME]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p>Volumes are the recommended way to persist data in Docker. Unlike bind mounts, volumes are fully managed by Docker, stored in a Docker-controlled directory on the host, and work the same on Windows, Mac, and Linux.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>A container's internal filesystem is temporary — when you delete the container, all data inside it is gone. A volume is an external hard drive you plug into the container. Delete the container, and the hard drive (volume) still exists with all its data intact.</p>", order: 30 },
+          { type: "code", content: `# Create a named volume\ndocker volume create my-db-data\n\n# Use it when running a container\ndocker run -d -v my-db-data:/var/lib/postgresql/data postgres:16`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Create a volume with a specific driver for network-attached storage in a production environment.</p>", order: 50 },
+          { type: "code", content: `# Create a volume and inspect it\ndocker volume create my-db-data\ndocker volume inspect my-db-data`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "VOLUME", type: "Argument", description: "Name for the volume. Omit for an auto-generated name." },
+              { flag: "--driver / -d STRING", type: "Option", description: "Volume driver. Default is local. Others: nfs, aws-efs, etc." },
+              { flag: "--opt / -o KEY=VALUE", type: "Option", description: "Driver-specific options (e.g. size, type for cloud volumes)." },
+              { flag: "--label KEY=VALUE", type: "Option", description: "Attach metadata labels to the volume for filtering later." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
 
-    console.log("✅ Seeding complete!");
+  const pVolumeLs = await prisma.page.create({
+    data: {
+      title: "docker volume ls / inspect / rm", slug: "/commands/volume-manage",
+      description: "List, inspect, and remove Docker volumes.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker volume ls</code> — list all volumes<br><code>docker volume inspect VOLUME</code> — detailed JSON info<br><code>docker volume rm VOLUME</code> — delete a volume</p>", order: 10 },
+          { type: "paragraph", content: "<p>These three commands let you manage the full lifecycle of volumes. <code>ls</code> shows what exists, <code>inspect</code> shows where data lives on the host and which containers are using it, and <code>rm</code> permanently deletes a volume and all its data.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker volume ls</code> is like checking what hard drives are connected. <code>docker volume inspect</code> opens Device Manager and shows full specs. <code>docker volume rm</code> formats and removes the drive permanently — all data is gone.</p>", order: 30 },
+          { type: "code", content: `# List all volumes\ndocker volume ls\n\n# Inspect a volume (shows mountpoint on host)\ndocker volume inspect my-db-data\n\n# Remove a volume (container must be stopped/removed first)\ndocker volume rm my-db-data`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Find the exact host path of a volume's data to back it up directly from the filesystem.</p>", order: 50 },
+          { type: "code", content: `# Get the mountpoint path of a volume\ndocker volume inspect my-db-data --format '{{.Mountpoint}}'\n# /var/lib/docker/volumes/my-db-data/_data\n\n# Remove all unused volumes\ndocker volume prune -f`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "docker volume ls --filter", type: "Option", description: "Filter volumes: dangling=true (unused), name=<pattern>, label=<key>." },
+              { flag: "docker volume ls -q", type: "Flag", description: "Print only volume names. Useful for piping to docker volume rm." },
+              { flag: "docker volume inspect --format", type: "Option", description: "Extract a specific field using a Go template, e.g. {{.Mountpoint}}." },
+              { flag: "docker volume rm -f", type: "Flag", description: "Force remove (some drivers support this even if a stopped container references the volume)." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  // =========================================================================
+  // PAGES — REGISTRY
+  // =========================================================================
+
+  const pLogin = await prisma.page.create({
+    data: {
+      title: "docker login / logout", slug: "/commands/login",
+      description: "Authenticate with a container registry (Docker Hub or private) to push and pull private images.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker login [SERVER]</code><br><code>docker logout [SERVER]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker login</code> stores your registry credentials so Docker can authenticate when pulling private images or pushing to your repositories. Credentials are stored in <code>~/.docker/config.json</code>. <code>docker logout</code> removes the stored credentials for that registry.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Docker Hub is like a private library. Logging in gives you access to your private shelf (private images). Without logging in, you can only access the public section. <code>docker logout</code> is checking out of the library — your credentials are cleared from memory.</p>", order: 30 },
+          { type: "code", content: `# Log in to Docker Hub (prompts for username + password)\ndocker login\n\n# Log in to a private registry\ndocker login registry.mycompany.com\n\n# Log out from Docker Hub\ndocker logout`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>In CI/CD, pass credentials via environment variables without an interactive prompt — the secure way to authenticate in pipelines.</p>", order: 50 },
+          { type: "code", content: `# Non-interactive login using piped password (CI-safe)\necho "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin\n\n# Login to AWS ECR (uses helper tool)\naws ecr get-login-password | docker login --username AWS --password-stdin 123456789.dkr.ecr.us-east-1.amazonaws.com`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "SERVER", type: "Argument", description: "Registry URL. Omit for Docker Hub (docker.io)." },
+              { flag: "-u / --username STRING", type: "Option", description: "Registry username." },
+              { flag: "-p / --password STRING", type: "Option", description: "Registry password. Avoid this in scripts — use --password-stdin instead." },
+              { flag: "--password-stdin", type: "Flag", description: "Read the password from stdin. Safe for CI/CD pipelines." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  const pSearch = await prisma.page.create({
+    data: {
+      title: "docker search / tag", slug: "/commands/search-tag",
+      description: "Search Docker Hub for public images, or tag a local image with a new name.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker search [OPTIONS] TERM</code><br><code>docker tag SOURCE_IMAGE TARGET_IMAGE</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker search</code> queries Docker Hub and returns matching public images with their star ratings and official status. <code>docker tag</code> creates an additional tag pointing to the same image — a way to rename or version an image before pushing it to a registry.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker search</code> is the command-line equivalent of searching Docker Hub's website. <code>docker tag</code> is like putting a second label on a jar — same contents, different name. Use it to retag an image with your Docker Hub username before pushing.</p>", order: 30 },
+          { type: "code", content: `# Search Docker Hub for nginx images\ndocker search nginx\n\n# Tag a local image with your username for pushing\ndocker tag my-app:latest yourusername/my-app:v1.0`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Filter search results to show only official images with at least 1000 stars, then tag and push a local image to a private registry.</p>", order: 50 },
+          { type: "code", content: `# Search for official images only with star count\ndocker search --filter "is-official=true" --filter "stars=1000" python\n\n# Tag an image for a private registry and push\ndocker tag my-app:latest registry.mycompany.com/team/my-app:2.1.0\ndocker push registry.mycompany.com/team/my-app:2.1.0`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "docker search --filter", type: "Option", description: "Filter results: is-official=true, is-automated=true, stars=N." },
+              { flag: "docker search --limit N", type: "Option", description: "Limit results to N images (default 25, max 100)." },
+              { flag: "docker search --format", type: "Option", description: "Format output with a Go template." },
+              { flag: "docker tag SOURCE", type: "Argument", description: "The existing local image name:tag or image ID to retag." },
+              { flag: "docker tag TARGET", type: "Argument", description: "The new name:tag (can include registry host, org, repo, and tag)." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  // =========================================================================
+  // PAGES — SYSTEM INFO
+  // =========================================================================
+
+  const pSystemInfo = await prisma.page.create({
+    data: {
+      title: "docker info / version / system df", slug: "/commands/system-info",
+      description: "Inspect the Docker daemon configuration, version details, and disk usage.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker info</code> — daemon config &amp; resource summary<br><code>docker version</code> — client and server version detail<br><code>docker system df</code> — disk usage breakdown</p>", order: 10 },
+          { type: "paragraph", content: "<p>These three read-only commands help you understand the current state of your Docker installation without changing anything.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p><code>docker version</code> is like checking what version of an app you installed. <code>docker info</code> opens the full settings panel — how many containers are running, how much memory Docker can use, what OS it is running on. <code>docker system df</code> is checking how much disk space Docker is consuming overall.</p>", order: 30 },
+          { type: "code", content: `# Show Docker client and server versions\ndocker version\n\n# Show system-wide Docker information\ndocker info\n\n# Show disk usage by images, containers, and volumes\ndocker system df`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Use these commands at the start of a CI job to log the Docker environment, or to audit how much reclaimable space exists on a build server.</p>", order: 50 },
+          { type: "code", content: `# Verbose disk usage (shows each image/container/volume individually)\ndocker system df -v\n\n# Get just the Docker server version as a plain string\ndocker version --format '{{.Server.Version}}'\n\n# Check number of running containers and total memory\ndocker info --format '{{.ContainersRunning}} containers, {{.MemTotal}} bytes RAM'`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "docker info --format", type: "Option", description: "Extract specific fields using a Go template." },
+              { flag: "docker version --format", type: "Option", description: "Format version output. Use json for structured output." },
+              { flag: "docker system df -v", type: "Flag", description: "Show verbose output: breaks down disk usage per individual image, container, and volume." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  // =========================================================================
+  // PAGES — IMAGE TRANSFERS
+  // =========================================================================
+
+  const pSaveLoad = await prisma.page.create({
+    data: {
+      title: "docker save / load", slug: "/commands/save-load",
+      description: "Export a full image (with all layers) to a tar file, or load it back — no registry required.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker save IMAGE > archive.tar</code><br><code>docker load < archive.tar</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker save</code> exports a full image — all layers, tags, and metadata — into a tar file. <code>docker load</code> imports it back, restoring the image exactly as it was. Unlike <code>docker export</code> (which exports a container filesystem), <code>save</code> preserves the complete image layer cache.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smell-fill", content: "<p>Save/load is a USB stick for Docker images. You build an image, <code>docker save</code> it to a <code>.tar</code> file, copy the file to another machine (even one with no internet), and <code>docker load</code> it. The image appears exactly as if you had built it or pulled it from a registry.</p>", order: 30 },
+          { type: "code", content: `# Save an image to a tar file\ndocker save my-app:latest > my-app.tar\n\n# Load it on another machine\ndocker load < my-app.tar`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Save multiple images into one archive and transfer them to an air-gapped server with no internet connection.</p>", order: 50 },
+          { type: "code", content: `# Save multiple images into one archive\ndocker save my-app:v1 nginx:alpine postgres:16 | gzip > stack-images.tar.gz\n\n# Load on the target machine\ngunzip -c stack-images.tar.gz | docker load\n\n# Save to a file directly (instead of stdout redirect)\ndocker save -o my-app.tar my-app:latest`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "docker save IMAGE [IMAGE...]", type: "Argument", description: "One or more image names/tags to include in the archive." },
+              { flag: "docker save -o FILE", type: "Option", description: "Write to a file directly instead of stdout. Equivalent to > redirect." },
+              { flag: "docker load -i FILE", type: "Option", description: "Load from a file instead of stdin. Equivalent to < redirect." },
+              { flag: "docker load -q", type: "Flag", description: "Suppress output — only print the loaded image names." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  // =========================================================================
+  // PAGES — DOCKER COMPOSE
+  // =========================================================================
+
+  const pComposeUp = await prisma.page.create({
+    data: {
+      title: "docker compose up / down", slug: "/commands/compose-up-down",
+      description: "Start your entire multi-container application from a compose file, or tear it all down.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker compose up [OPTIONS]</code><br><code>docker compose down [OPTIONS]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p>Docker Compose orchestrates multi-container applications defined in a <code>compose.yaml</code> file. <code>compose up</code> creates and starts all defined services, networks, and volumes. <code>compose down</code> stops and removes them — optionally also removing volumes and images.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>Running a modern app usually needs multiple containers: a web server, a database, a cache. Without Compose, you would start each one manually. <code>docker compose up</code> reads a recipe file (<code>compose.yaml</code>) and starts everything at once. <code>compose down</code> shuts everything down cleanly.</p>", order: 30 },
+          { type: "code", content: `# Start all services defined in compose.yaml\ndocker compose up\n\n# Start in background (detached)\ndocker compose up -d\n\n# Stop and remove all containers + networks\ndocker compose down`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Start only a subset of services, force a rebuild of images, and on teardown also remove volumes to get a fully clean state.</p>", order: 50 },
+          { type: "code", content: `# Rebuild images then start (ignores cache)\ndocker compose up -d --build\n\n# Start only the backend service (not frontend or db)\ndocker compose up -d backend\n\n# Tear down: remove containers, networks, AND volumes\ndocker compose down -v\n\n# Tear down and also remove the built images\ndocker compose down --rmi all -v`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "-d / --detach", type: "Flag (up)", description: "Run all services in the background and return the prompt." },
+              { flag: "--build", type: "Flag (up)", description: "Force rebuild of service images before starting containers." },
+              { flag: "--no-deps", type: "Flag (up)", description: "Start only the specified service, without starting its dependencies." },
+              { flag: "--scale SERVICE=N", type: "Option (up)", description: "Override the number of replicas for a service." },
+              { flag: "-v / --volumes", type: "Flag (down)", description: "Remove named and anonymous volumes declared in compose.yaml." },
+              { flag: "--rmi STRING", type: "Option (down)", description: "Remove images. Values: all (all images used), local (only locally built ones)." },
+              { flag: "-f / --file FILE", type: "Option (both)", description: "Specify a non-default compose file, e.g. -f docker-compose.prod.yaml." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  const pComposePsLogs = await prisma.page.create({
+    data: {
+      title: "docker compose ps / logs", slug: "/commands/compose-ps-logs",
+      description: "Check the status of compose services and view their combined log output.",
+      components: {
+        create: [
+          { type: "heading", heading: "Quick Look", icon: "bi-lightning-charge-fill", content: "<p><code>docker compose ps</code><br><code>docker compose logs [SERVICE]</code></p>", order: 10 },
+          { type: "paragraph", content: "<p><code>docker compose ps</code> lists the containers managed by the current compose stack and their status. <code>docker compose logs</code> aggregates and streams logs from all services in one view — optionally filtered to a single service.</p>", order: 20 },
+          { type: "heading", heading: "Noob-Friendly Example", icon: "bi-emoji-smile-fill", content: "<p>After running <code>docker compose up -d</code>, your app is running silently in the background. <code>compose ps</code> tells you which services are healthy and running. <code>compose logs</code> opens the combined log stream of all services so you can spot errors across the whole stack at once.</p>", order: 30 },
+          { type: "code", content: `# Check status of all compose services\ndocker compose ps\n\n# View combined logs from all services\ndocker compose logs\n\n# Follow (stream) logs from all services\ndocker compose logs -f`, language: "bash", order: 40 },
+          { type: "heading", heading: "Tech-Friendly Example", icon: "bi-code-slash", content: "<p>Follow only the backend service's logs with timestamps, and check which compose services have unhealthy health checks.</p>", order: 50 },
+          { type: "code", content: `# Stream logs for only one service with timestamps\ndocker compose logs -f --timestamps backend\n\n# Check services that are not running (exit code != 0)\ndocker compose ps --status exited\n\n# Show only the last 50 lines from each service\ndocker compose logs --tail 50`, language: "bash", order: 60 },
+          { type: "heading", heading: "Flag / Parameter Reference", icon: "bi-table", content: "", order: 70 },
+          {
+            type: "paragraph", content: flagTable([
+              { flag: "docker compose ps --status", type: "Option", description: "Filter by status: running, exited, paused, restarting." },
+              { flag: "docker compose ps -q", type: "Flag", description: "Print only container IDs." },
+              { flag: "docker compose logs SERVICE", type: "Argument", description: "Filter logs to a specific service name. Omit for all services." },
+              { flag: "docker compose logs -f", type: "Flag", description: "Follow log output in real-time." },
+              { flag: "docker compose logs --tail N", type: "Option", description: "Show only the last N lines from each service." },
+              { flag: "docker compose logs -t", type: "Flag", description: "Include timestamps on each log line." },
+            ]), order: 80
+          },
+        ]
+      },
+    }
+  });
+
+  // =========================================================================
+  // MENU ITEMS
+  // =========================================================================
+
+  // Section: Getting Started (order 1)
+  const menuGettingStarted = await prisma.menuItem.create({
+    data: { label: "Getting Started", icon: "bi-rocket-takeoff-fill", order: 1 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "Introduction", icon: "bi-book-fill", parentId: menuGettingStarted.id, pageId: pIntro.id, order: 1 },
+      { label: "Docker Architecture", icon: "bi-cpu-fill", parentId: menuGettingStarted.id, pageId: pDockerArchitecture.id, order: 2 },
+      { label: "Images and Containers", icon: "bi-box-seam-fill", parentId: menuGettingStarted.id, pageId: pImagesContainers.id, order: 3 },
+      { label: "Layers", icon: "bi-layers-fill", parentId: menuGettingStarted.id, pageId: pLayers.id, order: 4 },
+      { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", parentId: menuGettingStarted.id, pageId: pVolumesBindMounts.id, order: 5 },
+      { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", parentId: menuGettingStarted.id, pageId: pRulesAndCaseStudies.id, order: 6 },
+      { label: "Installation", icon: "bi-download", parentId: menuGettingStarted.id, pageId: pInstall.id, order: 7 },
+    ],
+  });
+
+  // Section: Commands (order 2)
+  const menuCommands = await prisma.menuItem.create({
+    data: { label: "Commands", icon: "bi-terminal-fill", order: 2 },
+  });
+
+  // Subsection: Common Linux Commands
+  const menuCommonLinuxCommands = await prisma.menuItem.create({
+    data: { label: "Common Linux Commands", icon: "bi-terminal-fill", parentId: menuCommands.id, order: 1 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "Common Linux Commands", icon: "bi-terminal-fill", parentId: menuCommonLinuxCommands.id, pageId: pCommonLinuxCommands.id, order: 1 },
+      { label: "Practice Challenges", icon: "bi-pencil-square", parentId: menuCommonLinuxCommands.id, pageId: pPracticeLinuxCommands.id, order: 2 },
+    ],
+  });
+
+  // Subsection: Core Docker Commands
+  const menuCoreDockerCommands = await prisma.menuItem.create({
+    data: { label: "Core Docker Commands", icon: "bi-play-circle-fill", parentId: menuCommands.id, order: 2 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "docker run", icon: "bi-play-circle-fill", parentId: menuCoreDockerCommands.id, pageId: pRun.id, order: 1 },
+      { label: "docker build", icon: "bi-hammer", parentId: menuCoreDockerCommands.id, pageId: pBuild.id, order: 2 },
+      { label: "docker pull", icon: "bi-cloud-download-fill", parentId: menuCoreDockerCommands.id, pageId: pPull.id, order: 3 },
+      { label: "docker push", icon: "bi-cloud-upload-fill", parentId: menuCoreDockerCommands.id, pageId: pPush.id, order: 4 },
+      { label: "docker ps", icon: "bi-list-check", parentId: menuCoreDockerCommands.id, pageId: pPs.id, order: 5 },
+      { label: "docker images", icon: "bi-layers-fill", parentId: menuCoreDockerCommands.id, pageId: pImages.id, order: 6 },
+      { label: "docker stop", icon: "bi-stop-circle-fill", parentId: menuCoreDockerCommands.id, pageId: pStop.id, order: 7 },
+      { label: "docker rm", icon: "bi-trash-fill", parentId: menuCoreDockerCommands.id, pageId: pRm.id, order: 8 },
+      { label: "docker rmi", icon: "bi-trash2-fill", parentId: menuCoreDockerCommands.id, pageId: pRmi.id, order: 9 },
+      { label: "docker exec", icon: "bi-terminal", parentId: menuCoreDockerCommands.id, pageId: pExec.id, order: 10 },
+      { label: "docker logs", icon: "bi-file-text-fill", parentId: menuCoreDockerCommands.id, pageId: pLogs.id, order: 11 },
+      // Container Lifecycle
+      { label: "start / restart", icon: "bi-arrow-clockwise", parentId: menuCoreDockerCommands.id, pageId: pStart.id, order: 12 },
+      { label: "docker kill", icon: "bi-x-octagon-fill", parentId: menuCoreDockerCommands.id, pageId: pKill.id, order: 13 },
+      { label: "pause / unpause", icon: "bi-pause-circle-fill", parentId: menuCoreDockerCommands.id, pageId: pPause.id, order: 14 },
+      { label: "docker rename", icon: "bi-pencil-fill", parentId: menuCoreDockerCommands.id, pageId: pRename.id, order: 15 },
+      // Volumes
+      { label: "volume create", icon: "bi-hdd-fill", parentId: menuCoreDockerCommands.id, pageId: pVolumeCreate.id, order: 16 },
+      { label: "volume ls/inspect/rm", icon: "bi-hdd-stack-fill", parentId: menuCoreDockerCommands.id, pageId: pVolumeLs.id, order: 17 },
+      // Registry
+      { label: "login / logout", icon: "bi-person-badge-fill", parentId: menuCoreDockerCommands.id, pageId: pLogin.id, order: 18 },
+      { label: "search / tag", icon: "bi-tags-fill", parentId: menuCoreDockerCommands.id, pageId: pSearch.id, order: 19 },
+      // System Info
+      { label: "info / version / df", icon: "bi-info-circle-fill", parentId: menuCoreDockerCommands.id, pageId: pSystemInfo.id, order: 20 },
+      // Image Transfers
+      { label: "save / load", icon: "bi-box-arrow-in-down-left", parentId: menuCoreDockerCommands.id, pageId: pSaveLoad.id, order: 21 },
+      // Docker Compose
+      { label: "compose up / down", icon: "bi-stack", parentId: menuCoreDockerCommands.id, pageId: pComposeUp.id, order: 22 },
+      { label: "compose ps / logs", icon: "bi-card-list", parentId: menuCoreDockerCommands.id, pageId: pComposePsLogs.id, order: 23 },
+    ],
+  });
+
+  // Subsection: Debugging (now under Commands)
+  const menuDebugging = await prisma.menuItem.create({
+    data: { label: "Debugging", icon: "bi-bug-fill", parentId: menuCommands.id, order: 3 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "docker inspect", icon: "bi-search", parentId: menuDebugging.id, pageId: pInspect.id, order: 1 },
+      { label: "docker stats", icon: "bi-bar-chart-fill", parentId: menuDebugging.id, pageId: pStats.id, order: 2 },
+      { label: "docker top", icon: "bi-cpu-fill", parentId: menuDebugging.id, pageId: pTop.id, order: 3 },
+      { label: "docker events", icon: "bi-activity", parentId: menuDebugging.id, pageId: pEvents.id, order: 4 },
+      { label: "docker diff", icon: "bi-file-diff-fill", parentId: menuDebugging.id, pageId: pDiff.id, order: 5 },
+    ],
+  });
+
+  // Subsection: Cleanup (now under Commands)
+  const menuCleanup = await prisma.menuItem.create({
+    data: { label: "Cleanup", icon: "bi-trash3-fill", parentId: menuCommands.id, order: 4 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "system prune", icon: "bi-nuclear", parentId: menuCleanup.id, pageId: pSystemPrune.id, order: 1 },
+      { label: "container prune", icon: "bi-box-arrow-right", parentId: menuCleanup.id, pageId: pContainerPrune.id, order: 2 },
+      { label: "image prune", icon: "bi-image-fill", parentId: menuCleanup.id, pageId: pImagePrune.id, order: 3 },
+      { label: "volume prune", icon: "bi-device-hdd-fill", parentId: menuCleanup.id, pageId: pVolumePrune.id, order: 4 },
+    ],
+  });
+
+  // Subsection: Networking (now under Commands)
+  const menuNetworking = await prisma.menuItem.create({
+    data: { label: "Networking", icon: "bi-diagram-3-fill", parentId: menuCommands.id, order: 5 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "network ls", icon: "bi-list-ul", parentId: menuNetworking.id, pageId: pNetworkLs.id, order: 1 },
+      { label: "network create", icon: "bi-plus-circle-fill", parentId: menuNetworking.id, pageId: pNetworkCreate.id, order: 2 },
+      { label: "network inspect", icon: "bi-search", parentId: menuNetworking.id, pageId: pNetworkInspect.id, order: 3 },
+      { label: "network connect", icon: "bi-plug-fill", parentId: menuNetworking.id, pageId: pNetworkConnect.id, order: 4 },
+      { label: "network rm", icon: "bi-trash-fill", parentId: menuNetworking.id, pageId: pNetworkRm.id, order: 5 },
+    ],
+  });
+
+  // Subsection: File Transfer (now under Commands)
+  const menuFileTransfer = await prisma.menuItem.create({
+    data: { label: "File Transfer", icon: "bi-arrow-left-right", parentId: menuCommands.id, order: 6 },
+  });
+  await prisma.menuItem.createMany({
+    data: [
+      { label: "docker cp", icon: "bi-clipboard-fill", parentId: menuFileTransfer.id, pageId: pCp.id, order: 1 },
+      { label: "export / import", icon: "bi-box-arrow-in-down", parentId: menuFileTransfer.id, pageId: pExportImport.id, order: 2 },
+    ],
+  });
+
+  console.log("✅ Seeding complete!");
 }
 
 main()
-    .catch((e) => {
-        console.error("❌ Seed failed:", e);
-        process.exit(1);
-    })
-    .finally(() => prisma.$disconnect());
+  .catch((e) => {
+    console.error("❌ Seed failed:", e);
+    process.exit(1);
+  })
+  .finally(() => prisma.$disconnect());

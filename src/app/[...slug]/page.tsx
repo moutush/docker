@@ -2,9 +2,25 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import type { Metadata } from 'next';
 
-export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
-    const awaitedParams = await params;
-    const fullSlug = "/" + awaitedParams.slug.join("/");
+type PageProps = {
+    params: Promise<{ slug: string[] }>
+};
+// export async function generateMetadata({ params }: { params: { slug: string[] } }): Promise<Metadata> {
+//     const awaitedParams = await params;
+//     const fullSlug = "/" + awaitedParams.slug.join("/");
+
+//     const page = await prisma.page.findUnique({
+//         where: { slug: fullSlug },
+//     });
+
+//     return {
+//         title: page ? `${page.title} - Docker Documentation` : "Page Not Found",
+//         description: page?.description || "Documentation page",
+//     };
+// }
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+    const { slug } = await params;
+    const fullSlug = "/" + slug.join("/");
 
     const page = await prisma.page.findUnique({
         where: { slug: fullSlug },
@@ -36,9 +52,9 @@ const PageComponentRenderer = ({ comp }: { comp: any }) => {
     }
 };
 
-export default async function DynamicPage({ params }: { params: { slug: string[] } }) {
-    const awaitedParams = await params;
-    const fullSlug = "/" + awaitedParams.slug.join("/");
+export default async function DynamicPage({ params }: PageProps) {
+    const { slug } = await params;
+    const fullSlug = "/" + slug.join("/");
 
     const page = await prisma.page.findUnique({
         where: { slug: fullSlug },
