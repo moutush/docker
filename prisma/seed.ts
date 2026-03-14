@@ -149,6 +149,148 @@ async function main() {
     },
   });
 
+  // 1.5. Virtual Machines
+  const pVM = await prisma.page.create({
+    data: {
+      title: "Virtual Machines",
+      slug: "/virtual-machines",
+      description: "Understand the 'old way' of isolation and how it differs from Docker containers.",
+      components: {
+        create: [
+          {
+            type: "heading",
+            heading: "What is a Virtual Machine?",
+            icon: "bi-laptop",
+            content: "",
+            order: 1,
+          },
+          {
+            type: "paragraph",
+            content: "<p>Before Docker became famous, if you wanted to run several apps on one server without them interfering with each other, you used <strong>Virtual Machines (VMs)</strong>.</p>",
+            order: 2,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-sub-cards-grid">
+  <div class="doc-sub-card">
+    <div class="doc-sub-card-header">
+      <div class="doc-sub-card-icon"><i class="bi bi-emoji-smile-fill"></i></div>
+      <h3 class="doc-sub-card-title">Noob-Friendly: The "Mini-Laptop"</h3>
+    </div>
+    <div class="doc-sub-card-body">
+      <p>A VM is like having a <strong>"mini-laptop"</strong> running inside your actual laptop. It has its own desktop, its own login screen, and its own hard drive. It's completely separate from your main computer.</p>
+    </div>
+  </div>
+  <div class="doc-sub-card">
+    <div class="doc-sub-card-header">
+      <div class="doc-sub-card-icon"><i class="bi bi-cpu-fill"></i></div>
+      <h3 class="doc-sub-card-title">Tech-Friendly: Hardware Emulation</h3>
+    </div>
+    <div class="doc-sub-card-body">
+      <p>A VM uses a <strong>Hypervisor</strong> (like VMware or VirtualBox) to emulate physical hardware. Each VM runs a full <strong>Guest Operating System</strong>, which has its own kernel, binaries, and libraries.</p>
+    </div>
+  </div>
+</div>`,
+            order: 3,
+          },
+          {
+            type: "heading",
+            heading: "Docker vs. Virtual Machines",
+            icon: "bi-intersect",
+            content: "",
+            order: 4,
+          },
+          {
+            type: "paragraph",
+            content: "<p>The biggest difference is <strong>Efficiency</strong>. While VMs emulate a whole computer, Docker only emulates the <strong>Software Environment</strong>.</p>",
+            order: 5,
+          },
+          {
+            type: "paragraph",
+            content: `<div class="doc-table-wrapper shadow-sm">
+  <table class="table table-dark table-hover doc-table mb-0">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Virtual Machine (VM)</th>
+        <th>Docker Container</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Analogy</strong></td>
+        <td>A House (Everything included)</td>
+        <td>An Apartment (Shared structure)</td>
+      </tr>
+      <tr>
+        <td><strong>Size</strong></td>
+        <td>GBs (Huge)</td>
+        <td>MBs (Tiny)</td>
+      </tr>
+      <tr>
+        <td><strong>Boot Time</strong></td>
+        <td>Minutes (Slow)</td>
+        <td>Milliseconds (Instant)</td>
+      </tr>
+      <tr>
+        <td><strong>Isolation</strong></td>
+        <td>Hardware Level (Very secure)</td>
+        <td>OS Level (Secure enough)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>`,
+            order: 6,
+          },
+          {
+            type: "heading",
+            heading: "Use Cases: When to use which?",
+            icon: "bi-question-diamond-fill",
+            content: "",
+            order: 7,
+          },
+          {
+            type: "paragraph",
+            content: `
+<div class="row g-4">
+  <div class="col-md-6">
+    <div class="doc-sub-card h-100 border-primary">
+      <div class="doc-sub-card-header">
+        <div class="doc-sub-card-icon text-primary"><i class="bi bi-shield-lock-fill"></i></div>
+        <h3 class="doc-sub-card-title">When to use VMs?</h3>
+      </div>
+      <div class="doc-sub-card-body">
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i><strong>Different Kernels:</strong> Run Windows on a Linux server.</li>
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i><strong>Legacy Apps:</strong> Old apps that need a specific, old OS version.</li>
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i><strong>Maximum Security:</strong> When you cannot risk sharing an OS kernel.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="doc-sub-card h-100 border-info">
+      <div class="doc-sub-card-header">
+        <div class="doc-sub-card-icon text-info"><i class="bi bi-lightning-fill"></i></div>
+        <h3 class="doc-sub-card-title">When to use Docker?</h3>
+      </div>
+      <div class="doc-sub-card-body">
+        <ul class="list-unstyled">
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i><strong>Development:</strong> "It works on my machine" every time.</li>
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i><strong>Microservices:</strong> Scale hundreds of tiny services instantly.</li>
+          <li class="mb-2"><i class="bi bi-check2-circle text-success me-2"></i><strong>CI/CD Pipelines:</strong> Build and test in seconds, not hours.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>`,
+            order: 8,
+          },
+        ],
+      },
+    },
+  });
+
   // 2. Docker Architecture
   const pDockerArchitecture = await prisma.page.create({
     data: {
@@ -4337,12 +4479,13 @@ Use export/import for lightweight filesystem transfer. Use save/load when you ne
   await prisma.menuItem.createMany({
     data: [
       { label: "Introduction", icon: "bi-book-fill", parentId: menuGettingStarted.id, pageId: pIntro.id, order: 1 },
-      { label: "Docker Architecture", icon: "bi-cpu-fill", parentId: menuGettingStarted.id, pageId: pDockerArchitecture.id, order: 2 },
-      { label: "Images and Containers", icon: "bi-box-seam-fill", parentId: menuGettingStarted.id, pageId: pImagesContainers.id, order: 3 },
-      { label: "Layers", icon: "bi-layers-fill", parentId: menuGettingStarted.id, pageId: pLayers.id, order: 4 },
-      { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", parentId: menuGettingStarted.id, pageId: pVolumesBindMounts.id, order: 5 },
-      { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", parentId: menuGettingStarted.id, pageId: pRulesAndCaseStudies.id, order: 6 },
-      { label: "Installation", icon: "bi-download", parentId: menuGettingStarted.id, pageId: pInstall.id, order: 7 },
+      { label: "Virtual Machines", icon: "bi-laptop", parentId: menuGettingStarted.id, pageId: pVM.id, order: 2 },
+      { label: "Docker Architecture", icon: "bi-cpu-fill", parentId: menuGettingStarted.id, pageId: pDockerArchitecture.id, order: 3 },
+      { label: "Images and Containers", icon: "bi-box-seam-fill", parentId: menuGettingStarted.id, pageId: pImagesContainers.id, order: 4 },
+      { label: "Layers", icon: "bi-layers-fill", parentId: menuGettingStarted.id, pageId: pLayers.id, order: 5 },
+      { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", parentId: menuGettingStarted.id, pageId: pVolumesBindMounts.id, order: 6 },
+      { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", parentId: menuGettingStarted.id, pageId: pRulesAndCaseStudies.id, order: 7 },
+      { label: "Installation", icon: "bi-download", parentId: menuGettingStarted.id, pageId: pInstall.id, order: 8 },
     ],
   });
 
