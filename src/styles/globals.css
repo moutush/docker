@@ -156,6 +156,29 @@ body {
   color: var(--text-primary);
 }
 
+/* Collapsed Header vertical stack */
+.sidebar.collapsed .sidebar-header {
+  flex-direction: column;
+  padding: 18px 0;
+  gap: 12px;
+  justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-logo-icon {
+  margin: 0;
+}
+
+.sidebar.collapsed .sidebar-collapse-btn {
+  position: static;
+  margin: 0 !important;
+  width: 34px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 /* Nav sections */
 .sidebar-nav {
   flex: 1;
@@ -431,6 +454,7 @@ body {
   min-width: 0;
 }
 
+.sidebar.collapsed + .main-content,
 .main-content.collapsed {
   margin-left: var(--sidebar-collapsed-width);
 }

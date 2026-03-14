@@ -136,7 +136,7 @@ export default function Sidebar() {
           </div>
           <span className="sidebar-brand-text">Docker UI</span>
           <button
-            className="sidebar-collapse-btn ms-auto d-none d-lg-flex"
+            className="sidebar-collapse-btn ms-auto d-none d-md-flex"
             onClick={() => setCollapsed(!collapsed)}
           >
             <i className={`bi ${collapsed ? "bi-chevron-right" : "bi-chevron-left"}`} />
