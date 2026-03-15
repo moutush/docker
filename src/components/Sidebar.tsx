@@ -124,19 +124,21 @@ const NAV_CONFIG: NavItem[] = [
     label: "Storage",
     icon: "bi-hdd-stack-fill",
     children: [
-      { label: "Storage Overview", icon: "bi-hdd-stack-fill", href: "/storage/overview" },
-      { label: "Volumes", icon: "bi-hdd-fill", href: "/getting-started/volumes-bind-mounts" },
-      { label: "Bind Mounts", icon: "bi-link-45deg", href: "/getting-started/volumes-bind-mounts" },
+      { label: "Volumes", icon: "bi-hdd-fill", href: "/storage/volumes-deep-dive" },
+      { label: "Bind Mounts", icon: "bi-link-45deg", href: "/storage/bind-mounts" },
       { label: "tmpfs Mounts", icon: "bi-lightning-charge-fill", href: "/storage/tmpfs-mounts" },
+      { label: "When to Use Which?", icon: "bi-question-circle-fill", href: "/storage/when-to-use" },
       {
         label: "Storage Drivers",
         icon: "bi-layers-fill",
         children: [
+          { label: "Drivers Overview", icon: "bi-info-circle-fill", href: "/storage/drivers/overview" },
           { label: "Select a Storage Driver", icon: "bi-question-diamond-fill", href: "/storage/drivers/select" },
-          { label: "OverlayFS Driver", icon: "bi-stack", href: "/storage/drivers/overlayfs" },
-          { label: "BTRFS Driver", icon: "bi-tree-fill", href: "/storage/drivers/btrfs" },
-          { label: "ZFS Driver", icon: "bi-database-fill", href: "/storage/drivers/zfs" },
-          { label: "Windows Filter Driver", icon: "bi-windows", href: "/storage/drivers/windowsfilter" },
+          { label: "OverlayFS", icon: "bi-stack", href: "/storage/drivers/overlayfs" },
+          { label: "Btrfs", icon: "bi-diagram-2-fill", href: "/storage/drivers/btrfs" },
+          { label: "ZFS", icon: "bi-folder-symlink-fill", href: "/storage/drivers/zfs" },
+          { label: "Windows Filter", icon: "bi-windows", href: "/storage/drivers/windowsfilter" },
+          { label: "VFS", icon: "bi-folder-fill", href: "/storage/drivers/vfs" },
         ],
       },
       { label: "Containerd Image Store", icon: "bi-box-seam-fill", href: "/storage/containerd-store" },
@@ -150,7 +152,7 @@ export default function Sidebar() {
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
   const pathname = usePathname();
 
-  
+
 
   const toggleMenu = useCallback((label: string) => {
     if (collapsed) {
@@ -269,13 +271,13 @@ export default function Sidebar() {
           })}
         </nav>
 
-        <div className="sidebar-footer">
+        {/* <div className="sidebar-footer">
           <div className="user-avatar">AD</div>
           <div className="user-info">
             <p className="user-name">Admin User</p>
             <p className="user-role">Author</p>
           </div>
-        </div>
+        </div> */}
       </aside>
     </>
   );
