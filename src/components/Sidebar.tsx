@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -20,27 +20,137 @@ interface NavItem {
   section?: string;
 }
 
+
+const NAV_CONFIG: NavItem[] = [
+  {
+    section: "GETTING STARTED",
+    label: "Getting Started",
+    icon: "bi-rocket-takeoff-fill",
+    children: [
+      { label: "Introduction", icon: "bi-book-fill", href: "/getting-started/introduction" },
+      { label: "Virtual Machines", icon: "bi-laptop", href: "/getting-started/virtual-machines" },
+      { label: "Docker Architecture", icon: "bi-cpu-fill", href: "/getting-started/docker-architecture" },
+      { label: "Images and Containers", icon: "bi-box-seam-fill", href: "/getting-started/images-containers" },
+      { label: "Layers", icon: "bi-layers-fill", href: "/getting-started/layers" },
+      { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", href: "/getting-started/volumes-bind-mounts" },
+      { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", href: "/getting-started/rules-and-case-studies" },
+      { label: "Installation", icon: "bi-download", href: "/getting-started/installation" },
+    ],
+  },
+  {
+    label: "Commands",
+    icon: "bi-terminal-fill",
+    children: [
+      {
+        label: "Common Linux Commands",
+        icon: "bi-terminal-fill",
+        children: [
+          { label: "Common Linux Commands", icon: "bi-terminal-fill", href: "/commands/common-linux-commands" },
+          { label: "Practice Challenges", icon: "bi-pencil-square", href: "/commands/practice/linux-commands" },
+        ],
+      },
+      {
+        label: "Core Docker Commands",
+        icon: "bi-play-circle-fill",
+        children: [
+          { label: "docker run", icon: "bi-play-circle-fill", href: "/commands/run" },
+          { label: "docker build", icon: "bi-hammer", href: "/commands/build" },
+          { label: "docker pull", icon: "bi-cloud-download-fill", href: "/commands/pull" },
+          { label: "docker push", icon: "bi-cloud-upload-fill", href: "/commands/push" },
+          { label: "docker ps", icon: "bi-list-check", href: "/commands/ps" },
+          { label: "docker images", icon: "bi-layers-fill", href: "/commands/images" },
+          { label: "docker stop", icon: "bi-stop-circle-fill", href: "/commands/stop" },
+          { label: "docker rm", icon: "bi-trash-fill", href: "/commands/rm" },
+          { label: "docker rmi", icon: "bi-trash2-fill", href: "/commands/rmi" },
+          { label: "docker exec", icon: "bi-terminal", href: "/commands/exec" },
+          { label: "docker logs", icon: "bi-file-text-fill", href: "/commands/logs" },
+          { label: "start / restart", icon: "bi-arrow-clockwise", href: "/commands/start-restart" },
+          { label: "docker kill", icon: "bi-x-octagon-fill", href: "/commands/kill" },
+          { label: "pause / unpause", icon: "bi-pause-circle-fill", href: "/commands/pause" },
+          { label: "docker rename", icon: "bi-pencil-fill", href: "/commands/rename" },
+          { label: "volume create", icon: "bi-hdd-fill", href: "/commands/volume-create" },
+          { label: "volume ls/inspect/rm", icon: "bi-hdd-stack-fill", href: "/commands/volume-manage" },
+          { label: "login / logout", icon: "bi-person-badge-fill", href: "/commands/login" },
+          { label: "search / tag", icon: "bi-tags-fill", href: "/commands/search-tag" },
+          { label: "info / version / df", icon: "bi-info-circle-fill", href: "/commands/system-info" },
+          { label: "save / load", icon: "bi-box-arrow-in-down-left", href: "/commands/save-load" },
+          { label: "compose up / down", icon: "bi-stack", href: "/commands/compose-up-down" },
+          { label: "compose ps / logs", icon: "bi-card-list", href: "/commands/compose-ps-logs" },
+        ],
+      },
+      {
+        label: "Debugging",
+        icon: "bi-bug-fill",
+        children: [
+          { label: "docker inspect", icon: "bi-search", href: "/commands/debugging/inspect" },
+          { label: "docker stats", icon: "bi-bar-chart-fill", href: "/commands/debugging/stats" },
+          { label: "docker top", icon: "bi-cpu-fill", href: "/commands/debugging/top" },
+          { label: "docker events", icon: "bi-activity", href: "/commands/debugging/events" },
+          { label: "docker diff", icon: "bi-file-diff-fill", href: "/commands/debugging/diff" },
+        ],
+      },
+      {
+        label: "Cleanup",
+        icon: "bi-trash3-fill",
+        children: [
+          { label: "system prune", icon: "bi-nuclear", href: "/commands/cleanup/system-prune" },
+          { label: "container prune", icon: "bi-box-arrow-right", href: "/commands/cleanup/container-prune" },
+          { label: "image prune", icon: "bi-image-fill", href: "/commands/cleanup/image-prune" },
+          { label: "volume prune", icon: "bi-device-hdd-fill", href: "/commands/cleanup/volume-prune" },
+        ],
+      },
+      {
+        label: "Networking",
+        icon: "bi-diagram-3-fill",
+        children: [
+          { label: "network ls", icon: "bi-list-ul", href: "/commands/networking/ls" },
+          { label: "network create", icon: "bi-plus-circle-fill", href: "/commands/networking/create" },
+          { label: "network inspect", icon: "bi-search", href: "/commands/networking/inspect" },
+          { label: "network connect", icon: "bi-plug-fill", href: "/commands/networking/connect" },
+          { label: "network rm", icon: "bi-trash-fill", href: "/commands/networking/rm" },
+        ],
+      },
+      {
+        label: "File Transfer",
+        icon: "bi-arrow-left-right",
+        children: [
+          { label: "docker cp", icon: "bi-clipboard-fill", href: "/commands/file-transfer/cp" },
+          { label: "export / import", icon: "bi-box-arrow-in-down", href: "/commands/file-transfer/export-import" },
+        ],
+      },
+    ],
+  },
+  {
+    label: "Storage",
+    icon: "bi-hdd-stack-fill",
+    children: [
+      { label: "Storage Overview", icon: "bi-hdd-stack-fill", href: "/storage/overview" },
+      { label: "Volumes", icon: "bi-hdd-fill", href: "/getting-started/volumes-bind-mounts" },
+      { label: "Bind Mounts", icon: "bi-link-45deg", href: "/getting-started/volumes-bind-mounts" },
+      { label: "tmpfs Mounts", icon: "bi-lightning-charge-fill", href: "/storage/tmpfs-mounts" },
+      {
+        label: "Storage Drivers",
+        icon: "bi-layers-fill",
+        children: [
+          { label: "Select a Storage Driver", icon: "bi-question-diamond-fill", href: "/storage/drivers/select" },
+          { label: "OverlayFS Driver", icon: "bi-stack", href: "/storage/drivers/overlayfs" },
+          { label: "BTRFS Driver", icon: "bi-tree-fill", href: "/storage/drivers/btrfs" },
+          { label: "ZFS Driver", icon: "bi-database-fill", href: "/storage/drivers/zfs" },
+          { label: "Windows Filter Driver", icon: "bi-windows", href: "/storage/drivers/windowsfilter" },
+        ],
+      },
+      { label: "Containerd Image Store", icon: "bi-box-seam-fill", href: "/storage/containerd-store" },
+    ],
+  },
+];
+
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
-  const [navConfig, setNavConfig] = useState<NavItem[]>([]);
   const pathname = usePathname();
 
-  useEffect(() => {
-    async function fetchMenu() {
-      try {
-        const res = await fetch("/api/menu");
-        if (res.ok) {
-          const data = await res.json();
-          setNavConfig(data);
-        }
-      } catch (err) {
-        console.error("Failed to load nav config", err);
-      }
-    }
-    fetchMenu();
-  }, []);
+  
 
   const toggleMenu = useCallback((label: string) => {
     if (collapsed) {
@@ -144,7 +254,7 @@ export default function Sidebar() {
         </div>
 
         <nav className="sidebar-nav">
-          {navConfig.map((item, idx) => {
+          {NAV_CONFIG.map((item, idx) => {
             const isActive = isActiveParent(item);
 
             return (
