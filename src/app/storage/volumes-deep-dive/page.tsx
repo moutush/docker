@@ -515,6 +515,32 @@ volumes:
                                     <code>volumes:</code> key, or Compose will throw an error.
                                 </div>
                             </div>
+
+                            <div className="mt-4 p-4 rounded" style={{ background: '#1c2128', border: '1px solid #30363d' }}>
+                                <h4 className="fs-6 text-uppercase text-primary mb-3">What means what?</h4>
+                                <div className="vstack gap-3">
+                                    <div className="small">
+                                        <code className="text-info">services:</code> 
+                                        <span className="opacity-75 ms-2">Start here—it tells Docker that "db" and "adminer" are separate containers.</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">db:</code> 
+                                        <span className="opacity-75 ms-2"> This is a <strong>Service Name</strong>. It's like a hostname—"adminer" can find the database by simply connecting to <code>db:5432</code>.</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">ports: 8080:8080</code> 
+                                        <span className="opacity-75 ms-2"> Connects your computer's browser (8080) to the container's engine (8080).</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">db_data:/var/...</code> 
+                                        <span className="opacity-75 ms-2"> This is the <strong>Volume Mount</strong>. It maps the virtual "Bank Vault" (db_data) to the actual database folder.</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">volumes: (at the end)</code> 
+                                        <span className="opacity-75 ms-2"> This acts as a <strong>Catalog</strong>. It tells Docker: "I plan to use a named volume called db_data—please create it if it doesn't exist."</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

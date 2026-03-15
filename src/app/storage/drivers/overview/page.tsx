@@ -179,31 +179,45 @@ export default function StorageOverviewPage() {
                         </div>
                     </div>
 
-                    {/* UTILITIES */}
-                    <div className="doc-section-card shadow-lg">
+                    {/* COW COMPARISON */}
+                    <div className="doc-section-card shadow-lg border-primary mt-4">
                         <div className="doc-card-header-wrapper">
-                            <div className="heading-icon">
-                                <i className="bi bi-wrench-adjustable-circle"></i>
+                            <div className="heading-icon text-primary">
+                                <i className="bi bi-cpu-fill"></i>
                             </div>
                             <h2 className="doc-card-heading">
-                                Key Utilities
+                                CoW Comparison: RAM vs. Reliability
                             </h2>
                         </div>
                         <div className="doc-card-body">
-                            <p>Storage drivers provide several critical "hidden" utilities:</p>
-                            <div className="doc-sub-cards-grid">
-                                <div className="doc-sub-card">
-                                    <h3 className="doc-sub-card-title">Space Saving</h3>
-                                    <p className="doc-sub-card-text">
-                                        They share layers between different containers so you don't waste disk space.
-                                    </p>
-                                </div>
-                                <div className="doc-sub-card">
-                                    <h3 className="doc-sub-card-title">Speed</h3>
-                                    <p className="doc-sub-card-text">
-                                        By using native kernel features, they make reading and writing files incredibly fast.
-                                    </p>
-                                </div>
+                            <p>While all standard drivers use Copy-on-Write, their <strong>architectural impact</strong> is very different:</p>
+                            <div className="table-responsive">
+                                <table className="table table-dark table-sm mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Driver</th>
+                                            <th>Memory Profile</th>
+                                            <th>Key Strategy</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>overlay2</strong></td>
+                                            <td className="text-success small">Ultra Efficient</td>
+                                            <td className="small">Shares Linux Page Cache across containers.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>btrfs</strong></td>
+                                            <td className="text-info small">Standard CoW</td>
+                                            <td className="small">Uses native "Subvolumes" to manage layers at the block level.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>zfs</strong></td>
+                                            <td className="text-danger small fw-bold">RAM Intensive</td>
+                                            <td className="small">Uses **ARC cache**. Can consume gigabytes of RAM to boost speed.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

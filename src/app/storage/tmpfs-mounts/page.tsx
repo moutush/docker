@@ -127,7 +127,7 @@ export default function DockerTmpfsMountsPage() {
                                 <i className="bi bi-terminal"></i>
                             </div>
                             <h2 className="doc-card-heading">
-                                Mounting Syntax
+                                CLI Mounting Syntax
                             </h2>
                         </div>
                         <div className="doc-card-body">
@@ -140,6 +140,11 @@ export default function DockerTmpfsMountsPage() {
   --mount type=tmpfs,destination=/app/cache \\
   nginx`}
                             </pre>
+                            <div className="ps-3 border-start border-primary mt-2 small opacity-75">
+                                <strong>--mount:</strong> The explicit way to define storage.<br />
+                                <strong>type=tmpfs:</strong> Tells Docker to use RAM, not disk.<br />
+                                <strong>destination=/app/cache:</strong> The folder inside the container that will be ultra-fast.
+                            </div>
 
                             <h4 className="mt-4 fs-6 text-uppercase opacity-75">Option 2: The Short Way</h4>
                             <pre className="doc-code-block">
@@ -153,6 +158,42 @@ export default function DockerTmpfsMountsPage() {
                                     on the host, only a destination inside the container.
                                 </div>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* COMPOSE SECTION */}
+                    <div className="doc-section-card shadow-lg border-info">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-info">
+                                <i className="bi bi-file-earmark-code-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                tmpfs with Docker Compose
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <p>For complex setups, Docker Compose uses the <code>tmpfs</code> key:</p>
+                            <pre className="doc-code-block">
+{`services:
+  fast-api:
+    image: my-app:latest
+    tmpfs:
+      - /app/cache
+      - /tmp/sessions`}
+                            </pre>
+
+                            <h4 className="mt-4 fs-6 text-uppercase opacity-75">What means what?</h4>
+                            <ul className="list-group list-group-flush bg-transparent mt-2">
+                                <li className="list-group-item bg-transparent text-white border-secondary small">
+                                    <strong className="text-info">services:</strong> Defines the heart of your project. Each "service" is a container.
+                                </li>
+                                <li className="list-group-item bg-transparent text-white border-secondary small">
+                                    <strong className="text-info">fast-api:</strong> This is a <strong>Custom Name</strong> you give to your container. You can call it anything (e.g., <code>web</code>, <code>backend</code>).
+                                </li>
+                                <li className="list-group-item bg-transparent text-white border-secondary small">
+                                    <strong className="text-info">tmpfs:</strong> A list of paths inside the container that should live in RAM.
+                                </li>
+                            </ul>
                         </div>
                     </div>
 

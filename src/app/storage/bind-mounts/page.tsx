@@ -283,6 +283,106 @@ export default function DockerBindMountsPage() {
                         </div>
                     </div>
 
+                    {/* REAL WORLD EXAMPLE 3: FULL STACK */}
+                    <div className="doc-section-card shadow-lg border-primary">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-primary">
+                                <i className="bi bi-layers-half"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                Senior Full-Stack Example (FastAPI + Postgres)
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <p className="mb-4">
+                                This is a common pattern for local development where you need 
+                                persistence for your database AND instant updates for your code.
+                            </p>
+
+                            <div className="row g-4">
+                                <div className="col-md-6">
+                                    <h4 className="fs-6 text-uppercase opacity-75 mb-3">1. The Dockerfile</h4>
+                                    <pre className="doc-code-block" style={{ fontSize: '13px' }}>
+{`FROM python:3.11-slim
+WORKDIR /app
+COPY Requirements.txt .
+RUN pip install -r Requirements.txt
+
+# Copy source code and other files
+COPY ./src ./src
+
+# Note: We NEVER copy 'User-profile-pics' 
+# into the image. It stays on the host.`}
+                                    </pre>
+                                </div>
+                                <div className="col-md-6">
+                                    <h4 className="fs-6 text-uppercase opacity-75 mb-3">2. Docker Compose</h4>
+                                    <pre className="doc-code-block" style={{ fontSize: '13px' }}>
+{`services:
+  api:
+    build: .
+    volumes:
+      # Bind Mount for Code (Instant Refresh)
+      - ./src/codes:/app/src/codes
+      # Bind Mount for Uploads (Local Access)
+      - ./User-profile-pics:/app/User-profile-pics
+  
+  db:
+    image: postgres:15
+    volumes:
+      # Named Volume (Speed & Safety)
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data: # Crucial for persistent DB`}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <div className="doc-alert doc-alert-info mt-4">
+                                <i className="bi bi-diagram-3-fill"></i>
+                                <div>
+                                    <strong>The Strategy:</strong><br />
+                                    1. <strong>Database:</strong> Uses <code>db_data</code> (Volume) because Docker manages it perfectly.<br />
+                                    2. <strong>Code:</strong> Uses <code>./src/codes</code> (Bind Mount) so you don't rebuild the image.<br />
+                                    3. <strong>Uploads:</strong> Uses <code>./User-profile-pics</code> (Bind Mount) so you can see the JPGs on your host machine instantly.
+                                </div>
+                            </div>
+
+                            <div className="mt-4 p-4 rounded" style={{ background: '#1c2128', border: '1px solid #30363d' }}>
+                                <h4 className="fs-6 text-uppercase text-primary mb-3">What means what? (Step-by-Step)</h4>
+                                <div className="vstack gap-3">
+                                    <div className="small">
+                                        <code className="text-info">services:</code> 
+                                        <span className="opacity-75 ms-2">Specifies that every block below this is a container.</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">api:</code> 
+                                        <span className="opacity-75 ms-2">A **Custom Name**. It's not a keyword—you could name it <code>fastapi_app</code> or <code>backend</code>.</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">build: .</code> 
+                                        <span className="opacity-75 ms-2">Tells Docker to look for a <code>Dockerfile</code> in the <strong>Current Directory</strong> (the <code>.</code>) and build it into an image.</span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">- ./src/codes:/app/src/codes</code> 
+                                        <span className="opacity-75 ms-2 text-warning animate-pulse"><strong>Why different paths?</strong></span><br />
+                                        <span className="opacity-75 ms-2">
+                                            The first part (<code>./src/codes</code>) is on **YOUR Computer**.<br />
+                                            The second part (<code>/app/src/codes</code>) is the **Mirror Folder** inside the Linux Container.<br />
+                                            Anything you change on your computer reflects inside <code>/app/...</code> instantly!
+                                        </span>
+                                    </div>
+                                    <div className="small border-top border-secondary pt-2">
+                                        <code className="text-info">db_data:/var/...</code> 
+                                        <span className="opacity-75 ms-2 text-warning"><strong>Named Volume</strong></span><br />
+                                        <span className="opacity-75 ms-2">Since it doesn't start with <code>./</code>, Docker knows this is its own managed storage (the Bank Vault analogy).</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* READ ONLY */}
                     <div className="doc-section-card shadow-lg">
 

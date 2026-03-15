@@ -56,8 +56,12 @@ export default function SelectStorageDriverPage() {
                                             <td>Modern Linux (Ubuntu, CentOS, RHEL). Best performance and memory efficiency.</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>btrfs / zfs</strong></td>
-                                            <td>Enterprise systems requiring snapshots and volume management at the cost of memory.</td>
+                                            <td><strong>btrfs</strong></td>
+                                            <td>Linux-native CoW filesystem. Great for high-density containers with low RAM overhead.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>zfs</strong></td>
+                                            <td>High-end CoW with extreme data integrity. Requires **high RAM** (for ARC cache).</td>
                                         </tr>
                                         <tr>
                                             <td><strong>windowsfilter</strong></td>
@@ -92,8 +96,13 @@ export default function SelectStorageDriverPage() {
                                 </li>
                                 <li className="mb-3 p-3 bg-dark rounded border-start border-warning border-4">
                                     <strong><i className="bi bi-database me-2"></i> The Data Scientist:</strong><br />
-                                    "I need to take instant backups of 500GB training data."<br />
-                                    <span className="text-secondary small">→ Use <strong>ZFS</strong> or <strong>Btrfs</strong> for their instant snapshots.</span>
+                                    "I need to take instant backups of 500GB training data and have a 64GB RAM server."<br />
+                                    <span className="text-secondary small">→ Use <strong>ZFS</strong>. Its snapshots are enterprise-grade and its memory usage is worth the integrity.</span>
+                                </li>
+                                <li className="mb-3 p-3 bg-dark rounded border-start border-primary border-4">
+                                    <strong><i className="bi bi-cpu me-2"></i> The Systems Engineer:</strong><br />
+                                    "I want advanced snapshots but my server has limited RAM."<br />
+                                    <span className="text-secondary small">→ Use <strong>Btrfs</strong>. It gives you CoW benefits without the heavy RAM requirements of ZFS.</span>
                                 </li>
                                 <li className="mb-3 p-3 bg-dark rounded border-start border-success border-4">
                                     <strong><i className="bi bi-cloud-upload me-2"></i> The DevOps Architect:</strong><br />
