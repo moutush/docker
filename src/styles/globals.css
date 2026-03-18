@@ -899,3 +899,14 @@ body {
 .bg-os { background: rgba(249, 114, 185, 0.1) !important; border-color: rgba(249, 114, 185, 0.4) !important; color: #f972b9 !important; }
 .bg-python { background: rgba(187, 187, 255, 0.1) !important; border-color: rgba(187, 187, 255, 0.4) !important; color: #bbbbff !important; }
 .bg-framework { background: rgba(191, 255, 191, 0.1) !important; border-color: rgba(191, 255, 191, 0.4) !important; color: #bfffbf !important; }
+
+/* --- Custom Utility Animations --- */
+@keyframes swarm-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-swarm-rotate {
+  display: inline-block;
+  animation: swarm-rotate 15s linear infinite;
+}

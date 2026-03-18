@@ -202,7 +202,8 @@ export default function StorageOverviewPage() {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td><strong>overlay2</strong></td>
+                                            <td><strong>overlay2</strong> (OverlayFS)</td>
+
                                             <td className="text-success small">Ultra Efficient</td>
                                             <td className="small">Shares Linux Page Cache across containers.</td>
                                         </tr>

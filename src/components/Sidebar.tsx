@@ -34,9 +34,13 @@ const NAV_CONFIG: NavItem[] = [
       { label: "Layers", icon: "bi-layers-fill", href: "/getting-started/layers" },
       { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", href: "/getting-started/volumes-bind-mounts" },
       { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", href: "/getting-started/rules-and-case-studies" },
+      { label: "Understanding Clusters", icon: "bi-diagram-3-fill", href: "/getting-started/cluster" },
+      { label: "Docker Swarm", icon: "bi-gear-fill", href: "/getting-started/swarm" },
       { label: "Installation", icon: "bi-download", href: "/getting-started/installation" },
+
     ],
   },
+
   {
     label: "Commands",
     icon: "bi-terminal-fill",
@@ -134,7 +138,8 @@ const NAV_CONFIG: NavItem[] = [
         children: [
           { label: "Drivers Overview", icon: "bi-info-circle-fill", href: "/storage/drivers/overview" },
           { label: "Select a Storage Driver", icon: "bi-question-diamond-fill", href: "/storage/drivers/select" },
-          { label: "OverlayFS", icon: "bi-stack", href: "/storage/drivers/overlayfs" },
+          { label: "overlay2", icon: "bi-stack", href: "/storage/drivers/overlay2" },
+
           { label: "Btrfs", icon: "bi-diagram-2-fill", href: "/storage/drivers/btrfs" },
           { label: "ZFS", icon: "bi-folder-symlink-fill", href: "/storage/drivers/zfs" },
           { label: "Windows Filter", icon: "bi-windows", href: "/storage/drivers/windowsfilter" },
@@ -144,7 +149,15 @@ const NAV_CONFIG: NavItem[] = [
       { label: "Containerd Image Store", icon: "bi-box-seam-fill", href: "/storage/containerd-store" },
     ],
   },
+  {
+    label: "Containers",
+    icon: "bi-box-seam-fill",
+    children: [
+      { label: "Overview", icon: "bi-info-circle-fill", href: "/containers/overview" },
+    ],
+  },
 ];
+
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
