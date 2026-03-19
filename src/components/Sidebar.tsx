@@ -37,7 +37,8 @@ const NAV_CONFIG: NavItem[] = [
       { label: "Understanding Clusters", icon: "bi-diagram-3-fill", href: "/getting-started/cluster" },
       { label: "Docker Swarm", icon: "bi-gear-fill", href: "/getting-started/swarm" },
       { label: "Installation", icon: "bi-download", href: "/getting-started/installation" },
-
+      { label: "Revision Notes", icon: "bi-journal-check", href: "/getting-started/notes" },
+      { label: "Knowledge Check", icon: "bi-clipboard-check-fill", href: "/getting-started/quiz" },
     ],
   },
 

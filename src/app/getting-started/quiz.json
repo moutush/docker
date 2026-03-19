@@ -1,0 +1,1242 @@
+[
+    {
+        "node": "Docker Architecture",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "When you run a docker command, who actually executes it?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Docker CLI directly runs containers",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker Daemon executes commands",
+                        "answer": true
+                    },
+                    {
+                        "text": "Registry executes commands",
+                        "answer": false
+                    },
+                    {
+                        "text": "Kernel directly runs containers",
+                        "answer": false
+                    }
+                ],
+                "description": "CLI talks to daemon; daemon does the work."
+            },
+            {
+                "level": "foundation",
+                "question": "Docker CLI communicates with daemon using:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "HTTP API",
+                        "answer": true
+                    },
+                    {
+                        "text": "SSH only",
+                        "answer": false
+                    },
+                    {
+                        "text": "Database queries",
+                        "answer": false
+                    },
+                    {
+                        "text": "File system calls only",
+                        "answer": false
+                    }
+                ],
+                "description": "Docker uses REST API."
+            },
+            {
+                "level": "foundation",
+                "question": "Where does Docker pull images from?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Daemon cache",
+                        "answer": false
+                    },
+                    {
+                        "text": "Registry",
+                        "answer": true
+                    },
+                    {
+                        "text": "Kernel memory",
+                        "answer": false
+                    },
+                    {
+                        "text": "Local container",
+                        "answer": false
+                    }
+                ],
+                "description": "Registry stores images."
+            },
+            {
+                "level": "foundation",
+                "question": "Which component runs in background?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "CLI",
+                        "answer": false
+                    },
+                    {
+                        "text": "Daemon",
+                        "answer": true
+                    },
+                    {
+                        "text": "Registry",
+                        "answer": false
+                    },
+                    {
+                        "text": "Container",
+                        "answer": false
+                    }
+                ],
+                "description": "dockerd runs continuously."
+            },
+            {
+                "level": "foundation",
+                "question": "docker run internally does:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Only starts container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Pulls image + creates + runs container",
+                        "answer": true
+                    },
+                    {
+                        "text": "Only pulls image",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only builds image",
+                        "answer": false
+                    }
+                ],
+                "description": "Multi-step operation."
+            },
+            {
+                "level": "foundation",
+                "question": "Which is NOT part of Docker architecture?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Client",
+                        "answer": false
+                    },
+                    {
+                        "text": "Daemon",
+                        "answer": false
+                    },
+                    {
+                        "text": "Registry",
+                        "answer": false
+                    },
+                    {
+                        "text": "Hypervisor",
+                        "answer": true
+                    }
+                ],
+                "description": "Hypervisor belongs to VMs."
+            },
+            {
+                "level": "foundation",
+                "question": "Where are images stored locally?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Inside container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker host storage",
+                        "answer": true
+                    },
+                    {
+                        "text": "Only in RAM",
+                        "answer": false
+                    },
+                    {
+                        "text": "Cloud always",
+                        "answer": false
+                    }
+                ],
+                "description": "Docker maintains local image cache."
+            },
+            {
+                "level": "foundation",
+                "question": "If daemon stops, what happens?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Containers continue normally",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker operations stop",
+                        "answer": true
+                    },
+                    {
+                        "text": "Images get deleted",
+                        "answer": false
+                    },
+                    {
+                        "text": "System crashes",
+                        "answer": false
+                    }
+                ],
+                "description": "Daemon is core engine."
+            },
+            {
+                "level": "foundation",
+                "question": "Registry is best compared to:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Database server",
+                        "answer": false
+                    },
+                    {
+                        "text": "Warehouse of images",
+                        "answer": true
+                    },
+                    {
+                        "text": "Compiler",
+                        "answer": false
+                    },
+                    {
+                        "text": "Operating system",
+                        "answer": false
+                    }
+                ],
+                "description": "Stores images centrally."
+            },
+            {
+                "level": "foundation",
+                "question": "docker push sends image to:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Daemon",
+                        "answer": false
+                    },
+                    {
+                        "text": "Registry",
+                        "answer": true
+                    },
+                    {
+                        "text": "Container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Kernel",
+                        "answer": false
+                    }
+                ],
+                "description": "Push uploads image."
+            }
+        ]
+    },
+    {
+        "node": "Images and Containers",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "What happens if you run same image multiple times?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Only one container allowed",
+                        "answer": false
+                    },
+                    {
+                        "text": "Multiple containers are created",
+                        "answer": true
+                    },
+                    {
+                        "text": "Image gets deleted",
+                        "answer": false
+                    },
+                    {
+                        "text": "System crashes",
+                        "answer": false
+                    }
+                ],
+                "description": "Image is reusable."
+            },
+            {
+                "level": "foundation",
+                "question": "Image is:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Writable",
+                        "answer": false
+                    },
+                    {
+                        "text": "Read-only",
+                        "answer": true
+                    },
+                    {
+                        "text": "Temporary",
+                        "answer": false
+                    },
+                    {
+                        "text": "Dynamic process",
+                        "answer": false
+                    }
+                ],
+                "description": "Immutable blueprint."
+            },
+            {
+                "level": "foundation",
+                "question": "Container is:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Static file",
+                        "answer": false
+                    },
+                    {
+                        "text": "Running instance",
+                        "answer": true
+                    },
+                    {
+                        "text": "Image layer",
+                        "answer": false
+                    },
+                    {
+                        "text": "Kernel process",
+                        "answer": false
+                    }
+                ],
+                "description": "Live execution."
+            },
+            {
+                "level": "foundation",
+                "question": "Which command builds image?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker run",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker build",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker start",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker exec",
+                        "answer": false
+                    }
+                ],
+                "description": "Build from Dockerfile."
+            },
+            {
+                "level": "foundation",
+                "question": "If container is deleted, what happens to its writable data?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "It persists",
+                        "answer": false
+                    },
+                    {
+                        "text": "It is lost",
+                        "answer": true
+                    },
+                    {
+                        "text": "Moves to image",
+                        "answer": false
+                    },
+                    {
+                        "text": "Stored in registry",
+                        "answer": false
+                    }
+                ],
+                "description": "Ephemeral storage."
+            },
+            {
+                "level": "foundation",
+                "question": "docker ps shows:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Images",
+                        "answer": false
+                    },
+                    {
+                        "text": "Running containers",
+                        "answer": true
+                    },
+                    {
+                        "text": "Volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "Networks",
+                        "answer": false
+                    }
+                ],
+                "description": "Active containers only."
+            },
+            {
+                "level": "foundation",
+                "question": "Which command removes container?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker stop",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker rm",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker kill",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker exit",
+                        "answer": false
+                    }
+                ],
+                "description": "Deletes container."
+            },
+            {
+                "level": "foundation",
+                "question": "Image vs Container relationship:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "1 image → 1 container only",
+                        "answer": false
+                    },
+                    {
+                        "text": "1 image → many containers",
+                        "answer": true
+                    },
+                    {
+                        "text": "Containers create images automatically",
+                        "answer": false
+                    },
+                    {
+                        "text": "No relation",
+                        "answer": false
+                    }
+                ],
+                "description": "Reusable blueprint."
+            },
+            {
+                "level": "foundation",
+                "question": "docker start does:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Creates new container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Starts existing container",
+                        "answer": true
+                    },
+                    {
+                        "text": "Builds image",
+                        "answer": false
+                    },
+                    {
+                        "text": "Deletes container",
+                        "answer": false
+                    }
+                ],
+                "description": "Reuses stopped container."
+            },
+            {
+                "level": "foundation",
+                "question": "Container isolation level:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Full OS isolation",
+                        "answer": false
+                    },
+                    {
+                        "text": "Process-level isolation",
+                        "answer": true
+                    },
+                    {
+                        "text": "No isolation",
+                        "answer": false
+                    },
+                    {
+                        "text": "Hardware-level isolation",
+                        "answer": false
+                    }
+                ],
+                "description": "Shared kernel."
+            }
+        ]
+    },
+    {
+        "node": "Clusters",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "What is a Docker cluster?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Single container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Group of machines working together",
+                        "answer": true
+                    },
+                    {
+                        "text": "One OS instance",
+                        "answer": false
+                    },
+                    {
+                        "text": "Single image",
+                        "answer": false
+                    }
+                ],
+                "description": "Multiple machines = cluster."
+            },
+            {
+                "level": "foundation",
+                "question": "In cluster, containers are:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Split across machines",
+                        "answer": false
+                    },
+                    {
+                        "text": "Replicated fully on machines",
+                        "answer": true
+                    },
+                    {
+                        "text": "Shared partially",
+                        "answer": false
+                    },
+                    {
+                        "text": "Stored centrally",
+                        "answer": false
+                    }
+                ],
+                "description": "Full copies run."
+            },
+            {
+                "level": "foundation",
+                "question": "Main purpose of cluster:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Reduce CPU",
+                        "answer": false
+                    },
+                    {
+                        "text": "High availability and scaling",
+                        "answer": true
+                    },
+                    {
+                        "text": "Replace OS",
+                        "answer": false
+                    },
+                    {
+                        "text": "Store files",
+                        "answer": false
+                    }
+                ],
+                "description": "Scalability."
+            },
+            {
+                "level": "foundation",
+                "question": "If one machine fails in cluster:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "App stops completely",
+                        "answer": false
+                    },
+                    {
+                        "text": "Other machines continue serving",
+                        "answer": true
+                    },
+                    {
+                        "text": "Data deleted",
+                        "answer": false
+                    },
+                    {
+                        "text": "Cluster shuts down",
+                        "answer": false
+                    }
+                ],
+                "description": "Fault tolerance."
+            },
+            {
+                "level": "foundation",
+                "question": "Load balancing means:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "All requests go to one container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Requests distributed across containers",
+                        "answer": true
+                    },
+                    {
+                        "text": "No requests handled",
+                        "answer": false
+                    },
+                    {
+                        "text": "Manual routing only",
+                        "answer": false
+                    }
+                ],
+                "description": "Even distribution."
+            },
+            {
+                "level": "foundation",
+                "question": "Cluster helps in:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Scaling horizontally",
+                        "answer": true
+                    },
+                    {
+                        "text": "Scaling vertically only",
+                        "answer": false
+                    },
+                    {
+                        "text": "Reducing containers",
+                        "answer": false
+                    },
+                    {
+                        "text": "Stopping services",
+                        "answer": false
+                    }
+                ],
+                "description": "More machines."
+            },
+            {
+                "level": "foundation",
+                "question": "Cluster machines are called:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Nodes",
+                        "answer": true
+                    },
+                    {
+                        "text": "Images",
+                        "answer": false
+                    },
+                    {
+                        "text": "Volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "Layers",
+                        "answer": false
+                    }
+                ],
+                "description": "Each machine = node."
+            },
+            {
+                "level": "foundation",
+                "question": "User request goes to:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "All containers simultaneously",
+                        "answer": false
+                    },
+                    {
+                        "text": "One available container",
+                        "answer": true
+                    },
+                    {
+                        "text": "All machines equally",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only manager node",
+                        "answer": false
+                    }
+                ],
+                "description": "Handled individually."
+            },
+            {
+                "level": "foundation",
+                "question": "Cluster without replication is:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Highly available",
+                        "answer": false
+                    },
+                    {
+                        "text": "Single point of failure",
+                        "answer": true
+                    },
+                    {
+                        "text": "Load balanced",
+                        "answer": false
+                    },
+                    {
+                        "text": "Distributed",
+                        "answer": false
+                    }
+                ],
+                "description": "No redundancy."
+            },
+            {
+                "level": "foundation",
+                "question": "Cluster is best for:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Single-user apps",
+                        "answer": false
+                    },
+                    {
+                        "text": "High traffic apps",
+                        "answer": true
+                    },
+                    {
+                        "text": "Offline tools",
+                        "answer": false
+                    },
+                    {
+                        "text": "Local scripts",
+                        "answer": false
+                    }
+                ],
+                "description": "Handles scale."
+            }
+        ]
+    },
+    {
+        "node": "Docker Swarm",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "What is Docker Swarm?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "A container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Cluster management tool",
+                        "answer": true
+                    },
+                    {
+                        "text": "Image builder",
+                        "answer": false
+                    },
+                    {
+                        "text": "Volume manager",
+                        "answer": false
+                    }
+                ],
+                "description": "Manages cluster."
+            },
+            {
+                "level": "foundation",
+                "question": "Swarm consists of:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Only containers",
+                        "answer": false
+                    },
+                    {
+                        "text": "Manager and worker nodes",
+                        "answer": true
+                    },
+                    {
+                        "text": "Only images",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only volumes",
+                        "answer": false
+                    }
+                ],
+                "description": "Two node types."
+            },
+            {
+                "level": "foundation",
+                "question": "Manager node does:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Runs user containers only",
+                        "answer": false
+                    },
+                    {
+                        "text": "Controls cluster decisions",
+                        "answer": true
+                    },
+                    {
+                        "text": "Stores images only",
+                        "answer": false
+                    },
+                    {
+                        "text": "Handles volumes only",
+                        "answer": false
+                    }
+                ],
+                "description": "Brain of swarm."
+            },
+            {
+                "level": "foundation",
+                "question": "Worker node does:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Manages cluster",
+                        "answer": false
+                    },
+                    {
+                        "text": "Runs containers",
+                        "answer": true
+                    },
+                    {
+                        "text": "Stores images",
+                        "answer": false
+                    },
+                    {
+                        "text": "Handles networking only",
+                        "answer": false
+                    }
+                ],
+                "description": "Executes tasks."
+            },
+            {
+                "level": "foundation",
+                "question": "docker service create is used for:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Creating image",
+                        "answer": false
+                    },
+                    {
+                        "text": "Running scalable containers",
+                        "answer": true
+                    },
+                    {
+                        "text": "Deleting containers",
+                        "answer": false
+                    },
+                    {
+                        "text": "Managing volumes",
+                        "answer": false
+                    }
+                ],
+                "description": "Service = scalable container."
+            },
+            {
+                "level": "foundation",
+                "question": "Replica means:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Split container parts",
+                        "answer": false
+                    },
+                    {
+                        "text": "Copies of full container",
+                        "answer": true
+                    },
+                    {
+                        "text": "Half container",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only memory copy",
+                        "answer": false
+                    }
+                ],
+                "description": "Multiple instances."
+            },
+            {
+                "level": "foundation",
+                "question": "If a container crashes in swarm:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Nothing happens",
+                        "answer": false
+                    },
+                    {
+                        "text": "Swarm recreates it",
+                        "answer": true
+                    },
+                    {
+                        "text": "All containers stop",
+                        "answer": false
+                    },
+                    {
+                        "text": "Cluster shuts down",
+                        "answer": false
+                    }
+                ],
+                "description": "Self-healing."
+            },
+            {
+                "level": "foundation",
+                "question": "Swarm ensures:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Manual scaling",
+                        "answer": false
+                    },
+                    {
+                        "text": "Automatic load balancing",
+                        "answer": true
+                    },
+                    {
+                        "text": "No scaling",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only storage",
+                        "answer": false
+                    }
+                ],
+                "description": "Traffic distribution."
+            },
+            {
+                "level": "foundation",
+                "question": "Swarm vs cluster:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Same concept",
+                        "answer": false
+                    },
+                    {
+                        "text": "Swarm manages cluster",
+                        "answer": true
+                    },
+                    {
+                        "text": "Cluster manages swarm",
+                        "answer": false
+                    },
+                    {
+                        "text": "No relation",
+                        "answer": false
+                    }
+                ],
+                "description": "Swarm = tool."
+            },
+            {
+                "level": "foundation",
+                "question": "Swarm is best for:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Single container apps",
+                        "answer": false
+                    },
+                    {
+                        "text": "Distributed scalable apps",
+                        "answer": true
+                    },
+                    {
+                        "text": "Local scripts",
+                        "answer": false
+                    },
+                    {
+                        "text": "File storage",
+                        "answer": false
+                    }
+                ],
+                "description": "Cluster orchestration."
+            }
+        ]
+    },
+    {
+        "node": "Introduction & Architecture Basics",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "In the \"Cooking\" analogy, what represents the Docker Image?",
+                "type": "radio",
+                "options": [
+                    { "text": "The freshly cooked meal", "answer": false },
+                    { "text": "The frozen meal box in the supermarket", "answer": true },
+                    { "text": "The oven", "answer": false },
+                    { "text": "The dining table", "answer": false }
+                ],
+                "description": "An image is an immutable template just like a frozen meal box with instructions and ingredients."
+            },
+            {
+                "level": "foundation",
+                "question": "What is the key difference between Virtual Machines and Containers?",
+                "type": "radio",
+                "options": [
+                    { "text": "VMs share the host kernel, while containers abstract hardware.", "answer": false },
+                    { "text": "VMs abstract the hardware (Full House), while Containers share the host kernel (Apartment).", "answer": true },
+                    { "text": "Containers require a Hypervisor to run.", "answer": false },
+                    { "text": "VMs are faster to start up than containers.", "answer": false }
+                ],
+                "description": "VMs emulate hardware and run a full Guest OS. Containers share the host OS Kernel directly, making them lightweight."
+            },
+            {
+                "level": "foundation",
+                "question": "Which of the following is NOT one of the 3 main parts of Docker?",
+                "type": "radio",
+                "options": [
+                    { "text": "The Recipe (Dockerfile)", "answer": false },
+                    { "text": "The Frozen Meal (Image)", "answer": false },
+                    { "text": "The Hypervisor (VM Manager)", "answer": true },
+                    { "text": "The Cooked Meal (Container)", "answer": false }
+                ],
+                "description": "Hypervisors belong to Virtual Machines. Docker relies on Images, Containers, and Dockerfiles to build apps."
+            },
+            {
+                "level": "foundation",
+                "question": "What happens if you try to modify the core ingredients of a built Image directly?",
+                "type": "radio",
+                "options": [
+                    { "text": "The original image updates automatically.", "answer": false },
+                    { "text": "Images are read-only (immutable); you must build a new image to change it.", "answer": true },
+                    { "text": "The Registry rejects it.", "answer": false },
+                    { "text": "The Container crashes.", "answer": false }
+                ],
+                "description": "Images are frozen in time. To update one, you must build a fresh image with new instructions."
+            },
+            {
+                "level": "foundation",
+                "question": "In the Client-Server model, which component is analogous to the \"Warehouse\"?",
+                "type": "radio",
+                "options": [
+                    { "text": "Docker Daemon", "answer": false },
+                    { "text": "Docker Client", "answer": false },
+                    { "text": "Docker Registry (like Docker Hub)", "answer": true },
+                    { "text": "Docker Compose", "answer": false }
+                ],
+                "description": "A Docker Registry acts as a centralized warehouse where images are uploaded, stored, and downloaded."
+            }
+        ]
+    },
+    {
+        "node": "Layers & UnionFS",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "What is the UnionFS \"Tax\"?",
+                "type": "radio",
+                "options": [
+                    { "text": "The money you pay for Docker Pro.", "answer": false },
+                    { "text": "The performance overhead of merging multiple read-only layers together on disk.", "answer": true },
+                    { "text": "The networking overhead of DNS in Docker.", "answer": false },
+                    { "text": "The CPU limitation set by cgroups.", "answer": false }
+                ],
+                "description": "UnionFS dynamically merges layers to look like a single filesystem, which can drastically slow down high I/O operations."
+            },
+            {
+                "level": "foundation",
+                "question": "If you delete a large 100MB file in a subsequent RUN layer step, what happens to the final image size?",
+                "type": "radio",
+                "options": [
+                    { "text": "It decreases by 100MB.", "answer": false },
+                    { "text": "It decreases by 50MB because of compression.", "answer": false },
+                    { "text": "The size remains the same; the file is only visually hidden (masked).", "answer": true },
+                    { "text": "The build fails if you delete files from previous layers.", "answer": false }
+                ],
+                "description": "Layers are immutable. Deleting a file in a later layer simply adds a 'whiteout' marker, masking it but not reclaiming the actual disk space from the lower layer."
+            },
+            {
+                "level": "foundation",
+                "question": "Why should you place `apt-get install` commands near the top of a Dockerfile?",
+                "type": "radio",
+                "options": [
+                    { "text": "To make the container boot faster.", "answer": false },
+                    { "text": "Because they change rarely, allowing Docker to heavily cache those slow layers.", "answer": true },
+                    { "text": "To reduce the memory usage of the container.", "answer": false },
+                    { "text": "To prevent security vulnerabilities.", "answer": false }
+                ],
+                "description": "Placing rarely-changed instructions high up in the Dockerfile maximizes cache reuse and significantly speeds up subsequent builds."
+            },
+            {
+                "level": "foundation",
+                "question": "What represents the 'Cheese' layer in the 'Layer Cake' analogy for a Node.js app?",
+                "type": "radio",
+                "options": [
+                    { "text": "The base OS (Ubuntu/Alpine).", "answer": false },
+                    { "text": "The Node.js installation.", "answer": false },
+                    { "text": "The application's actual source code.", "answer": true },
+                    { "text": "The network driver.", "answer": false }
+                ],
+                "description": "The base OS is the crust, Node.js is the sauce, and your fast-changing source code is the topmost cheese layer."
+            },
+            {
+                "level": "foundation",
+                "question": "How is caching utilized when building multiple images that use the same Base OS?",
+                "type": "radio",
+                "options": [
+                    { "text": "Docker downloads a new copy of the Base OS per image.", "answer": false },
+                    { "text": "The host OS caches it in RAM.", "answer": false },
+                    { "text": "Docker reuses the exact same physical Base OS layer on disk for all of them.", "answer": true },
+                    { "text": "It copies the layer into every container.", "answer": false }
+                ],
+                "description": "Deduplication: Docker physically stores only one copy of any shared layer on your hard drive."
+            }
+        ]
+    },
+    {
+        "node": "Volumes & Bind Mounts",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "What is the defining characteristic of a Bind Mount?",
+                "type": "radio",
+                "options": [
+                    { "text": "It is managed entirely by Docker inside /var/lib/docker.", "answer": false },
+                    { "text": "It relies on the host machine's specific directory structure and maps it directly into the container.", "answer": true },
+                    { "text": "It stores data purely in memory (RAM).", "answer": false },
+                    { "text": "It cannot be modified by the container.", "answer": false }
+                ],
+                "description": "Bind mounts link a specific folder on your Host OS (like ~/my-project) directly into the container, bypassing Docker's volume management."
+            },
+            {
+                "level": "foundation",
+                "question": "What is the 'Amnesia Effect' in containers?",
+                "type": "radio",
+                "options": [
+                    { "text": "Containers forget their IP address when stopped.", "answer": false },
+                    { "text": "All data written directly inside the container's writable layer is permanently lost when the container is deleted.", "answer": true },
+                    { "text": "Containers delete attached volumes upon restart.", "answer": false },
+                    { "text": "Nodes forget who the manager is if heartbeats are lost.", "answer": false }
+                ],
+                "description": "Containers are ephemeral. Any data not saved in a Volume or Bind Mount is wiped clean as soon as the container dies."
+            },
+            {
+                "level": "foundation",
+                "question": "Who manages the actual files when using a Docker Volume?",
+                "type": "radio",
+                "options": [
+                    { "text": "The host operating system entirely natively.", "answer": false },
+                    { "text": "Docker itself, storing it in a protected internal directory (like /var/lib/docker).", "answer": true },
+                    { "text": "The container's internal filesystem directly.", "answer": false },
+                    { "text": "A remote cloud provider always.", "answer": false }
+                ],
+                "description": "Volumes are entirely managed by Docker, providing excellent isolation and backup capabilities."
+            },
+            {
+                "level": "foundation",
+                "question": "When should you prefer a Bind Mount over a Volume?",
+                "type": "radio",
+                "options": [
+                    { "text": "For production database storage.", "answer": false },
+                    { "text": "During local development when you want \"Live Reloading\" connected directly to your IDE folder.", "answer": true },
+                    { "text": "To store API secrets securely.", "answer": false },
+                    { "text": "Never, Volumes are always strictly better.", "answer": false }
+                ],
+                "description": "Bind mounts open a dynamic window to the developer's laptop folder, making it perfect for live code reloading."
+            },
+            {
+                "level": "foundation",
+                "question": "What happens if you mount a Volume into a container folder (like /app) that already contains files?",
+                "type": "radio",
+                "options": [
+                    { "text": "The container refuses to start.", "answer": false },
+                    { "text": "The volume deletes its own contents to copy the container's files.", "answer": false },
+                    { "text": "The volume acts like a \"tablecloth\", completely hiding the existing files underneath it while mounted.", "answer": true },
+                    { "text": "The files are merged together seamlessly.", "answer": false }
+                ],
+                "description": "A mount perfectly shadows whatever exists in the container's target directory until that mount is removed."
+            }
+        ]
+    },
+    {
+        "node": "Rules & Limits (Namespaces/cgroups)",
+        "questions": [
+            {
+                "level": "foundation",
+                "question": "Which Linux feature acts as the 'Budget Controller' for a container?",
+                "type": "radio",
+                "options": [
+                    { "text": "Namespaces", "answer": false },
+                    { "text": "Control Groups (cgroups)", "answer": true },
+                    { "text": "UnionFS", "answer": false },
+                    { "text": "SELinux", "answer": false }
+                ],
+                "description": "cgroups limit and meter the resource usage (CPU, RAM, Block I/O) of a container."
+            },
+            {
+                "level": "foundation",
+                "question": "What is the golden rule regarding PID 1?",
+                "type": "radio",
+                "options": [
+                    { "text": "PID 1 must always be a bash process.", "answer": false },
+                    { "text": "A container's lifecycle is directly tied to PID 1. If PID 1 dies, the container dies.", "answer": true },
+                    { "text": "PID 1 is reserved for the root user on the host OS.", "answer": false },
+                    { "text": "Only one container can run PID 1 at a time on a host.", "answer": false }
+                ],
+                "description": "The primary process executed in the container gets PID 1 inside its namespace. When that process exits, the namespace collapses and the container stops."
+            },
+            {
+                "level": "foundation",
+                "question": "What is the primary function of Linux Namespaces?",
+                "type": "radio",
+                "options": [
+                    { "text": "To limit how much CPU the container can use.", "answer": false },
+                    { "text": "To provide Isolation by acting as \"Magic Blinders\" so the container thinks it has its own private OS.", "answer": true },
+                    { "text": "To compress image layers.", "answer": false },
+                    { "text": "To manage external hard drives.", "answer": false }
+                ],
+                "description": "Namespaces split the global OS domains (like Process Trees, Networking, User IDs) so containers cannot see each other."
+            },
+            {
+                "level": "foundation",
+                "question": "What is the subtle difference between killing (SIGKILL) and stopping (SIGTERM) a container?",
+                "type": "radio",
+                "options": [
+                    { "text": "Both immediately destroy the container process.", "answer": false },
+                    { "text": "SIGTERM politely asks the app to shut down cleanly, while SIGKILL pulls the power plug instantly.", "answer": true },
+                    { "text": "SIGKILL saves data, SIGTERM deletes it.", "answer": false },
+                    { "text": "Docker only supports SIGKILL.", "answer": false }
+                ],
+                "description": "SIGTERM gives the application a short grace period to save its work and close connections securely."
+            },
+            {
+                "level": "foundation",
+                "question": "Why doesn't a container need its own Linux Kernel?",
+                "type": "radio",
+                "options": [
+                    { "text": "Because it uses a Hypervisor instead.", "answer": false },
+                    { "text": "Because it writes its own drivers using Node.js.", "answer": false },
+                    { "text": "Because it uses the Host OS's Kernel, acting simply as an isolated folder of processes.", "answer": true },
+                    { "text": "Because it relies on Docker Hub to simulate one.", "answer": false }
+                ],
+                "description": "The ability to share the exact same underlying host Kernel and simply isolate processes is what makes containers ultra-lightweight."
+            }
+        ]
+    }
+]
