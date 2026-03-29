@@ -35,13 +35,13 @@ export default function ContainerdStorePage() {
                         </div>
                         <div className="doc-card-body">
                             <p>
-                                Starting with Docker 29.0, fresh installations use <strong>containerd</strong> as 
-                                the default storage engine. It replaces the classic "graph drivers" 
+                                Starting with Docker 29.0, fresh installations use <strong>containerd</strong> as
+                                the default storage engine. It replaces the classic "graph drivers"
                                 (like overlay2) with <strong>snapshotters</strong>.
                             </p>
                             <div className="doc-alert doc-alert-info">
                                 <i className="bi bi-info-circle-fill me-2"></i>
-                                <strong>Upgrade Note:</strong> if you upgraded from an older version, 
+                                <strong>Upgrade Note:</strong> if you upgraded from an older version,
                                 you're still on the old system. You need to enable this manually.
                             </div>
                         </div>
@@ -99,15 +99,15 @@ export default function ContainerdStorePage() {
                             <div className="notes-container">
                                 <div className="component-note mb-3 p-3 d-flex align-items-center" style={{ background: '#161b22', borderLeft: '4px solid #f1e05a' }}>
                                     <div>
-                                        <strong>Dual Storage:</strong> It keeps both the <strong>compressed</strong> 
-                                        layers (for fast pushes) and the <strong>extracted</strong> layers 
+                                        <strong>Dual Storage:</strong> It keeps both the <strong>compressed</strong>
+                                        layers (for fast pushes) and the <strong>extracted</strong> layers
                                         (for running containers).
                                     </div>
                                 </div>
                                 <div className="component-note p-3 d-flex align-items-center" style={{ background: '#161b22', borderLeft: '4px solid #f1e05a' }}>
                                     <div>
                                         <i className="bi bi-trash3-fill me-2"></i>
-                                        <strong>Maintenance:</strong> Use <code>docker image prune</code> regularly 
+                                        <strong>Maintenance:</strong> Use <code>docker image prune</code> regularly
                                         to keep things lean.
                                     </div>
                                 </div>
@@ -129,15 +129,15 @@ export default function ContainerdStorePage() {
                             <p>If you're upgrading, add this to your <code>daemon.json</code>:</p>
                             <pre className="doc-code-block">
                                 {`{
-  "features": {
+"features": {
     "containerd-snapshotter": true
-  }
+}
 }`}
                             </pre>
                             <div className="doc-alert doc-alert-warning mt-3">
                                 <i className="bi bi-exclamation-triangle-fill"></i>
                                 <div className="ms-2">
-                                    <strong>Important:</strong> Switching stores "hides" your existing containers. 
+                                    <strong>Important:</strong> Switching stores "hides" your existing containers.
                                     They aren't deleted, but you'll need to switch back to see them again.
                                 </div>
                             </div>
@@ -162,6 +162,58 @@ export default function ContainerdStorePage() {
                             <p className="mt-2 small opacity-75">
                                 If you see <code>io.containerd.snapshotter.v1</code>, you're all set!
                             </p>
+                        </div>
+                    </div>
+
+                    {/* EXPERT Q&A: EXAM STRATEGY */}
+                    <div className="doc-section-card shadow-lg border-primary" style={{ gridColumn: '1 / -1' }}>
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-primary">
+                                <i className="bi bi-mortarboard-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                Expert Q&A: DCA Exam Strategy
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="vstack gap-4">
+                                <div>
+                                    <h4 className="fs-5 text-primary mb-3">
+                                        <i className="bi bi-question-circle me-2"></i>
+                                        "Is this more important than overlay2 for the DCA exam?"
+                                    </h4>
+                                    <p>
+                                        <strong>For the Exam: No.</strong> <code>overlay2</code> is still the primary
+                                        focus of the current Docker Certified Associate (DCA) curriculum. You should
+                                        prioritize understanding <code>overlay2</code> architecture and <code>Copy-on-Write</code>.
+                                    </p>
+                                    <div className="doc-alert doc-alert-info">
+                                        <i className="bi bi-award-fill"></i>
+                                        <div>
+                                            <strong>DCA Study Tip:</strong> If an exam question asks "What is the
+                                            recommended storage driver for modern Linux?", the answer is almost
+                                            always <strong>overlay2</strong>.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="border-top pt-4" style={{ borderTopColor: '#30363d !important' }}>
+                                    <h4 className="fs-5 text-primary mb-3">
+                                        <i className="bi bi-question-circle me-2"></i>
+                                        "Then why learn containerd-store at all?"
+                                    </h4>
+                                    <p>
+                                        Because it is the <strong>Future of Docker</strong>. In
+                                        <strong> Senior/Lead Engineer interviews</strong>, you will be expected
+                                        to know why Docker is moving away from graph drivers:
+                                    </p>
+                                    <ul className="small opacity-75">
+                                        <li><strong>Wasm:</strong> You can't run WebAssembly workloads natively without the containerd store.</li>
+                                        <li><strong>Security (Attestations):</strong> Modern supply chain security (SBOMs) is built into this store.</li>
+                                        <li><strong>Performance:</strong> It unifies Docker with the industry-standard <code>containerd</code>, reducing redundancy.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

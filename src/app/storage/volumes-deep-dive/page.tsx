@@ -544,6 +544,160 @@ volumes:
                         </div>
                     </div>
 
+                    {/* EXPERT Q&A: VOLUME SHARING */}
+                    <div className="doc-section-card shadow-lg border-primary">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-primary">
+                                <i className="bi bi-patch-question-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                Expert Q&A: Volume Sharing & Conflicts
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            
+                            {/* QUESTION 1 */}
+                            <div className="mb-5 pb-4 border-bottom border-secondary border-opacity-25">
+                                <h4 className="fs-5 text-info mb-3">
+                                    <i className="bi bi-question-circle me-2"></i>
+                                    "If two containers use the same volume, will data conflict?"
+                                </h4>
+                                <p>
+                                    The short answer is: <strong>Yes, absolutely.</strong>
+                                </p>
+                                <p className="small opacity-75">
+                                    Docker provides the storage "plumbing," but it <strong>does not provide any locking mechanisms</strong>. 
+                                    If two containers try to write to the same file at the exact same time, you risk 
+                                    data corruption or "Last Writer Wins" scenarios.
+                                </p>
+                                
+                                <div className="doc-alert doc-alert-info mt-3">
+                                    <i className="bi bi-lightbulb-fill"></i>
+                                    <div>
+                                        <strong>Noob Note:</strong><br />
+                                        Think of it like a <strong>shared Word Document</strong> without "Auto-Save" or "Locking". 
+                                        If you and your friend both type at the same time, the person who hits "Save" last 
+                                        will overwrite whatever the first person wrote!
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* QUESTION 2 */}
+                            <div className="mb-4">
+                                <h4 className="fs-5 text-info mb-3">
+                                    <i className="bi bi-question-circle me-2"></i>
+                                    "Wait, so can I use this to let containers 'talk' to each other?"
+                                </h4>
+                                <p>
+                                    <strong>Yes!</strong> This is actually a very powerful strategy called the <strong>Sidecar Pattern</strong>.
+                                </p>
+
+                                <div className="doc-alert doc-alert-success mt-3">
+                                    <i className="bi bi-check2-circle"></i>
+                                    <div>
+                                        <strong>The Goal:</strong><br />
+                                        One container <strong>Writes</strong> (e.g., your Web App logs) and another container 
+                                        <strong>Reads</strong> (e.g., a Log Shipper like Fluentd) in real-time.
+                                    </div>
+                                </div>
+
+                                <h5 className="fs-6 text-uppercase text-danger mt-4">The Solution to "Inconsistent Reads"</h5>
+                                <p className="small mb-2">
+                                    If the Reader starts reading a file while the Writer is still middle of writing 100MB, 
+                                    the Reader gets a <strong>corrupted/partial file</strong>.
+                                </p>
+                                <div className="p-3 rounded mb-3" style={{ background: '#1c2128', border: '1px solid #30363d' }}>
+                                    <p className="small fw-bold mb-2">Expert Strategy: Atomic Renames</p>
+                                    <ol className="small mb-0 opacity-75">
+                                        <li>Writer saves data to <code>file.txt.tmp</code></li>
+                                        <li>Writer renames it to <code>file.txt</code> (renames are <strong>atomic</strong> in Linux)</li>
+                                        <li>Reader <em>only</em> looks for <code>file.txt</code></li>
+                                    </ol>
+                                </div>
+                            </div>
+
+                            {/* QUESTION 3 */}
+                            <div className="mb-0">
+                                <h4 className="fs-5 text-info mb-3">
+                                    <i className="bi bi-question-circle me-2"></i>
+                                    "If a volume already has data and I mount it to a new container, what happens?"
+                                </h4>
+                                <p>
+                                    This is a critical "DCA Exam" topic! The behavior depends on whether the volume is empty or not:
+                                </p>
+                                <ul className="small opacity-75">
+                                    <li className="mb-2"><strong>If Volume is EMPTY:</strong> Docker <strong>initializes</strong> it by copying files from the container into the volume.</li>
+                                    <li><strong>If Volume HAS DATA:</strong> The volume <strong>mounts over</strong> the container's folder. It's like putting a physical sticker over a word—the original word (container data) is still there, but you can't see or touch it.</li>
+                                </ul>
+
+                                <div className="doc-alert doc-alert-warning mt-3">
+                                    <i className="bi bi-shuffle"></i>
+                                    <div>
+                                        <strong>Merge vs Mount:</strong><br />
+                                        Docker volumes <strong>NEVER merge</strong> files. It's not like Git. If your container has <code>A.txt</code> 
+                                        and the volume has <code>B.txt</code>, the container will ONLY see <code>B.txt</code>. 
+                                        The original <code>A.txt</code> is hidden (shadowed) until the volume is unmounted.
+                                    </div>
+                                </div>
+
+                                <h5 className="fs-6 text-uppercase text-info mt-4">"So the original file is lost forever?"</h5>
+                                <p className="small mb-0 text-success fw-bold">
+                                    <i className="bi bi-shield-check me-1"></i>
+                                    No! This is the magic of Docker.
+                                </p>
+                                <p className="small opacity-75 mt-2">
+                                    The original file is baked into the <strong>Image Layer</strong>, which is <strong>Read-Only</strong>. 
+                                    Docker never deletes files from an image. The volume just "sits on top" of the folder. 
+                                    If you run the container again <em>without</em> the volume, your original <code>config.json</code> 
+                                    will be right back where it was!
+                                </p>
+
+                                <div className="doc-alert doc-alert-danger mt-4 mb-0">
+                                    <i className="bi bi-exclamation-triangle-fill"></i>
+                                    <div>
+                                        <strong>The Shared Reality:</strong><br />
+                                        While your <strong>Image Layers</strong> are private and safe, a <strong>Volume</strong> is like a shared piece of paper. 
+                                        If Container A and Container B both mount Volume V, they <strong>WILL</strong> see each other's changes. 
+                                        If Container B edits <code>config.json</code> in the volume, Container A will see that change immediately. 
+                                        <strong>This is where clashing happens!</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* QUESTION 4 */}
+                            <div className="mb-0 mt-5 border-top pt-5" style={{ borderTopColor: '#30363d !important' }}>
+                                <h4 className="fs-5 text-info mb-3">
+                                    <i className="bi bi-question-circle me-2"></i>
+                                    "Can I mount any folder I want as a Volume?"
+                                </h4>
+                                <p>
+                                    This is a common point of confusion! The answer depends on your <strong>Mount Type</strong>:
+                                </p>
+                                <ul className="small opacity-75">
+                                    <li className="mb-2">
+                                        <strong>Volumes:</strong> <span className="text-danger">No.</span> Docker manages these. 
+                                        They always live in Docker's "private" area (e.g., <code>/var/lib/docker/volumes/</code>). 
+                                        You give them a name, and Docker chooses the location.
+                                    </li>
+                                    <li>
+                                        <strong>Bind Mounts:</strong> <span className="text-success">Yes!</span> You can mount 
+                                        <em>any</em> folder or file from your host machine (like <code>/home/user/project</code>).
+                                    </li>
+                                </ul>
+
+                                <div className="doc-alert doc-alert-info mt-3 mb-0">
+                                    <i className="bi bi-shield-lock-fill"></i>
+                                    <div>
+                                        <strong>Expert Insight:</strong><br />
+                                        While you <em>can</em> mount any folder as a bind mount, be careful! 
+                                        Mounting sensitive host folders like <code>/etc</code> or <code>/root</code> 
+                                        to a container is a security risk. If the container is compromised, the host is compromised.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

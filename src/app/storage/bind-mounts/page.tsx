@@ -461,6 +461,82 @@ volumes:
                         </div>
                     </div>
 
+                    {/* EXPERT Q&A */}
+                    <div className="doc-section-card shadow-lg border-info" style={{ gridColumn: '1 / -1' }}>
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-info">
+                                <i className="bi bi-patch-question-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                Expert Q&A: Bind Mount Behavior
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="vstack gap-5">
+                                {/* QUESTION 1 */}
+                                <div>
+                                    <h4 className="fs-5 text-info mb-3">
+                                        <i className="bi bi-question-circle me-2"></i>
+                                        "What happens if I mount a host folder over a container folder that has files?"
+                                    </h4>
+                                    <p>
+                                        This is a standard "Shadowing" behavior. Your host folder <strong>wins</strong> and hides everything 
+                                        inside the container's folder. 
+                                    </p>
+                                    <div className="doc-alert doc-alert-warning mt-3">
+                                        <i className="bi bi-shuffle"></i>
+                                        <div>
+                                            <strong>The Sticker Analogy:</strong><br />
+                                            Think of it like putting a <strong>physical sticker</strong> over a word in a book. 
+                                            The original word (container files) is still there, but you can't see or touch it. 
+                                            Only the sticker (host folder) is visible.
+                                        </div>
+                                    </div>
+                                    <p className="small text-success fw-bold flex items-center mt-3">
+                                        <i className="bi bi-shield-check me-2"></i>
+                                        Safety Check: The original files are safe in the Read-Only Image Layer. 
+                                        They reappear as soon as the container stops (or runs without the mount).
+                                    </p>
+
+                                    {/* NEW HOST VISIBILITY NOTE */}
+                                    <div className="doc-alert doc-alert-info mt-4">
+                                        <i className="bi bi-eye-slash-fill"></i>
+                                        <div>
+                                            <strong>Visible to Host? No.</strong><br />
+                                            If you do an <code>ls</code> on your <strong>host</strong> machine, you will <strong>NOT</strong> see the original 
+                                            container files. You will only see what's in your host folder. 
+                                            The container's original data is "behind the curtain" and stay inside the image.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* QUESTION 2 */}
+                                <div className="border-top pt-5" style={{ borderTopColor: '#30363d !important' }}>
+                                    <h4 className="fs-5 text-info mb-3">
+                                        <i className="bi bi-question-circle me-2"></i>
+                                        "Can I mount absolutely ANY host folder?"
+                                    </h4>
+                                    <p>
+                                        Technically, <strong>yes</strong>. But architecturally, <strong>be careful</strong>.
+                                    </p>
+                                    <ul className="small opacity-75">
+                                        <li><strong>Good:</strong> Mounting <code>./src</code> for live coding.</li>
+                                        <li><strong>Dangerous:</strong> Mounting <code>/etc</code>, <code>/root</code>, or <code>/home/user</code>.</li>
+                                    </ul>
+                                    <div className="doc-alert doc-alert-danger mt-3 mb-0">
+                                        <i className="bi bi-exclamation-octagon-fill"></i>
+                                        <div>
+                                            <strong>Security Risk:</strong><br />
+                                            If a container has a bind mount to a sensitive host directory and is compromised, 
+                                            the attacker can delete or modify files on your <strong>actual computer</strong>. 
+                                            Always use the most restrictive path possible.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

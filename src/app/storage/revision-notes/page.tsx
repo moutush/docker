@@ -2,166 +2,207 @@
 
 import React from 'react';
 import Link from 'next/link';
-
+import type { Metadata } from 'next';
 
 export default function StorageRevisionNotesPage() {
-    const revisionItems = [
-        {
-            title: "The Big Three",
-            subtitle: "Volumes vs Bind vs tmpfs",
-            icon: "bi-hdd-stack",
-            color: "primary",
-            points: [
-                "Volumes: Docker-managed, /var/lib/docker/volumes, production data.",
-                "Bind Mounts: Host-path, development, config sharing.",
-                "tmpfs: RAM only, Linux only, sensitive/temp data."
-            ],
-            link: "/storage/when-to-use"
-        },
-        {
-            title: "CLI Precision",
-            subtitle: "DCA Exam Traps",
-            icon: "bi-terminal",
-            color: "warning",
-            points: [
-                "-v creates host folder if missing (owned by root).",
-                "--mount errors if host source path is missing.",
-                "Short syntax vs Verbose syntax (use --mount for clarity)."
-            ],
-            link: "/storage/drivers/overview#dca-exam-practice"
-        },
-        {
-            title: "Storage Drivers",
-            subtitle: "Decision Matrix",
-            icon: "bi-layers",
-            color: "success",
-            points: [
-                "overlay2: Default, best RAM/speed balance.",
-                "zfs: High integrity, RAM hungry (ARC cache).",
-                "btrfs: Block-level CoW, native snapshots.",
-                "vfs: Fallback, slow, no CoW."
-            ],
-            link: "/storage/drivers/select"
-        },
-        {
-            title: "Internal Mechanics",
-            subtitle: "CoW & Copy-Up",
-            icon: "bi-cpu",
-            color: "info",
-            points: [
-                "Copy-on-Write: Space efficiency for shared layers.",
-                "Copy-Up: Full file copy to writable layer on first edit.",
-                "Impact: Large files cause lag on initial write."
-            ],
-            link: "/storage/drivers/overview"
-        },
-        {
-            title: "Senior Patterns",
-            subtitle: "Orchestration & Safety",
-            icon: "bi-shield-check",
-            color: "danger",
-            points: [
-                "Mount Propagation: shared, slave, private (default).",
-                "Backup: Use a temp container with --volumes-from.",
-                "Pruning: docker volume prune (removes unused only)."
-            ],
-            link: "/storage/volumes-deep-dive#senior-topic-mount-propagation"
-        },
-        {
-            title: "The Future",
-            subtitle: "containerd Store",
-            icon: "bi-box-seam",
-            color: "secondary",
-            points: [
-                "Uses containerd Snapshotters (not Graph Drivers).",
-                "Enables Multi-platform builds + Wasm support.",
-                "Dual Storage: Extracted + Compressed layers."
-            ],
-            link: "/storage/containerd-store"
-        }
-    ];
-
     return (
         <div className="content-area">
             <div className="container-fluid py-5 px-md-5">
-                
-                {/* HEADER */}
-                <div className="text-center mb-5 pb-4 border-bottom border-secondary border-opacity-25">
-                    <h1 className="display-4 fw-bold mb-3">Storage Revision Notes</h1>
-                    <p className="lead text-secondary opacity-75">
-                        <i className="bi bi-calendar-check me-2 text-primary"></i>
-                        Critical concepts to review daily for DCA and Interviews.
+
+                {/* PAGE HEADER */}
+                <div className="page-intro-header mb-5 text-center text-md-start">
+                    <h1 className="doc-section-title mb-2" style={{ fontSize: '42px' }}>Storage: Revision Notes</h1>
+                    <p className="lead text-secondary opacity-75 fs-5 mb-0">
+                        Critical concepts, mental models, and expert-level technical details for daily review.
                     </p>
                 </div>
 
-                <div className="row g-4">
-                    {revisionItems.map((item, idx) => (
-                        <div key={idx} className="col-md-6 col-xl-4">
-                            <div className={`card h-100 shadow-sm border-0 bg-dark bg-opacity-50`} style={{ borderTop: `4px solid var(--bs-${item.color})` }}>
-                                <div className="card-body p-4 d-flex flex-column">
-                                    <div className="d-flex align-items-center mb-3">
-                                        <div className={`p-2 rounded bg-${item.color} bg-opacity-10 text-${item.color} me-3`}>
-                                            <i className={`bi ${item.icon} fs-4`}></i>
-                                        </div>
-                                        <div>
-                                            <h3 className="h5 mb-0 fw-bold">{item.title}</h3>
-                                            <small className="text-secondary">{item.subtitle}</small>
-                                        </div>
-                                    </div>
-                                    
-                                    <ul className="list-unstyled flex-grow-1 border-start border-secondary border-opacity-25 ps-4 py-2 mt-2">
-                                        {item.points.map((pt, pIdx) => (
-                                            <li key={pIdx} className="mb-3 position-relative">
-                                                <i className={`bi bi-check2-circle position-absolute text-${item.color}`} style={{ left: '-1.8rem', top: '0.2rem' }}></i>
-                                                <span className="small opacity-90" style={{ lineHeight: '1.4' }}>{pt}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
+                <div className="doc-content-grid">
 
-                                    <div className="mt-4 pt-3 border-top border-secondary border-opacity-25">
-                                        <Link href={item.link} className={`btn btn-sm btn-outline-${item.color} w-100 d-flex align-items-center justify-content-center gap-2`}>
-                                            Deep Dive <i className="bi bi-arrow-right"></i>
-                                        </Link>
+                    {/* 1. THE BIG THREE */}
+                    <div className="doc-section-card shadow-lg">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon">
+                                <i className="bi bi-hdd-stack-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">1. The Big Three (Mount Types)</h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
+                                <div className="doc-sub-card border-primary">
+                                    <div className="doc-sub-card-header">
+                                        <div className="doc-sub-card-icon text-primary"><i className="bi bi-safe-fill"></i></div>
+                                        <h3 className="doc-sub-card-title text-primary">Volumes (The Vault)</h3>
+                                    </div>
+                                    <div className="doc-sub-card-body">
+                                        <p><strong>The Reality:</strong> Managed by Docker, stored in <code>/var/lib/docker/volumes</code>. The ONLY way to store database data in production.</p>
+                                        <ul className="small opacity-75 ps-3">
+                                            <li>Lifecycle independent of containers (Survives <code>docker rm</code>).</li>
+                                            <li>Supports <strong>Volume Drivers</strong> (NFS, S3, Azure).</li>
+                                            <li>Shared between multiple containers simultaneously.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="doc-sub-card border-info">
+                                    <div className="doc-sub-card-header">
+                                        <div className="doc-sub-card-icon text-info"><i className="bi bi-window-sidebar"></i></div>
+                                        <h3 className="doc-sub-card-title text-info">Bind Mounts (The Open Window)</h3>
+                                    </div>
+                                    <div className="doc-sub-card-body">
+                                        <p><strong>The Reality:</strong> Direct link to a host path (e.g., your Desktop). Best for live-reloading code or injecting host configs.</p>
+                                        <ul className="small opacity-75 ps-3">
+                                            <li><strong>DCA Warning:</strong> Highly dependent on the host file structure.</li>
+                                            <li>Cannot use volume drivers.</li>
+                                            <li>Can mount individual files (e.g., <code>/etc/resolv.conf</code>).</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="doc-sub-card border-danger">
+                                    <div className="doc-sub-card-header">
+                                        <div className="doc-sub-card-icon text-danger"><i className="bi bi-memory"></i></div>
+                                        <h3 className="doc-sub-card-title text-danger">tmpfs (The Short-Term Thought)</h3>
+                                    </div>
+                                    <div className="doc-sub-card-body">
+                                        <p><strong>The Reality:</strong> Stored in host RAM. Never touches the disk. Wiped instantly on container stop.</p>
+                                        <ul className="small opacity-75 ps-3">
+                                            <li><strong>Expert Note:</strong> Linux-only (Not for Mac/Windows).</li>
+                                            <li><strong>Total Isolation:</strong> If 10 containers use tmpfs, they each get private, unreachable RAM slices.</li>
+                                            <li>Perfect for secrets, session keys, or high-speed temp buffers.</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    ))}
+                    </div>
+
+                    {/* 2. THE EXPERT MECHANICS */}
+                    <div className="doc-section-card shadow-lg border-warning">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-warning">
+                                <i className="bi bi-eye-slash-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">2. Expert Mechanics: Shadowing</h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="doc-sub-card bg-dark bg-opacity-25 border-warning border-opacity-25 mb-3">
+                                <div className="doc-sub-card-body">
+                                    <h4 className="h6 fw-bold text-warning mb-2">The "Sticker Analogy" (DCA Gold)</h4>
+                                    <p className="small mb-2">
+                                        When you mount a volume/bind over a container folder, it <strong>shadows</strong> (hides) the image's original files. 
+                                        It does NOT merge them.
+                                    </p>
+                                    <div className="doc-alert doc-alert-info py-2 small">
+                                        <i className="bi bi-lightbulb"></i>
+                                        <span>If you put a sticker (Mount) on a window (Image), you see the sticker, not the glass behind it. Remove the sticker, and the original glass is still there!</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul className="small opacity-75 ps-3">
+                                <li><strong>Partial Shadowing:</strong> If you mount <code>/app/config</code>, you can still see files in <code>/app/bin</code>. Shadowing is per-directory.</li>
+                                <li><strong>Write Precedence:</strong> Any writes to the shadowed folder go directly to the Volume—the Image layer is never touched.</li>
+                                <li><strong>Shared Reality:</strong> Two containers sharing a volume see the same "Sticker". One edit is visible to both.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* 3. STORAGE DRIVERS & EXAM TACTICS */}
+                    <div className="doc-section-card shadow-lg border-success">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-success">
+                                <i className="bi bi-layers-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">3. Drivers & Exam Tactics</h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="doc-sub-cards-grid d-flex flex-column gap-3 mb-4">
+                                <div className="doc-sub-card">
+                                    <div className="doc-sub-card-header">
+                                        <div className="doc-sub-card-icon text-success"><i className="bi bi-mortarboard-fill"></i></div>
+                                        <h3 className="doc-sub-card-title text-success">DCA Strategy: overlay2 vs. containerd</h3>
+                                    </div>
+                                    <div className="doc-sub-card-body">
+                                        <p className="small mb-3"><strong>The Rule:</strong> overlay2 is for the <u>Exam</u>; containerd-store is for the <u>Future</u>.</p>
+                                        <div className="table-responsive">
+                                            <table className="table table-dark table-sm small mb-0 opacity-75">
+                                                <tbody>
+                                                    <tr><td><strong>overlay2</strong></td><td>DCA Standard. Uses Page Cache sharing.</td></tr>
+                                                    <tr><td><strong>containerd</strong></td><td>Modern Snapshotters. Enables Wasm & SBOMs.</td></tr>
+                                                    <tr><td><strong>ZFS</strong></td><td>High integrity, requires heavy RAM (ARC).</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="doc-sub-card border-info border-opacity-25">
+                                    <div className="doc-sub-card-body">
+                                        <h4 className="h6 fw-bold text-info mb-2">CLI Precision: --mount vs -v</h4>
+                                        <ul className="small opacity-75 ps-3 mb-0">
+                                            <li><strong>-v (The Legacy):</strong> Automatically creates missing host folders (root-owned!). Confusing for beginners.</li>
+                                            <li><strong>--mount (The Pro):</strong> Explicitly errors if the path is missing. Required for Swarm Services.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 4. THE 10 STORAGE COMMANDMENTS */}
+                    <div className="doc-section-card shadow-lg border-info" style={{ gridColumn: '1 / -1' }}>
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-info">
+                                <i className="bi bi-list-check"></i>
+                            </div>
+                            <h2 className="doc-card-heading">4. The 10 Storage Commandments (Daily Review)</h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="row g-4">
+                                <div className="col-md-6">
+                                    <ul className="list-unstyled mb-0" style={{ lineHeight: '2' }}>
+                                        <li><strong>1. No Amnesia:</strong> Never write permanent DB data into the writable layer (Goldfish effect).</li>
+                                        <li><strong>2. Volumes &gt; Binds:</strong> Default to Volumes unless you specifically need host-folder access for development.</li>
+                                        <li><strong>3. The missing Path:</strong> <code>--mount</code> fails on missing paths; <code>-v</code> makes them (and often breaks permissions).</li>
+                                        <li><strong>4. Lifecycle:</strong> Deleting a container DOES NOT delete its named volume. Use <code>docker volume prune</code>.</li>
+                                        <li><strong>5. Inspect Before You Regret:</strong> Use <code>docker inspect --format</code> to verify your mount types.</li>
+                                    </ul>
+                                </div>
+                                <div className="col-md-6">
+                                    <ul className="list-unstyled mb-0" style={{ lineHeight: '2' }}>
+                                        <li><strong>6. Copy-Up Overhead:</strong> First write to a large image file = full copy to writable layer. High latency!</li>
+                                        <li><strong>7. Read-Only Safety:</strong> Append <code>:ro</code> to mounts to prevent containers from corrupting host data.</li>
+                                        <li><strong>8. Anonymous clutter:</strong> <code>docker run -v /app/data</code> creates a nameless volume that clutters your disk. Name them!</li>
+                                        <li><strong>9. Concurrency Risk:</strong> Docker provides storage but NO locking. Your app must handle file locks.</li>
+                                        <li><strong>10. Swarm Rule:</strong> Swarm services ONLY support the <code>--mount</code> syntax. No shortcuts allowed.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
-                {/* FINAL TIPS */}
-                <div className="mt-5 p-4 rounded bg-primary bg-opacity-10 border border-primary border-opacity-25 shadow-lg">
-                    <div className="d-flex align-items-center mb-3">
-                        <i className="bi bi-stars fs-3 text-warning me-3"></i>
-                        <h2 className="h4 mb-0 fw-bold">The "Diamond" Interview Closer</h2>
+                {/* THE DIAMOND INTERVIEW CLOSER */}
+                <div className="mt-5 p-5 rounded bg-primary bg-opacity-10 border border-primary border-opacity-25 shadow-lg position-relative overflow-hidden">
+                    <div className="position-absolute top-0 end-0 p-3 opacity-10">
+                        <i className="bi bi-gem display-1 text-primary"></i>
                     </div>
-                    <p className="mb-0 opacity-90 ps-md-5 fs-6" style={{ fontStyle: 'italic' }}>
-                        "When choosing storage, I default to <strong>Volumes</strong> for persistence and <strong>Overlay2</strong> for image management. 
-                        I only deviate toward <strong>ZFS/Btrfs</strong> for enterprise-grade snapshotting or <strong>tmpfs</strong> for ephemeral 
-                        security-first workloads, always balancing kernel stability with performance overhead."
+                    <div className="d-flex align-items-center mb-4">
+                        <div className="p-3 rounded bg-primary text-white me-3">
+                            <i className="bi bi-stars fs-3"></i>
+                        </div>
+                        <h2 className="h3 mb-0 fw-bold text-primary">The "Gold Standard" Interview Closer</h2>
+                    </div>
+                    <p className="lead fw-bold text-white opacity-90 ps-md-5 mb-0" style={{ fontStyle: 'italic', borderLeft: '4px solid var(--bs-primary)' }}>
+                        "In architectural design, I default to **Managed Volumes** to bypass CoW overhead and ensure data survival. 
+                        I strictly use **Bind Mounts** for host injection, and **tmpfs** for memory-speed, zero-leak security. 
+                        Finally, I stay current with **containerd snapshotters** for Wasm support, while ensuring **overlay2** 
+                        remains production-stable for my core kernel fleet."
                     </p>
                 </div>
-            </div>
 
-            <style jsx>{`
-                .card {
-                    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-                    background: rgba(21, 25, 30, 0.8) !important;
-                    backdrop-filter: blur(10px);
-                }
-                .card:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 10px 20px rgba(0,0,0,0.3) !important;
-                }
-                .animate-pulse {
-                    animation: pulse 2s infinite;
-                }
-                @keyframes pulse {
-                    0% { opacity: 1; }
-                    50% { opacity: 0.6; }
-                    100% { opacity: 1; }
-                }
-            `}</style>
+            </div>
         </div>
     );
 }

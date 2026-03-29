@@ -235,7 +235,6 @@ export default function DockerTmpfsMountsPage() {
                         </div>
                     </div>
 
-                    {/* VERIFICATION */}
                     <div className="doc-section-card shadow-lg">
                         <div className="doc-card-header-wrapper">
                             <div className="heading-icon">
@@ -253,6 +252,68 @@ export default function DockerTmpfsMountsPage() {
                             <p className="mt-2 mb-0 opacity-75">
                                 You should see <code>"Type": "tmpfs"</code> in the output.
                             </p>
+                        </div>
+                    </div>
+
+                    {/* EXPERT Q&A */}
+                    <div className="doc-section-card shadow-lg border-warning" style={{ gridColumn: '1 / -1' }}>
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-warning">
+                                <i className="bi bi-patch-question-fill"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                Expert Q&A: tmpfs Concurrency
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <div className="vstack gap-5">
+                                {/* QUESTION 1 */}
+                                <div>
+                                    <h4 className="fs-5 text-warning mb-3">
+                                        <i className="bi bi-question-circle me-2"></i>
+                                        "What happens if many containers use tmpfs at the same time?"
+                                    </h4>
+                                    <p>
+                                        <strong>Total Isolation.</strong> Unlike Volumes or Bind Mounts, <code>tmpfs</code> is 
+                                        strictly private. If 10 containers all mount <code>/app/cache</code> as <code>tmpfs</code>:
+                                    </p>
+                                    <ul className="small opacity-75">
+                                        <li>They each get their own private slice of RAM.</li>
+                                        <li>They <strong>cannot</strong> see each other's data.</li>
+                                        <li>They will <strong>never</strong> clash or have data conflicts.</li>
+                                    </ul>
+                                    <div className="doc-alert doc-alert-info mt-3">
+                                        <i className="bi bi-cpu-fill"></i>
+                                        <div>
+                                            <strong>Why?</strong><br />
+                                            Each <code>tmpfs</code> mount is a unique instance in the host's memory 
+                                            namespace. Container A's RAM "disk" is physically different from Container B's RAM "disk".
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* QUESTION 2 */}
+                                <div className="border-top pt-5" style={{ borderTopColor: '#30363d !important' }}>
+                                    <h4 className="fs-5 text-warning mb-3">
+                                        <i className="bi bi-question-circle me-2"></i>
+                                        "Can I share a tmpfs mount like a Volume?"
+                                    </h4>
+                                    <p>
+                                        <span className="text-danger fw-bold">Short Answer: No.</span>
+                                    </p>
+                                    <p>
+                                        Docker does not support "Named tmpfs Volumes". If you need to share extremely fast 
+                                        data between containers, you have two expert options:
+                                    </p>
+                                    <ul className="small opacity-75">
+                                        <li className="mb-2"><strong>Option A:</strong> Use a standard <strong>Volume</strong> (Docker handles the caching well, and modern SSDs are fast).</li>
+                                        <li><strong>Option B:</strong> If you are on a high-performance Linux server, 
+                                            mount a <strong>host-level tmpfs folder</strong> (like <code>/dev/shm</code>) 
+                                            as a <strong>Bind Mount</strong> to multiple containers.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
