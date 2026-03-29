@@ -321,15 +321,36 @@ export default function StorageOverviewPage() {
                             </p>
 
                             <div className="doc-sub-cards-grid">
-                                <div className="doc-sub-card">
-                                    <h3 className="doc-sub-card-title text-info">1. The Missing Path Trap</h3>
-                                    <p className="doc-sub-card-text small">
+                                 <div className="doc-section-card shadow-lg bg-dark bg-opacity-25 border-info">
+                                    <h3 className="doc-sub-card-title text-info fs-5">1. The Missing Path Trap</h3>
+                                    <p className="doc-sub-card-text small mb-3">
                                         <strong>Question:</strong> What happens if the source folder doesn't exist?
                                     </p>
-                                    <ul className="small opacity-75">
-                                        <li><strong>-v:</strong> Docker <em>automatically creates</em> the folder for you on the host (usually owned by root).</li>
-                                        <li><strong>--mount:</strong> Docker <em>throws an error</em> and refuses to start.</li>
-                                    </ul>
+                                    
+                                    <div className="vstack gap-3 mb-3">
+                                        <div className="p-3 rounded bg-dark" style={{ borderLeft: '3px solid #f1e05a' }}>
+                                            <div className="fw-bold text-warning small mb-1">-v (The Legacy Way)</div>
+                                            <p className="small mb-0 opacity-75">
+                                                Docker <strong>automatically creates</strong> the folder for you on the host. 
+                                                <br /><span className="text-danger fw-bold">The Danger:</span> It is usually owned by <code>root</code>, 
+                                                meaning your non-root container might lose write access!
+                                            </p>
+                                        </div>
+
+                                        <div className="p-3 rounded bg-dark" style={{ borderLeft: '3px solid #58a6ff' }}>
+                                            <div className="fw-bold text-primary small mb-1">--mount (The Recommended Way)</div>
+                                            <p className="small mb-0 opacity-75">
+                                                Docker <strong>throws an error</strong> and refuses to start. 
+                                                <br /><span className="text-success fw-bold">The Benefit:</span> It catches typos instantly. 
+                                                You won't accidentally mount a brand-new empty folder because of a misspelled path.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div className="doc-alert doc-alert-info mt-2 py-2">
+                                        <i className="bi bi-shield-exclamation me-2"></i>
+                                        <span className="small"><strong>DCA Tip:</strong> Always use <code>--mount</code> in production to ensure explicit failures over implicit (and confusing) folder creation.</span>
+                                    </div>
                                 </div>
 
                                 <div className="doc-sub-card">

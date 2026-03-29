@@ -241,6 +241,30 @@
                     }
                 ],
                 "description": "Push uploads image."
+            },
+            {
+                "level": "scenario",
+                "question": "You want to run a web server container on port 80, but the Docker Daemon on the host has crashed. What happens to the running web server container?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The container immediately stops.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The container keeps running, but you cannot manage it via the Docker Client until the daemon restarts.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The container is deleted to prevent corruption.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The container transfers control directly to the kernel.",
+                        "answer": false
+                    }
+                ],
+                "description": "Even though the daemon manages start/stop commands, active containers are standard Linux processes running on the host OS kernel and will persist even if the daemon crashes."
             }
         ]
     },
@@ -486,6 +510,30 @@
                     }
                 ],
                 "description": "Shared kernel."
+            },
+            {
+                "level": "scenario",
+                "question": "You run a MySQL container and manually create 10 new database tables inside it. You then use `docker rm -f` to delete the container. Where are those 10 tables now?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "They are permanently deleted because data inside the container's writable layer is ephemeral.",
+                        "answer": true
+                    },
+                    {
+                        "text": "They are automatically backed up into the origin Image.",
+                        "answer": false
+                    },
+                    {
+                        "text": "They are saved into a new hidden Volume by Docker.",
+                        "answer": false
+                    },
+                    {
+                        "text": "They remain on the Host OS disk indefinitely.",
+                        "answer": false
+                    }
+                ],
+                "description": "This is the Amnesia Effect! Since the state was written directly into the container and not a mapped volume, deleting the container wipes the data forever."
             }
         ]
     },
@@ -976,6 +1024,54 @@
                     }
                 ],
                 "description": "Cluster orchestration."
+            },
+            {
+                "level": "scenario",
+                "question": "You have a Swarm cluster with 1 Manager and 3 Workers running a highly trafficked web service. The Manager node's hardware completely fails. Can external users still access the running web service on the Workers?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "No, the workers shut down all containers immediately.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Yes, because the Swarm's Routing Mesh (Network Plane) persists on the Workers. They continue load-balancing existing traffic like 'blind robots'.",
+                        "answer": true
+                    },
+                    {
+                        "text": "No, because the Manager is required to route traffic like an AWS Load Balancer.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Yes, but only if you manually restart the Workers.",
+                        "answer": false
+                    }
+                ],
+                "description": "Even when the manager crashes, the Workers retain the IPVS map and actively route traffic. They just cannot self-heal or receive new assignments."
+            },
+            {
+                "level": "scenario",
+                "question": "In a Multi-Manager Swarm setup (3 Managers), one Manager loses network connection. What happens next?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The cluster triggers a Raft Election to establish a new Leader from the remaining managers.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The entire cluster freezes until you manually fix the disconnected manager.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Workers automatically become Managers to replace it.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Swarm dissolves and reverts to standalone Docker Engines.",
+                        "answer": false
+                    }
+                ],
+                "description": "Because of Raft Consensus, as long as a quorum (majority) of managers remains, they automatically hold an election and self-heal the cluster's management."
             }
         ]
     },
@@ -987,10 +1083,22 @@
                 "question": "In the \"Cooking\" analogy, what represents the Docker Image?",
                 "type": "radio",
                 "options": [
-                    { "text": "The freshly cooked meal", "answer": false },
-                    { "text": "The frozen meal box in the supermarket", "answer": true },
-                    { "text": "The oven", "answer": false },
-                    { "text": "The dining table", "answer": false }
+                    {
+                        "text": "The freshly cooked meal",
+                        "answer": false
+                    },
+                    {
+                        "text": "The frozen meal box in the supermarket",
+                        "answer": true
+                    },
+                    {
+                        "text": "The oven",
+                        "answer": false
+                    },
+                    {
+                        "text": "The dining table",
+                        "answer": false
+                    }
                 ],
                 "description": "An image is an immutable template just like a frozen meal box with instructions and ingredients."
             },
@@ -999,10 +1107,22 @@
                 "question": "What is the key difference between Virtual Machines and Containers?",
                 "type": "radio",
                 "options": [
-                    { "text": "VMs share the host kernel, while containers abstract hardware.", "answer": false },
-                    { "text": "VMs abstract the hardware (Full House), while Containers share the host kernel (Apartment).", "answer": true },
-                    { "text": "Containers require a Hypervisor to run.", "answer": false },
-                    { "text": "VMs are faster to start up than containers.", "answer": false }
+                    {
+                        "text": "VMs share the host kernel, while containers abstract hardware.",
+                        "answer": false
+                    },
+                    {
+                        "text": "VMs abstract the hardware (Full House), while Containers share the host kernel (Apartment).",
+                        "answer": true
+                    },
+                    {
+                        "text": "Containers require a Hypervisor to run.",
+                        "answer": false
+                    },
+                    {
+                        "text": "VMs are faster to start up than containers.",
+                        "answer": false
+                    }
                 ],
                 "description": "VMs emulate hardware and run a full Guest OS. Containers share the host OS Kernel directly, making them lightweight."
             },
@@ -1011,10 +1131,22 @@
                 "question": "Which of the following is NOT one of the 3 main parts of Docker?",
                 "type": "radio",
                 "options": [
-                    { "text": "The Recipe (Dockerfile)", "answer": false },
-                    { "text": "The Frozen Meal (Image)", "answer": false },
-                    { "text": "The Hypervisor (VM Manager)", "answer": true },
-                    { "text": "The Cooked Meal (Container)", "answer": false }
+                    {
+                        "text": "The Recipe (Dockerfile)",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Frozen Meal (Image)",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Hypervisor (VM Manager)",
+                        "answer": true
+                    },
+                    {
+                        "text": "The Cooked Meal (Container)",
+                        "answer": false
+                    }
                 ],
                 "description": "Hypervisors belong to Virtual Machines. Docker relies on Images, Containers, and Dockerfiles to build apps."
             },
@@ -1023,10 +1155,22 @@
                 "question": "What happens if you try to modify the core ingredients of a built Image directly?",
                 "type": "radio",
                 "options": [
-                    { "text": "The original image updates automatically.", "answer": false },
-                    { "text": "Images are read-only (immutable); you must build a new image to change it.", "answer": true },
-                    { "text": "The Registry rejects it.", "answer": false },
-                    { "text": "The Container crashes.", "answer": false }
+                    {
+                        "text": "The original image updates automatically.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Images are read-only (immutable); you must build a new image to change it.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The Registry rejects it.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Container crashes.",
+                        "answer": false
+                    }
                 ],
                 "description": "Images are frozen in time. To update one, you must build a fresh image with new instructions."
             },
@@ -1035,10 +1179,22 @@
                 "question": "In the Client-Server model, which component is analogous to the \"Warehouse\"?",
                 "type": "radio",
                 "options": [
-                    { "text": "Docker Daemon", "answer": false },
-                    { "text": "Docker Client", "answer": false },
-                    { "text": "Docker Registry (like Docker Hub)", "answer": true },
-                    { "text": "Docker Compose", "answer": false }
+                    {
+                        "text": "Docker Daemon",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker Client",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker Registry (like Docker Hub)",
+                        "answer": true
+                    },
+                    {
+                        "text": "Docker Compose",
+                        "answer": false
+                    }
                 ],
                 "description": "A Docker Registry acts as a centralized warehouse where images are uploaded, stored, and downloaded."
             }
@@ -1052,10 +1208,22 @@
                 "question": "What is the UnionFS \"Tax\"?",
                 "type": "radio",
                 "options": [
-                    { "text": "The money you pay for Docker Pro.", "answer": false },
-                    { "text": "The performance overhead of merging multiple read-only layers together on disk.", "answer": true },
-                    { "text": "The networking overhead of DNS in Docker.", "answer": false },
-                    { "text": "The CPU limitation set by cgroups.", "answer": false }
+                    {
+                        "text": "The money you pay for Docker Pro.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The performance overhead of merging multiple read-only layers together on disk.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The networking overhead of DNS in Docker.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The CPU limitation set by cgroups.",
+                        "answer": false
+                    }
                 ],
                 "description": "UnionFS dynamically merges layers to look like a single filesystem, which can drastically slow down high I/O operations."
             },
@@ -1064,10 +1232,22 @@
                 "question": "If you delete a large 100MB file in a subsequent RUN layer step, what happens to the final image size?",
                 "type": "radio",
                 "options": [
-                    { "text": "It decreases by 100MB.", "answer": false },
-                    { "text": "It decreases by 50MB because of compression.", "answer": false },
-                    { "text": "The size remains the same; the file is only visually hidden (masked).", "answer": true },
-                    { "text": "The build fails if you delete files from previous layers.", "answer": false }
+                    {
+                        "text": "It decreases by 100MB.",
+                        "answer": false
+                    },
+                    {
+                        "text": "It decreases by 50MB because of compression.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The size remains the same; the file is only visually hidden (masked).",
+                        "answer": true
+                    },
+                    {
+                        "text": "The build fails if you delete files from previous layers.",
+                        "answer": false
+                    }
                 ],
                 "description": "Layers are immutable. Deleting a file in a later layer simply adds a 'whiteout' marker, masking it but not reclaiming the actual disk space from the lower layer."
             },
@@ -1076,10 +1256,22 @@
                 "question": "Why should you place `apt-get install` commands near the top of a Dockerfile?",
                 "type": "radio",
                 "options": [
-                    { "text": "To make the container boot faster.", "answer": false },
-                    { "text": "Because they change rarely, allowing Docker to heavily cache those slow layers.", "answer": true },
-                    { "text": "To reduce the memory usage of the container.", "answer": false },
-                    { "text": "To prevent security vulnerabilities.", "answer": false }
+                    {
+                        "text": "To make the container boot faster.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Because they change rarely, allowing Docker to heavily cache those slow layers.",
+                        "answer": true
+                    },
+                    {
+                        "text": "To reduce the memory usage of the container.",
+                        "answer": false
+                    },
+                    {
+                        "text": "To prevent security vulnerabilities.",
+                        "answer": false
+                    }
                 ],
                 "description": "Placing rarely-changed instructions high up in the Dockerfile maximizes cache reuse and significantly speeds up subsequent builds."
             },
@@ -1088,10 +1280,22 @@
                 "question": "What represents the 'Cheese' layer in the 'Layer Cake' analogy for a Node.js app?",
                 "type": "radio",
                 "options": [
-                    { "text": "The base OS (Ubuntu/Alpine).", "answer": false },
-                    { "text": "The Node.js installation.", "answer": false },
-                    { "text": "The application's actual source code.", "answer": true },
-                    { "text": "The network driver.", "answer": false }
+                    {
+                        "text": "The base OS (Ubuntu/Alpine).",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Node.js installation.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The application's actual source code.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The network driver.",
+                        "answer": false
+                    }
                 ],
                 "description": "The base OS is the crust, Node.js is the sauce, and your fast-changing source code is the topmost cheese layer."
             },
@@ -1100,12 +1304,48 @@
                 "question": "How is caching utilized when building multiple images that use the same Base OS?",
                 "type": "radio",
                 "options": [
-                    { "text": "Docker downloads a new copy of the Base OS per image.", "answer": false },
-                    { "text": "The host OS caches it in RAM.", "answer": false },
-                    { "text": "Docker reuses the exact same physical Base OS layer on disk for all of them.", "answer": true },
-                    { "text": "It copies the layer into every container.", "answer": false }
+                    {
+                        "text": "Docker downloads a new copy of the Base OS per image.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The host OS caches it in RAM.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker reuses the exact same physical Base OS layer on disk for all of them.",
+                        "answer": true
+                    },
+                    {
+                        "text": "It copies the layer into every container.",
+                        "answer": false
+                    }
                 ],
                 "description": "Deduplication: Docker physically stores only one copy of any shared layer on your hard drive."
+            },
+            {
+                "level": "scenario",
+                "question": "You are writing a Dockerfile. In step 1, you download a 1GB file. In step 2, you run a command to delete the 1GB file. What is the final size of the resulting Docker Image?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "0GB, because the file was deleted.",
+                        "answer": false
+                    },
+                    {
+                        "text": "1GB, because image layers are immutable. The delete command just added a 'whiteout' marker, masking the file without recovering disk space.",
+                        "answer": true
+                    },
+                    {
+                        "text": "500MB, due to Docker's automatic layer compression.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The build fails because previous layers are locked.",
+                        "answer": false
+                    }
+                ],
+                "description": "Because Docker uses UnionFS, each RUN command creates a permanent, immutable layer. Deleting a file in a separate RUN step only 'hides' it visually from the final filesystem."
             }
         ]
     },
@@ -1117,10 +1357,22 @@
                 "question": "What is the defining characteristic of a Bind Mount?",
                 "type": "radio",
                 "options": [
-                    { "text": "It is managed entirely by Docker inside /var/lib/docker.", "answer": false },
-                    { "text": "It relies on the host machine's specific directory structure and maps it directly into the container.", "answer": true },
-                    { "text": "It stores data purely in memory (RAM).", "answer": false },
-                    { "text": "It cannot be modified by the container.", "answer": false }
+                    {
+                        "text": "It is managed entirely by Docker inside /var/lib/docker.",
+                        "answer": false
+                    },
+                    {
+                        "text": "It relies on the host machine's specific directory structure and maps it directly into the container.",
+                        "answer": true
+                    },
+                    {
+                        "text": "It stores data purely in memory (RAM).",
+                        "answer": false
+                    },
+                    {
+                        "text": "It cannot be modified by the container.",
+                        "answer": false
+                    }
                 ],
                 "description": "Bind mounts link a specific folder on your Host OS (like ~/my-project) directly into the container, bypassing Docker's volume management."
             },
@@ -1129,10 +1381,22 @@
                 "question": "What is the 'Amnesia Effect' in containers?",
                 "type": "radio",
                 "options": [
-                    { "text": "Containers forget their IP address when stopped.", "answer": false },
-                    { "text": "All data written directly inside the container's writable layer is permanently lost when the container is deleted.", "answer": true },
-                    { "text": "Containers delete attached volumes upon restart.", "answer": false },
-                    { "text": "Nodes forget who the manager is if heartbeats are lost.", "answer": false }
+                    {
+                        "text": "Containers forget their IP address when stopped.",
+                        "answer": false
+                    },
+                    {
+                        "text": "All data written directly inside the container's writable layer is permanently lost when the container is deleted.",
+                        "answer": true
+                    },
+                    {
+                        "text": "Containers delete attached volumes upon restart.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Nodes forget who the manager is if heartbeats are lost.",
+                        "answer": false
+                    }
                 ],
                 "description": "Containers are ephemeral. Any data not saved in a Volume or Bind Mount is wiped clean as soon as the container dies."
             },
@@ -1141,10 +1405,22 @@
                 "question": "Who manages the actual files when using a Docker Volume?",
                 "type": "radio",
                 "options": [
-                    { "text": "The host operating system entirely natively.", "answer": false },
-                    { "text": "Docker itself, storing it in a protected internal directory (like /var/lib/docker).", "answer": true },
-                    { "text": "The container's internal filesystem directly.", "answer": false },
-                    { "text": "A remote cloud provider always.", "answer": false }
+                    {
+                        "text": "The host operating system entirely natively.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker itself, storing it in a protected internal directory (like /var/lib/docker).",
+                        "answer": true
+                    },
+                    {
+                        "text": "The container's internal filesystem directly.",
+                        "answer": false
+                    },
+                    {
+                        "text": "A remote cloud provider always.",
+                        "answer": false
+                    }
                 ],
                 "description": "Volumes are entirely managed by Docker, providing excellent isolation and backup capabilities."
             },
@@ -1153,10 +1429,22 @@
                 "question": "When should you prefer a Bind Mount over a Volume?",
                 "type": "radio",
                 "options": [
-                    { "text": "For production database storage.", "answer": false },
-                    { "text": "During local development when you want \"Live Reloading\" connected directly to your IDE folder.", "answer": true },
-                    { "text": "To store API secrets securely.", "answer": false },
-                    { "text": "Never, Volumes are always strictly better.", "answer": false }
+                    {
+                        "text": "For production database storage.",
+                        "answer": false
+                    },
+                    {
+                        "text": "During local development when you want \"Live Reloading\" connected directly to your IDE folder.",
+                        "answer": true
+                    },
+                    {
+                        "text": "To store API secrets securely.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Never, Volumes are always strictly better.",
+                        "answer": false
+                    }
                 ],
                 "description": "Bind mounts open a dynamic window to the developer's laptop folder, making it perfect for live code reloading."
             },
@@ -1165,12 +1453,48 @@
                 "question": "What happens if you mount a Volume into a container folder (like /app) that already contains files?",
                 "type": "radio",
                 "options": [
-                    { "text": "The container refuses to start.", "answer": false },
-                    { "text": "The volume deletes its own contents to copy the container's files.", "answer": false },
-                    { "text": "The volume acts like a \"tablecloth\", completely hiding the existing files underneath it while mounted.", "answer": true },
-                    { "text": "The files are merged together seamlessly.", "answer": false }
+                    {
+                        "text": "The container refuses to start.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The volume deletes its own contents to copy the container's files.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The volume acts like a \"tablecloth\", completely hiding the existing files underneath it while mounted.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The files are merged together seamlessly.",
+                        "answer": false
+                    }
                 ],
                 "description": "A mount perfectly shadows whatever exists in the container's target directory until that mount is removed."
+            },
+            {
+                "level": "scenario",
+                "question": "You bind-mount your local desktop project folder (`~/project`) into a running container's `/app` directory, which already contains default configuration files. What happens to the configuration files inside `/app`?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "They are permanently deleted to make room for the host folder.",
+                        "answer": false
+                    },
+                    {
+                        "text": "They gracefully merge with your host folder's contents.",
+                        "answer": false
+                    },
+                    {
+                        "text": "They are temporarily hidden (overshadowed) by the host folder's contents until the mount is removed, acting like a tablecloth over them.",
+                        "answer": true
+                    },
+                    {
+                        "text": "The container refuses to start because the directory is not empty.",
+                        "answer": false
+                    }
+                ],
+                "description": "Bind-mounting acts exactly like placing a tablecloth over a table. Anything currently on the table is completely hidden by the cloth until it's removed."
             }
         ]
     },
@@ -1182,10 +1506,22 @@
                 "question": "Which Linux feature acts as the 'Budget Controller' for a container?",
                 "type": "radio",
                 "options": [
-                    { "text": "Namespaces", "answer": false },
-                    { "text": "Control Groups (cgroups)", "answer": true },
-                    { "text": "UnionFS", "answer": false },
-                    { "text": "SELinux", "answer": false }
+                    {
+                        "text": "Namespaces",
+                        "answer": false
+                    },
+                    {
+                        "text": "Control Groups (cgroups)",
+                        "answer": true
+                    },
+                    {
+                        "text": "UnionFS",
+                        "answer": false
+                    },
+                    {
+                        "text": "SELinux",
+                        "answer": false
+                    }
                 ],
                 "description": "cgroups limit and meter the resource usage (CPU, RAM, Block I/O) of a container."
             },
@@ -1194,10 +1530,22 @@
                 "question": "What is the golden rule regarding PID 1?",
                 "type": "radio",
                 "options": [
-                    { "text": "PID 1 must always be a bash process.", "answer": false },
-                    { "text": "A container's lifecycle is directly tied to PID 1. If PID 1 dies, the container dies.", "answer": true },
-                    { "text": "PID 1 is reserved for the root user on the host OS.", "answer": false },
-                    { "text": "Only one container can run PID 1 at a time on a host.", "answer": false }
+                    {
+                        "text": "PID 1 must always be a bash process.",
+                        "answer": false
+                    },
+                    {
+                        "text": "A container's lifecycle is directly tied to PID 1. If PID 1 dies, the container dies.",
+                        "answer": true
+                    },
+                    {
+                        "text": "PID 1 is reserved for the root user on the host OS.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only one container can run PID 1 at a time on a host.",
+                        "answer": false
+                    }
                 ],
                 "description": "The primary process executed in the container gets PID 1 inside its namespace. When that process exits, the namespace collapses and the container stops."
             },
@@ -1206,10 +1554,22 @@
                 "question": "What is the primary function of Linux Namespaces?",
                 "type": "radio",
                 "options": [
-                    { "text": "To limit how much CPU the container can use.", "answer": false },
-                    { "text": "To provide Isolation by acting as \"Magic Blinders\" so the container thinks it has its own private OS.", "answer": true },
-                    { "text": "To compress image layers.", "answer": false },
-                    { "text": "To manage external hard drives.", "answer": false }
+                    {
+                        "text": "To limit how much CPU the container can use.",
+                        "answer": false
+                    },
+                    {
+                        "text": "To provide Isolation by acting as \"Magic Blinders\" so the container thinks it has its own private OS.",
+                        "answer": true
+                    },
+                    {
+                        "text": "To compress image layers.",
+                        "answer": false
+                    },
+                    {
+                        "text": "To manage external hard drives.",
+                        "answer": false
+                    }
                 ],
                 "description": "Namespaces split the global OS domains (like Process Trees, Networking, User IDs) so containers cannot see each other."
             },
@@ -1218,10 +1578,22 @@
                 "question": "What is the subtle difference between killing (SIGKILL) and stopping (SIGTERM) a container?",
                 "type": "radio",
                 "options": [
-                    { "text": "Both immediately destroy the container process.", "answer": false },
-                    { "text": "SIGTERM politely asks the app to shut down cleanly, while SIGKILL pulls the power plug instantly.", "answer": true },
-                    { "text": "SIGKILL saves data, SIGTERM deletes it.", "answer": false },
-                    { "text": "Docker only supports SIGKILL.", "answer": false }
+                    {
+                        "text": "Both immediately destroy the container process.",
+                        "answer": false
+                    },
+                    {
+                        "text": "SIGTERM politely asks the app to shut down cleanly, while SIGKILL pulls the power plug instantly.",
+                        "answer": true
+                    },
+                    {
+                        "text": "SIGKILL saves data, SIGTERM deletes it.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker only supports SIGKILL.",
+                        "answer": false
+                    }
                 ],
                 "description": "SIGTERM gives the application a short grace period to save its work and close connections securely."
             },
@@ -1230,12 +1602,48 @@
                 "question": "Why doesn't a container need its own Linux Kernel?",
                 "type": "radio",
                 "options": [
-                    { "text": "Because it uses a Hypervisor instead.", "answer": false },
-                    { "text": "Because it writes its own drivers using Node.js.", "answer": false },
-                    { "text": "Because it uses the Host OS's Kernel, acting simply as an isolated folder of processes.", "answer": true },
-                    { "text": "Because it relies on Docker Hub to simulate one.", "answer": false }
+                    {
+                        "text": "Because it uses a Hypervisor instead.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Because it writes its own drivers using Node.js.",
+                        "answer": false
+                    },
+                    {
+                        "text": "Because it uses the Host OS's Kernel, acting simply as an isolated folder of processes.",
+                        "answer": true
+                    },
+                    {
+                        "text": "Because it relies on Docker Hub to simulate one.",
+                        "answer": false
+                    }
                 ],
                 "description": "The ability to share the exact same underlying host Kernel and simply isolate processes is what makes containers ultra-lightweight."
+            },
+            {
+                "level": "interview",
+                "question": "A senior engineer notices a container suddenly dying immediately after startup. Upon inspection, they see the primary process executed by the container finished in 2 seconds. Why did the container die?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The container ran out of RAM budget specified by cgroups.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The host OS kernel panicked.",
+                        "answer": false
+                    },
+                    {
+                        "text": "The container's lifecycle is exactly tied to PID 1. Since the primary process completed, the container correctly terminated.",
+                        "answer": true
+                    },
+                    {
+                        "text": "A secondary background daemon was missing.",
+                        "answer": false
+                    }
+                ],
+                "description": "This invokes Rule #2: PID 1 is the 'Life Spark'. A container only exists as long as its PID 1 process is alive."
             }
         ]
     }

@@ -148,6 +148,8 @@ const NAV_CONFIG: NavItem[] = [
         ],
       },
       { label: "Containerd Image Store", icon: "bi-box-seam-fill", href: "/storage/containerd-store" },
+      { label: "Revision Notes", icon: "bi-journal-check", href: "/storage/revision-notes" },
+      { label: "Knowledge Check", icon: "bi-clipboard-check-fill", href: "/storage/quiz" },
     ],
   },
   {

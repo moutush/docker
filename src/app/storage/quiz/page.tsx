@@ -22,7 +22,7 @@ interface QuizNode {
   questions: Question[];
 }
 
-export default function GettingStartedQuizPage() {
+export default function StorageQuizPage() {
   const [questions, setQuestions] = useState<(Question & { node: string })[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
@@ -93,7 +93,7 @@ export default function GettingStartedQuizPage() {
         `}</style>
         <div className="container-fluid py-5 px-md-5">
           <div className="page-intro-header mb-5 text-center text-md-start">
-            <h1 className="doc-section-title mb-2" style={{ fontSize: '42px' }}>Knowledge Check: Results</h1>
+            <h1 className="doc-section-title mb-2" style={{ fontSize: '42px' }}>Storage Knowledge Check: Results</h1>
             <p className="text-secondary opacity-75 fs-5 mb-0">
               You scored {score} out of {questions.length} ({Math.round((score / questions.length) * 100)}%)
             </p>
@@ -187,9 +187,9 @@ export default function GettingStartedQuizPage() {
 
         {/* PAGE HEADER */}
         <div className="page-intro-header mb-5 text-center text-md-start">
-          <h1 className="doc-section-title mb-2" style={{ fontSize: '42px' }}>Getting Started Knowledge Check</h1>
+          <h1 className="doc-section-title mb-2" style={{ fontSize: '42px' }}>Storage Knowledge Check</h1>
           <p className="text-secondary opacity-75 fs-5 mb-4">
-            Test your understanding of the core Docker concepts covered so far.
+            Test your expertise on Volumes, Bind Mounts, Drivers, and Advanced Patterns.
           </p>
 
           {/* Progress Bar */}
@@ -270,7 +270,7 @@ export default function GettingStartedQuizPage() {
                     onClick={handleNext}
                     disabled={selectedOption === null}
                   >
-                    {currentIndex === questions.length - 1 ? 'Submit File' : 'Next Question'}
+                    {currentIndex === questions.length - 1 ? 'Show Results' : 'Next Question'}
                     <i className="bi bi-arrow-right ms-2"></i>
                   </button>
                 </div>
