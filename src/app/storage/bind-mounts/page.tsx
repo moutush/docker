@@ -31,7 +31,7 @@ export default function DockerBindMountsPage() {
                                 <i className={"bi " + "bi-folder2-open"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="what-is-bind">
                                 What is a Bind Mount?
                             </h2>
                         </div>
@@ -68,7 +68,7 @@ export default function DockerBindMountsPage() {
                                 <i className={"bi " + "bi-hdd"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="bind-vs-volume">
                                 Bind Mount vs Docker Volume
                             </h2>
                         </div>
@@ -131,7 +131,7 @@ export default function DockerBindMountsPage() {
                                 <i className={"bi " + "bi-tools"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="use-cases">
                                 When Bind Mounts Are Used
                             </h2>
 
@@ -166,7 +166,7 @@ export default function DockerBindMountsPage() {
                                 <i className={"bi " + "bi-terminal"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="basic-command">
                                 Basic Bind Mount Command
                             </h2>
 
@@ -210,7 +210,7 @@ export default function DockerBindMountsPage() {
                                 <i className={"bi " + "bi-globe"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="dev-workflow">
                                 Real World Example (Development Workflow)
                             </h2>
 
@@ -248,7 +248,7 @@ export default function DockerBindMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-box-arrow-down"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="artifact-extraction">
                                 Real World Example (Artifact Extraction)
                             </h2>
                         </div>
@@ -289,7 +289,7 @@ export default function DockerBindMountsPage() {
                             <div className="heading-icon text-primary">
                                 <i className="bi bi-layers-half"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="full-stack-example">
                                 Senior Full-Stack Example (FastAPI + Postgres)
                             </h2>
                         </div>
@@ -392,7 +392,7 @@ volumes:
                                 <i className={"bi " + "bi-shield-lock"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="read-only-bind">
                                 Read-Only Bind Mount
                             </h2>
 
@@ -421,7 +421,7 @@ volumes:
                             <div className="heading-icon text-info">
                                 <i className="bi bi-file-earmark-code"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="compose-bind">
                                 Bind Mounts with Docker Compose
                             </h2>
                         </div>
@@ -467,7 +467,7 @@ volumes:
                             <div className="heading-icon text-info">
                                 <i className="bi bi-patch-question-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="expert-qa-behavior">
                                 Expert Q&A: Bind Mount Behavior
                             </h2>
                         </div>
@@ -512,7 +512,7 @@ volumes:
 
                                 {/* QUESTION 2 */}
                                 <div className="border-top pt-5" style={{ borderTopColor: '#30363d !important' }}>
-                                    <h4 className="fs-5 text-info mb-3">
+                                    <h4 className="fs-5 text-info mb-3" id="mount-any-host-folder">
                                         <i className="bi bi-question-circle me-2"></i>
                                         "Can I mount absolutely ANY host folder?"
                                     </h4>

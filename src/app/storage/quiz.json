@@ -2,111 +2,2053 @@
     {
         "node": "Volumes & Bind Mounts",
         "questions": [
-            { "level": "foundation", "question": "Where are Docker volumes stored by default on a Linux host?", "type": "radio", "options": [{ "text": "/etc/docker/volumes", "answer": false }, { "text": "/var/lib/docker/volumes", "answer": true }, { "text": "/usr/local/docker/volumes", "answer": false }, { "text": "/home/docker/volumes", "answer": false }], "description": "Volumes are managed by Docker and live in the host filesystem at /var/lib/docker/volumes. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Which mount type is best for sharing source code from your host into a development container?", "type": "radio", "options": [{ "text": "Volumes", "answer": false }, { "text": "Bind Mounts", "answer": true }, { "text": "tmpfs Mounts", "answer": false }, { "text": "Named Pipes", "answer": false }], "description": "Bind mounts map a specific host path to the container, making them ideal for dev workflows. Check: [Bind Mounts](/storage/bind-mounts)" },
-            { "level": "foundation", "question": "What happens to a Named Volume when the container using it is deleted?", "type": "radio", "options": [{ "text": "The volume is deleted immediately", "answer": false }, { "text": "The volume persists on the host", "answer": true }, { "text": "The volume is moved to the registry", "answer": false }, { "text": "The volume is cleared of all data", "answer": false }], "description": "Volumes have a lifecycle independent of containers. They persist until explicitly removed. Check: [When to Use Which?](/storage/when-to-use)" },
-            { "level": "foundation", "question": "Which command removes all volumes NOT currently used by at least one container?", "type": "radio", "options": [{ "text": "docker volume rm all", "answer": false }, { "text": "docker volume prune", "answer": true }, { "text": "docker system clean", "answer": false }, { "text": "docker volume clear", "answer": false }], "description": "The prune command is the standard way to cleanup unused resources. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "tmpfs mounts are stored in:", "type": "radio", "options": [{ "text": "The persistent disk", "answer": false }, { "text": "The Host RAM", "answer": true }, { "text": "The Docker Registry", "answer": false }, { "text": "The container's writable layer", "answer": false }], "description": "tmpfs is a memory-only mount, making it fast but non-persistent. Check: [tmpfs Mounts](/storage/tmpfs-mounts)" },
-            { "level": "foundation", "question": "True or False: A bind mount can map a single file, not just a whole directory.", "type": "radio", "options": [{ "text": "True", "answer": true }, { "text": "False", "answer": false }], "description": "You can bind mount individual files like /etc/resolv.conf. Check: [Bind Mounts](/storage/bind-mounts)" },
-            { "level": "foundation", "question": "Which flag is recommended for creating volumes in production for better clarity?", "type": "radio", "options": [{ "text": "-v", "answer": false }, { "text": "--mount", "answer": true }, { "text": "--volume", "answer": false }, { "text": "-m", "answer": false }], "description": "--mount is more verbose but prevents common mistakes. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "What happens if you bind mount a host directory containing files over a container directory that also has files?", "type": "radio", "options": [{ "text": "The files are merged", "answer": false }, { "text": "The host files obscure (hide) the container files", "answer": true }, { "text": "The container fails to start", "answer": false }, { "text": "The container files overwrite the host files", "answer": false }], "description": "The mount 'covers' the existing content of the container directory. Check: [Bind Mounts](/storage/bind-mounts)" },
-            { "level": "foundation", "question": "Where does Docker Desktop for Windows store volumes by default?", "type": "radio", "options": [{ "text": "C:\\ProgramData\\Docker\\volumes", "answer": false }, { "text": "Inside a hidden WSL2 distribution or Hyper-V VM", "answer": true }, { "text": "C:\\Users\\Public\\Docker", "answer": false }, { "text": "Registry Editor", "answer": false }], "description": "Docker Desktop uses a utility VM or WSL2 backend. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "How do you identify which containers are using a specific volume?", "type": "radio", "options": [{ "text": "docker volume show-users", "answer": false }, { "text": "docker volume inspect (check labels)", "answer": false }, { "text": "docker ps --filter volume=NAME", "answer": false }, { "text": "docker inspect <container> and search for 'Mounts'", "answer": true }], "description": "The container's inspection data lists active mounts. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "scenario", "question": "You want a container to read configuration from a file on the host but ensure it cannot modify it. Which option do you use?", "type": "radio", "options": [{ "text": ":ro (read-only)", "answer": true }, { "text": ":secure", "answer": false }, { "text": ":no-write", "answer": false }, { "text": ":lock", "answer": false }], "description": "Appending :ro to a mount makes it read-only. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Anonymous volumes are primarily created when:", "type": "radio", "options": [{ "text": "You forget to name a volume in 'docker run -v'", "answer": true }, { "text": "You use 'docker volume create' without a name", "answer": false }, { "text": "A container crashes", "answer": false }, { "text": "You pull an image", "answer": false }], "description": "Anonymous volumes have random hex names and are usually ephemeral. Check: [When to Use Which?](/storage/when-to-use)" },
-            { "level": "foundation", "question": "To force the removal of an anonymous volume when its container is deleted, use:", "type": "radio", "options": [{ "text": "docker rm -v", "answer": true }, { "text": "docker rm -f", "answer": false }, { "text": "docker rm --clean", "answer": false }, { "text": "docker clean volumes", "answer": false }], "description": "The -v flag on 'docker rm' cleans up associated anonymous volumes. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Which command lists all volumes available to the local Docker engine?", "type": "radio", "options": [{ "text": "docker list volumes", "answer": false }, { "text": "docker volume ls", "answer": true }, { "text": "docker volumes --all", "answer": false }, { "text": "docker storage list", "answer": false }], "description": "Standard management command. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "scenario", "question": "You need to share a database across two containers on the same host. What is the most reliable mount type?", "type": "radio", "options": [{ "text": "Bind Mount", "answer": false }, { "text": "Named Volume", "answer": true }, { "text": "tmpfs", "answer": false }, { "text": "Registry cache", "answer": false }], "description": "Named volumes are the production standard for container data sharing. Check: [When to Use Which?](/storage/when-to-use)" },
-            { "level": "foundation", "question": "What is a 'Volume Driver'?", "type": "radio", "options": [{ "text": "A kernel module for OverlayFS", "answer": false }, { "text": "A plugin that allows Docker to use external storage (S3, NFS, etc.)", "answer": true }, { "text": "The code that builds images", "answer": false }, { "text": "A tool to compress volumes on disk", "answer": false }], "description": "Volume drivers extend Docker storage capabilities beyond the local host. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Can you bind mount a file that doesn't exist yet?", "type": "radio", "options": [{ "text": "No, it must exist", "answer": true }, { "text": "Yes, Docker will create an empty file", "answer": false }], "description": "For files, the source MUST exist or Docker will throw an error (or create a directory instead if using -v). Check: [Bind Mounts](/storage/bind-mounts)" },
-            { "level": "scenario", "question": "You are debugging a container and want to see exactly where its volume is mapped on the host. Which command helps?", "type": "radio", "options": [{ "text": "docker volume inspect <name>", "answer": true }, { "text": "docker info --storage", "answer": false }, { "text": "docker cat volume", "answer": false }, { "text": "ls /var/lib/docker/volumes", "answer": false }], "description": "Inspect shows the 'Mountpoint' on the host. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "What happens if you try to remove a volume that is still in use by a stopped container?", "type": "radio", "options": [{ "text": "The volume is deleted and container is corrupted", "answer": false }, { "text": "Docker refuses to delete it (error)", "answer": true }, { "text": "The container is deleted automatically", "answer": false }, { "text": "The volume is marked for deletion after next start", "answer": false }], "description": "Volumes cannot be removed while referenced by any container. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Which mount type is Linux-only?", "type": "radio", "options": [{ "text": "Volumes", "answer": false }, { "text": "Bind Mounts", "answer": false }, { "text": "tmpfs Mounts", "answer": true }, { "text": "Named Pipes", "answer": false }], "description": "tmpfs relies on Linux kernel memory management features. Check: [tmpfs Mounts](/storage/tmpfs-mounts)" }
+            {
+                "level": "foundation",
+                "question": "Where are Docker volumes stored by default on a Linux host?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "/etc/docker/volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "/var/lib/docker/volumes",
+                        "answer": true
+                    },
+                    {
+                        "text": "/usr/local/docker/volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "/home/docker/volumes",
+                        "answer": false
+                    }
+                ],
+                "description": "Volumes are managed by Docker and live in the host filesystem at /var/lib/docker/volumes. Check: [Volumes](/storage/volumes-deep-dive#what-is-volume)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which mount type is best for sharing source code from your host into a development container?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "Bind Mounts",
+                        "answer": true
+                    },
+                    {
+                        "text": "tmpfs Mounts",
+                        "answer": false
+                    },
+                    {
+                        "text": "Named Pipes",
+                        "answer": false
+                    }
+                ],
+                "description": "Bind mounts map a specific host path to the container, making them ideal for dev workflows. Check: [Bind Mounts](/storage/bind-mounts#use-cases)"
+            },
+            {
+                "level": "foundation",
+                "question": "What happens to a Named Volume when the container using it is deleted?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The volume is deleted immediately",
+                        "answer": false
+                    },
+                    {
+                        "text": "The volume persists on the host",
+                        "answer": true
+                    },
+                    {
+                        "text": "The volume is moved to the registry",
+                        "answer": false
+                    },
+                    {
+                        "text": "The volume is cleared of all data",
+                        "answer": false
+                    }
+                ],
+                "description": "Volumes have a lifecycle independent of containers. They persist until explicitly removed. Check: [Persistence](/storage/volumes-deep-dive#persistence)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which command removes all volumes NOT currently used by at least one container?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker volume rm all",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker volume prune",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker system clean",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker volume clear",
+                        "answer": false
+                    }
+                ],
+                "description": "The prune command is the standard way to cleanup unused resources. Check: [Cleanup](/storage/volumes-deep-dive#cleanup)"
+            },
+            {
+                "level": "foundation",
+                "question": "tmpfs mounts are stored in:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The persistent disk",
+                        "answer": false
+                    },
+                    {
+                        "text": "The Host RAM",
+                        "answer": true
+                    },
+                    {
+                        "text": "The Docker Registry",
+                        "answer": false
+                    },
+                    {
+                        "text": "The container's writable layer",
+                        "answer": false
+                    }
+                ],
+                "description": "tmpfs is a memory-only mount, making it fast but non-persistent. Check: [tmpfs Mounts](/storage/tmpfs-mounts#what-is-tmpfs)"
+            },
+            {
+                "level": "foundation",
+                "question": "True or False: A bind mount can map a single file, not just a whole directory.",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "True",
+                        "answer": true
+                    },
+                    {
+                        "text": "False",
+                        "answer": false
+                    }
+                ],
+                "description": "You can bind mount individual files like /etc/resolv.conf. Check: [Bind Mounts](/storage/bind-mounts#what-is-bind)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which flag is recommended for creating volumes in production for better clarity?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "-v",
+                        "answer": false
+                    },
+                    {
+                        "text": "--mount",
+                        "answer": true
+                    },
+                    {
+                        "text": "--volume",
+                        "answer": false
+                    },
+                    {
+                        "text": "-m",
+                        "answer": false
+                    }
+                ],
+                "description": "--mount is more verbose but prevents common mistakes. Check: [Mounting](/storage/volumes-deep-dive#mounting)"
+            },
+            {
+                "level": "interview",
+                "question": "What happens if you bind mount a host directory containing files over a container directory that also has files?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The files are merged",
+                        "answer": false
+                    },
+                    {
+                        "text": "The host files obscure (hide) the container files",
+                        "answer": true
+                    },
+                    {
+                        "text": "The container fails to start",
+                        "answer": false
+                    },
+                    {
+                        "text": "The container files overwrite the host files",
+                        "answer": false
+                    }
+                ],
+                "description": "The mount 'covers' the existing content of the container directory. Check: [Expert Q&A](/storage/bind-mounts#expert-qa-behavior)"
+            },
+            {
+                "level": "foundation",
+                "question": "Where does Docker Desktop for Windows store volumes by default?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "C:\\ProgramData\\Docker\\volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "Inside a hidden WSL2 distribution or Hyper-V VM",
+                        "answer": true
+                    },
+                    {
+                        "text": "C:\\Users\\Public\\Docker",
+                        "answer": false
+                    },
+                    {
+                        "text": "Registry Editor",
+                        "answer": false
+                    }
+                ],
+                "description": "Docker Desktop uses a utility VM or WSL2 backend. Check: [What is Volume](/storage/volumes-deep-dive#what-is-volume)"
+            },
+            {
+                "level": "foundation",
+                "question": "How do you identify which containers are using a specific volume?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker volume show-users",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker volume inspect (check labels)",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker ps --filter volume=NAME",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker inspect <container> and search for 'Mounts'",
+                        "answer": true
+                    }
+                ],
+                "description": "The container's inspection data lists active mounts. Check: [Manage Volumes](/storage/volumes-deep-dive#manage-volumes)"
+            },
+            {
+                "level": "scenario",
+                "question": "You want a container to read configuration from a file on the host but ensure it cannot modify it. Which option do you use?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": ":ro (read-only)",
+                        "answer": true
+                    },
+                    {
+                        "text": ":secure",
+                        "answer": false
+                    },
+                    {
+                        "text": ":no-write",
+                        "answer": false
+                    },
+                    {
+                        "text": ":lock",
+                        "answer": false
+                    }
+                ],
+                "description": "Appending :ro to a mount makes it read-only. Check: [Read Only](/storage/volumes-deep-dive#read-only)"
+            },
+            {
+                "level": "foundation",
+                "question": "Anonymous volumes are primarily created when:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "You forget to name a volume in 'docker run -v'",
+                        "answer": true
+                    },
+                    {
+                        "text": "You use 'docker volume create' without a name",
+                        "answer": false
+                    },
+                    {
+                        "text": "A container crashes",
+                        "answer": false
+                    },
+                    {
+                        "text": "You pull an image",
+                        "answer": false
+                    }
+                ],
+                "description": "Anonymous volumes have random hex names and are usually ephemeral. Check: [Named vs Anonymous](/storage/volumes-deep-dive#named-vs-anonymous)"
+            },
+            {
+                "level": "foundation",
+                "question": "To force the removal of an anonymous volume when its container is deleted, use:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker rm -v",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker rm -f",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker rm --clean",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker clean volumes",
+                        "answer": false
+                    }
+                ],
+                "description": "The -v flag on 'docker rm' cleans up associated anonymous volumes. Check: [Cleanup](/storage/volumes-deep-dive#cleanup)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which command lists all volumes available to the local Docker engine?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker list volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker volume ls",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker volumes --all",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker storage list",
+                        "answer": false
+                    }
+                ],
+                "description": "Standard management command. Check: [Manage Volumes](/storage/volumes-deep-dive#manage-volumes)"
+            },
+            {
+                "level": "scenario",
+                "question": "You need to share a database across two containers on the same host. What is the most reliable mount type?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Bind Mount",
+                        "answer": false
+                    },
+                    {
+                        "text": "Named Volume",
+                        "answer": true
+                    },
+                    {
+                        "text": "tmpfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "Registry cache",
+                        "answer": false
+                    }
+                ],
+                "description": "Named volumes are the production standard for container data sharing. Check: [Why Volumes](/storage/volumes-deep-dive#why-volumes)"
+            },
+            {
+                "level": "foundation",
+                "question": "What is a 'Volume Driver'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "A kernel module for OverlayFS",
+                        "answer": false
+                    },
+                    {
+                        "text": "A plugin that allows Docker to use external storage (S3, NFS, etc.)",
+                        "answer": true
+                    },
+                    {
+                        "text": "The code that builds images",
+                        "answer": false
+                    },
+                    {
+                        "text": "A tool to compress volumes on disk",
+                        "answer": false
+                    }
+                ],
+                "description": "Volume drivers extend Docker storage capabilities beyond the local host. Check: [Drivers](/storage/volumes-deep-dive#drivers)"
+            },
+            {
+                "level": "foundation",
+                "question": "Can you bind mount a file that doesn't exist yet?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "No, it must exist",
+                        "answer": true
+                    },
+                    {
+                        "text": "Yes, Docker will create an empty file",
+                        "answer": false
+                    }
+                ],
+                "description": "For files, the source MUST exist or Docker will throw an error (or create a directory instead if using -v). Check: [Bind Mounts](/storage/bind-mounts#what-is-bind)"
+            },
+            {
+                "level": "scenario",
+                "question": "You are debugging a container and want to see exactly where its volume is mapped on the host. Which command helps?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker volume inspect <name>",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker info --storage",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker cat volume",
+                        "answer": false
+                    },
+                    {
+                        "text": "ls /var/lib/docker/volumes",
+                        "answer": false
+                    }
+                ],
+                "description": "Inspect shows the 'Mountpoint' on the host. Check: [Manage Volumes](/storage/volumes-deep-dive#manage-volumes)"
+            },
+            {
+                "level": "foundation",
+                "question": "What happens if you try to remove a volume that is still in use by a stopped container?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The volume is deleted and container is corrupted",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker refuses to delete it (error)",
+                        "answer": true
+                    },
+                    {
+                        "text": "The container is deleted automatically",
+                        "answer": false
+                    },
+                    {
+                        "text": "The volume is marked for deletion after next start",
+                        "answer": false
+                    }
+                ],
+                "description": "Volumes cannot be removed while referenced by any container. Check: [Manage Volumes](/storage/volumes-deep-dive#manage-volumes)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which mount type is Linux-only?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "Bind Mounts",
+                        "answer": false
+                    },
+                    {
+                        "text": "tmpfs Mounts",
+                        "answer": true
+                    },
+                    {
+                        "text": "Named Pipes",
+                        "answer": false
+                    }
+                ],
+                "description": "tmpfs relies on Linux kernel memory management features. Check: [What is tmpfs](/storage/tmpfs-mounts#what-is-tmpfs)"
+            }
         ]
     },
     {
         "node": "Storage Drivers",
         "questions": [
-            { "level": "foundation", "question": "Which storage driver is the modern standard for Linux?", "type": "radio", "options": [{ "text": "aufs", "answer": false }, { "text": "overlay2", "answer": true }, { "text": "vfs", "answer": false }, { "text": "devicemapper", "answer": false }], "description": "overlay2 is the preferred union filesystem driver. Check: [overlay2](/storage/drivers/overlay2)" },
-            { "level": "interview", "question": "What is 'Copy-on-Write' (CoW)?", "type": "radio", "options": [{ "text": "Copying files during build only", "answer": false }, { "text": "Sharing a single set of files until one container needs to modify them", "answer": true }, { "text": "Writing files to multiple volumes at once", "answer": false }, { "text": "A version control system for images", "answer": false }], "description": "CoW maximizes disk efficiency by sharing identical layers. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "interview", "question": "Which layer is the only writable layer in a running container?", "type": "radio", "options": [{ "text": "The bottom layer", "answer": false }, { "text": "The top layer (container layer)", "answer": true }, { "text": "The middle layer", "answer": false }, { "text": "All layers are writable", "answer": false }], "description": "Image layers are read-only; only the top container layer accepts changes. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "foundation", "question": "If you change the storage driver on a live system, what happens to existing images?", "type": "radio", "options": [{ "text": "They are automatically converted", "answer": false }, { "text": "They become inaccessible to the new driver", "answer": true }, { "text": "They are moved to tmpfs", "answer": false }, { "text": "They are deleted", "answer": false }], "description": "Changing drivers is a breaking change for existing data. Check: [Select a Storage Driver](/storage/drivers/select)" },
-            { "level": "interview", "question": "Which driver uses 'Snapshotters' instead of 'Graph Drivers'?", "type": "radio", "options": [{ "text": "overlay2", "answer": false }, { "text": "containerd image store", "answer": true }, { "text": "zfs", "answer": false }, { "text": "btrfs", "answer": false }], "description": "Modern containerd integration uses the snapshotter architecture. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "Where is the storage driver configured?", "type": "radio", "options": [{ "text": "Dockerfile", "answer": false }, { "text": "daemon.json", "answer": true }, { "text": "docker-compose.yml", "answer": false }, { "text": "System BIOS", "answer": false }], "description": "Configurations go in /etc/docker/daemon.json. Check: [overlay2](/storage/drivers/overlay2)" },
-            { "level": "foundation", "question": "How many layers can 'overlay2' stack max?", "type": "radio", "options": [{ "text": "10", "answer": false }, { "text": "128", "answer": true }, { "text": "512", "answer": false }, { "text": "Unlimited", "answer": false }], "description": "Overlay2 has a hard limit of 128 layers. Check: [overlay2](/storage/drivers/overlay2)" },
-            { "level": "interview", "question": "Which driver is best for system integrity and block-level snapshots?", "type": "radio", "options": [{ "text": "vfs", "answer": false }, { "text": "ZFS", "answer": true }, { "text": "overlay2", "answer": false }, { "text": "aufs", "answer": false }], "description": "ZFS provides advanced filesystem features at the expense of high RAM. Check: [ZFS](/storage/drivers/zfs)" },
-            { "level": "interview", "question": "What is the 'lowerdir' in OverlayFS?", "type": "radio", "options": [{ "text": "The writable layer", "answer": false }, { "text": "The stack of read-only image layers", "answer": true }, { "text": "The host folder", "answer": false }, { "text": "The volume mount", "answer": false }], "description": "The lowerdir contains the static image content. Check: [overlay2](/storage/drivers/overlay2)" },
-            { "level": "foundation", "question": "Which driver is the slowest and most disk-heavy due to lack of CoW?", "type": "radio", "options": [{ "text": "overlay2", "answer": false }, { "text": "vfs", "answer": true }, { "text": "btrfs", "answer": false }, { "text": "zfs", "answer": false }], "description": "VFS makes full 'deep copies' for every layer. Check: [VFS](/storage/drivers/vfs)" },
-            { "level": "scenario", "question": "You are on a system where the kernel does not support union filesystems. What will Docker likely fall back to?", "type": "radio", "options": [{ "text": "overlay2", "answer": false }, { "text": "vfs", "answer": true }, { "text": "tmpfs", "answer": false }, { "text": "It won't run", "answer": false }], "description": "VFS is the universal fallback for any Linux kernel. Check: [VFS](/storage/drivers/vfs)" },
-            { "level": "interview", "question": "What specifically does XFS need enabled to support overlay2?", "type": "radio", "options": [{ "text": "d_type=true", "answer": true }, { "text": "inode_size=2048", "answer": false }, { "text": "bit_map=on", "answer": false }, { "text": "cow=enabled", "answer": false }], "description": "OverlayFS requires d_type support from the underlying filesystem. Check: [overlay2](/storage/drivers/overlay2)" },
-            { "level": "interview", "question": "Why does ZFS require high RAM (often 1GB+ purely for cache)?", "type": "radio", "options": [{ "text": "It loads all images into RAM", "answer": false }, { "text": "Its Adaptive Replacement Cache (ARC)", "answer": true }, { "text": "It runs in user-space", "answer": false }, { "text": "It encrypts RAM", "answer": false }], "description": "ZFS's ARC is a sophisticated caching layer that consumes significant memory. Check: [ZFS](/storage/drivers/zfs)" },
-            { "level": "foundation", "question": "Which command shows your active storage driver?", "type": "radio", "options": [{ "text": "docker version", "answer": false }, { "text": "docker ps", "answer": false }, { "text": "docker info", "answer": true }, { "text": "docker images", "answer": false }], "description": "Check the 'Storage Driver' line in docker info. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "interview", "question": "What happens if a container modifies a 10GB file in the read-only layer for the first time?", "type": "radio", "options": [{ "text": "Only the block changes are saved", "answer": false }, { "text": "The entire 10GB file is copied to the writable layer first", "answer": true }, { "text": "The file is edited in place (dangerous)", "answer": false }, { "text": "The container crashes", "answer": false }], "description": "This is the 'Copy-Up' overhead; it copies the target file in its entirety. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "scenario", "question": "You want to maximize image building speed by reusing cached layers. Which driver architecture facilitates this best?", "type": "radio", "options": [{ "text": "VFS", "answer": false }, { "text": "Union File Systems (Overlay2)", "answer": true }, { "text": "Pure Volumes", "answer": false }, { "text": "tmpfs", "answer": false }], "description": "Layering is the core of Docker cache efficiency. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "foundation", "question": "True or False: Storage drivers are responsible for managing Volumes.", "type": "radio", "options": [{ "text": "True", "answer": false }, { "text": "False", "answer": true }], "description": "Storage drivers manage internal image/container layers. Volumes are separate. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "interview", "question": "Which driver is best for 'high-density' servers where many containers use the same base image?", "type": "radio", "options": [{ "text": "overlay2", "answer": true }, { "text": "devicemapper", "answer": false }, { "text": "zfs", "answer": false }, { "text": "vfs", "answer": false }], "description": "Overlay2 allows for shared page cache in memory, saving huge amounts of RAM. Check: [overlay2](/storage/drivers/overlay2)" },
-            { "level": "foundation", "question": "The 'AUFS' driver is best known as:", "type": "radio", "options": [{ "text": "The modern standard", "answer": false }, { "text": "The original union filesystem for early Docker", "answer": true }, { "text": "A Windows-only driver", "answer": false }, { "text": "A memory-only driver", "answer": false }], "description": "AUFS was the pioneer but has been replaced by overlay2. Check: [Drivers Overview](/storage/drivers/overview)" },
-            { "level": "scenario", "question": "You find that your container's disk space is filling up despite mounting all large data to a volume. Why?", "type": "radio", "options": [{ "text": "The volume is full", "answer": false }, { "text": "Logs or temp files are being written to the container layer", "answer": true }, { "text": "Images are growing", "answer": false }, { "text": "tmpfs is leaking", "answer": false }], "description": "Anything not in a volume goes to the driver-managed writable layer. Check: [Drivers Overview](/storage/drivers/overview)" }
+            {
+                "level": "foundation",
+                "question": "Which storage driver is the modern standard for Linux?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "aufs",
+                        "answer": false
+                    },
+                    {
+                        "text": "overlay2",
+                        "answer": true
+                    },
+                    {
+                        "text": "vfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "devicemapper",
+                        "answer": false
+                    }
+                ],
+                "description": "overlay2 is the preferred union filesystem driver. Check: [overlay2](/storage/drivers/overlay2)"
+            },
+            {
+                "level": "interview",
+                "question": "What is 'Copy-on-Write' (CoW)?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Copying files during build only",
+                        "answer": false
+                    },
+                    {
+                        "text": "Sharing a single set of files until one container needs to modify them",
+                        "answer": true
+                    },
+                    {
+                        "text": "Writing files to multiple volumes at once",
+                        "answer": false
+                    },
+                    {
+                        "text": "A version control system for images",
+                        "answer": false
+                    }
+                ],
+                "description": "CoW maximizes disk efficiency by sharing identical layers. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "interview",
+                "question": "Which layer is the only writable layer in a running container?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The bottom layer",
+                        "answer": false
+                    },
+                    {
+                        "text": "The top layer (container layer)",
+                        "answer": true
+                    },
+                    {
+                        "text": "The middle layer",
+                        "answer": false
+                    },
+                    {
+                        "text": "All layers are writable",
+                        "answer": false
+                    }
+                ],
+                "description": "Image layers are read-only; only the top container layer accepts changes. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "foundation",
+                "question": "If you change the storage driver on a live system, what happens to existing images?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "They are automatically converted",
+                        "answer": false
+                    },
+                    {
+                        "text": "They become inaccessible to the new driver",
+                        "answer": true
+                    },
+                    {
+                        "text": "They are moved to tmpfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "They are deleted",
+                        "answer": false
+                    }
+                ],
+                "description": "Changing drivers is a breaking change for existing data. Check: [Select a Storage Driver](/storage/drivers/select)"
+            },
+            {
+                "level": "interview",
+                "question": "Which driver uses 'Snapshotters' instead of 'Graph Drivers'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "overlay2",
+                        "answer": false
+                    },
+                    {
+                        "text": "containerd image store",
+                        "answer": true
+                    },
+                    {
+                        "text": "zfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "btrfs",
+                        "answer": false
+                    }
+                ],
+                "description": "Modern containerd integration uses the snapshotter architecture. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "foundation",
+                "question": "Where is the storage driver configured?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Dockerfile",
+                        "answer": false
+                    },
+                    {
+                        "text": "daemon.json",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker-compose.yml",
+                        "answer": false
+                    },
+                    {
+                        "text": "System BIOS",
+                        "answer": false
+                    }
+                ],
+                "description": "Configurations go in /etc/docker/daemon.json. Check: [overlay2](/storage/drivers/overlay2)"
+            },
+            {
+                "level": "foundation",
+                "question": "How many layers can 'overlay2' stack max?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "10",
+                        "answer": false
+                    },
+                    {
+                        "text": "128",
+                        "answer": true
+                    },
+                    {
+                        "text": "512",
+                        "answer": false
+                    },
+                    {
+                        "text": "Unlimited",
+                        "answer": false
+                    }
+                ],
+                "description": "Overlay2 has a hard limit of 128 layers. Check: [overlay2](/storage/drivers/overlay2)"
+            },
+            {
+                "level": "interview",
+                "question": "Which driver is best for system integrity and block-level snapshots?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "vfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "ZFS",
+                        "answer": true
+                    },
+                    {
+                        "text": "overlay2",
+                        "answer": false
+                    },
+                    {
+                        "text": "aufs",
+                        "answer": false
+                    }
+                ],
+                "description": "ZFS provides advanced filesystem features at the expense of high RAM. Check: [ZFS](/storage/drivers/zfs)"
+            },
+            {
+                "level": "interview",
+                "question": "What is the 'lowerdir' in OverlayFS?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The writable layer",
+                        "answer": false
+                    },
+                    {
+                        "text": "The stack of read-only image layers",
+                        "answer": true
+                    },
+                    {
+                        "text": "The host folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "The volume mount",
+                        "answer": false
+                    }
+                ],
+                "description": "The lowerdir contains the static image content. Check: [overlay2](/storage/drivers/overlay2)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which driver is the slowest and most disk-heavy due to lack of CoW?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "overlay2",
+                        "answer": false
+                    },
+                    {
+                        "text": "vfs",
+                        "answer": true
+                    },
+                    {
+                        "text": "btrfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "zfs",
+                        "answer": false
+                    }
+                ],
+                "description": "VFS makes full 'deep copies' for every layer. Check: [VFS](/storage/drivers/vfs)"
+            },
+            {
+                "level": "scenario",
+                "question": "You are on a system where the kernel does not support union filesystems. What will Docker likely fall back to?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "overlay2",
+                        "answer": false
+                    },
+                    {
+                        "text": "vfs",
+                        "answer": true
+                    },
+                    {
+                        "text": "tmpfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "It won't run",
+                        "answer": false
+                    }
+                ],
+                "description": "VFS is the universal fallback for any Linux kernel. Check: [VFS](/storage/drivers/vfs)"
+            },
+            {
+                "level": "interview",
+                "question": "What specifically does XFS need enabled to support overlay2?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "d_type=true",
+                        "answer": true
+                    },
+                    {
+                        "text": "inode_size=2048",
+                        "answer": false
+                    },
+                    {
+                        "text": "bit_map=on",
+                        "answer": false
+                    },
+                    {
+                        "text": "cow=enabled",
+                        "answer": false
+                    }
+                ],
+                "description": "OverlayFS requires d_type support from the underlying filesystem. Check: [overlay2](/storage/drivers/overlay2)"
+            },
+            {
+                "level": "interview",
+                "question": "Why does ZFS require high RAM (often 1GB+ purely for cache)?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "It loads all images into RAM",
+                        "answer": false
+                    },
+                    {
+                        "text": "Its Adaptive Replacement Cache (ARC)",
+                        "answer": true
+                    },
+                    {
+                        "text": "It runs in user-space",
+                        "answer": false
+                    },
+                    {
+                        "text": "It encrypts RAM",
+                        "answer": false
+                    }
+                ],
+                "description": "ZFS's ARC is a sophisticated caching layer that consumes significant memory. Check: [ZFS](/storage/drivers/zfs)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which command shows your active storage driver?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker version",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker ps",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker info",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker images",
+                        "answer": false
+                    }
+                ],
+                "description": "Check the 'Storage Driver' line in docker info. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "interview",
+                "question": "What happens if a container modifies a 10GB file in the read-only layer for the first time?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Only the block changes are saved",
+                        "answer": false
+                    },
+                    {
+                        "text": "The entire 10GB file is copied to the writable layer first",
+                        "answer": true
+                    },
+                    {
+                        "text": "The file is edited in place (dangerous)",
+                        "answer": false
+                    },
+                    {
+                        "text": "The container crashes",
+                        "answer": false
+                    }
+                ],
+                "description": "This is the 'Copy-Up' overhead; it copies the target file in its entirety. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "scenario",
+                "question": "You want to maximize image building speed by reusing cached layers. Which driver architecture facilitates this best?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "VFS",
+                        "answer": false
+                    },
+                    {
+                        "text": "Union File Systems (Overlay2)",
+                        "answer": true
+                    },
+                    {
+                        "text": "Pure Volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "tmpfs",
+                        "answer": false
+                    }
+                ],
+                "description": "Layering is the core of Docker cache efficiency. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "foundation",
+                "question": "True or False: Storage drivers are responsible for managing Volumes.",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "True",
+                        "answer": false
+                    },
+                    {
+                        "text": "False",
+                        "answer": true
+                    }
+                ],
+                "description": "Storage drivers manage internal image/container layers. Volumes are separate. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "interview",
+                "question": "Which driver is best for 'high-density' servers where many containers use the same base image?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "overlay2",
+                        "answer": true
+                    },
+                    {
+                        "text": "devicemapper",
+                        "answer": false
+                    },
+                    {
+                        "text": "zfs",
+                        "answer": false
+                    },
+                    {
+                        "text": "vfs",
+                        "answer": false
+                    }
+                ],
+                "description": "Overlay2 allows for shared page cache in memory, saving huge amounts of RAM. Check: [overlay2](/storage/drivers/overlay2)"
+            },
+            {
+                "level": "foundation",
+                "question": "The 'AUFS' driver is best known as:",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The modern standard",
+                        "answer": false
+                    },
+                    {
+                        "text": "The original union filesystem for early Docker",
+                        "answer": true
+                    },
+                    {
+                        "text": "A Windows-only driver",
+                        "answer": false
+                    },
+                    {
+                        "text": "A memory-only driver",
+                        "answer": false
+                    }
+                ],
+                "description": "AUFS was the pioneer but has been replaced by overlay2. Check: [Drivers Overview](/storage/drivers/overview)"
+            },
+            {
+                "level": "scenario",
+                "question": "You find that your container's disk space is filling up despite mounting all large data to a volume. Why?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The volume is full",
+                        "answer": false
+                    },
+                    {
+                        "text": "Logs or temp files are being written to the container layer",
+                        "answer": true
+                    },
+                    {
+                        "text": "Images are growing",
+                        "answer": false
+                    },
+                    {
+                        "text": "tmpfs is leaking",
+                        "answer": false
+                    }
+                ],
+                "description": "Anything not in a volume goes to the driver-managed writable layer. Check: [Drivers Overview](/storage/drivers/overview)"
+            }
         ]
     },
     {
         "node": "Advanced Patterns",
         "questions": [
-            { "level": "interview", "question": "What does 'Mount Propagation' control?", "type": "radio", "options": [{ "text": "How fast data is copied", "answer": false }, { "text": "How mounts inside the container interact with host mounts", "answer": true }, { "text": "Volume naming conventions", "answer": false }, { "text": "Image layer sharing", "answer": false }], "description": "Propagation defines if sub-mounts are shared between Host and Container. Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)" },
-            { "level": "interview", "question": "Which propagation setting is the default?", "type": "radio", "options": [{ "text": "shared", "answer": false }, { "text": "slave", "answer": false }, { "text": "private", "answer": true }, { "text": "unbindable", "answer": false }], "description": "Private means mounts in one namespace aren't visible in others. Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)" },
-            { "level": "scenario", "question": "You have a volume named 'db_data'. What is the safest way to back it up while the DB is semi-active?", "type": "radio", "options": [{ "text": "git add /var/lib/docker/volumes", "answer": false }, { "text": "Use a worker container with --volumes-from and run 'tar'", "answer": true }, { "text": "docker save db_data", "answer": false }, { "text": "Use 'docker cp' on every file individually", "answer": false }], "description": "The worker container pattern is the official recommendation for volume backup. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "What is the 'shared' propagation mode used for?", "type": "radio", "options": [{ "text": "Encrypting data", "answer": false }, { "text": "Allowing a container mount to be seen by the host's other mounts", "answer": true }, { "text": "Sharing images over the network", "answer": false }, { "text": "Improving SSD speed", "answer": false }], "description": "Shared mode reflects changes in both directions (host and container). Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)" },
-            { "level": "foundation", "question": "How do you specify a volume as read-only in 'docker run'?", "type": "radio", "options": [{ "text": "-v vol:/app:ro", "answer": true }, { "text": "-v vol:/app:safe", "answer": false }, { "text": "--read-only", "answer": false }, { "text": "--mount mode=locked", "answer": false }], "description": "The :ro suffix is the standard way to restrict writes. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "What happens if you use ':z' (lowercase) in a mount on an SELinux system?", "type": "radio", "options": [{ "text": "It compresses the folder", "answer": false }, { "text": "It relabels the folder as 'private' for only this container", "answer": true }, { "text": "It disables SELinux for that folder", "answer": false }, { "text": "It renames the volume to 'z'", "answer": false }], "description": "Lowercase z marks the mount as private to one container. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "What happens if you use ':Z' (uppercase) in a mount on an SELinux system?", "type": "radio", "options": [{ "text": "It relabels the folder as 'shared' among multiple containers", "answer": true }, { "text": "It deletes the folder", "answer": false }, { "text": "It encrypts the folder", "answer": false }, { "text": "It creates a backup", "answer": false }], "description": "Uppercase Z allows multiple containers to access the same volume under SELinux. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "What was the 'Data-only container' pattern?", "type": "radio", "options": [{ "text": "A way to run containers without images", "answer": false }, { "text": "An old (obsolete) way to manage volumes before Docker volumes were first-class", "answer": true }, { "text": "A new Swarm feature", "answer": false }, { "text": "A security setting", "answer": false }], "description": "Legacy Docker required creating actual containers just to hold data volumes. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "Why would you use 'tmpfs' instead of a Volume for a web server password?", "type": "radio", "options": [{ "text": "To hide it from the host OS", "answer": false }, { "text": "To ensure it never touches the physical disk and disappears on reboot", "answer": true }, { "text": "To make it faster to access", "answer": false }, { "text": "Volumes don't support text files", "answer": false }], "description": "Security and non-persistence are the primary drivers for tmpfs. Check: [tmpfs Mounts](/storage/tmpfs-mounts)" },
-            { "level": "scenario", "question": "You need to mount a volume to a Swarm Service. Which flag is REQUIRED?", "type": "radio", "options": [{ "text": "-v", "answer": false }, { "text": "--mount", "answer": true }, { "text": "--volume", "answer": false }, { "text": "--stack-vol", "answer": false }], "description": "Swarm services ONLY support the verbose --mount syntax. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "Can you share a local host volume across multiple machines in a Swarm cluster natively?", "type": "radio", "options": [{ "text": "Yes, Docker syncs it", "answer": false }, { "text": "No, you need a shared backend like NFS or a Cloud plugin", "answer": true }], "description": "Standard volumes are local to the machine they were created on. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Which management command helps you see the labels attached to a volume?", "type": "radio", "options": [{ "text": "docker volume ls", "answer": false }, { "text": "docker volume inspect", "answer": true }, { "text": "docker info", "answer": false }, { "text": "docker inspect label", "answer": false }], "description": "Inspect returns full JSON metadata including labels. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "scenario", "question": "You want to clear all stopped containers AND their associated anonymous volumes in one command.", "type": "radio", "options": [{ "text": "docker system prune", "answer": false }, { "text": "docker system prune --volumes", "answer": true }, { "text": "docker volume prune", "answer": false }, { "text": "docker rm -all", "answer": false }], "description": "The --volumes flag extends the system prune to include volume cleanup. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "What is 'Unbindable' propagation mode?", "type": "radio", "options": [{ "text": "Prevents any sub-mounts from being used", "answer": false }, { "text": "Mark a mount as private AND prevent it from being shared even if parent is shared", "answer": true }, { "text": "Deletes the mount point", "answer": false }, { "text": "Locks the filesystem", "answer": false }], "description": "Unbindable is the most restrictive propagation setting. Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)" },
-            { "level": "foundation", "question": "TRUE or FALSE: Docker volumes can be used to mount an NFS share directly.", "type": "radio", "options": [{ "text": "True", "answer": true }, { "text": "False", "answer": false }], "description": "Using volume-opt, you can map NFS directly at the Docker level. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "scenario", "question": "An application is writing TBs of data. Should you use the Storage Driver layer or a Volume?", "type": "radio", "options": [{ "text": "Storage Driver (Overlay2)", "answer": false }, { "text": "Volume", "answer": true }], "description": "Volumes bypass the CoW overhead and offer native filesystem performance. Check: [When to Use Which?](/storage/when-to-use)" },
-            { "level": "interview", "question": "If you use '--mount type=bind,source=/a/b,target=/c', what happens if '/a/b' doesn't exist?", "type": "radio", "options": [{ "text": "Docker creates it as a folder", "answer": false }, { "text": "Docker creates it as a file", "answer": false }, { "text": "Docker throws an error and fails to start", "answer": true }], "description": "This is the Missing Path Trap; --mount is explicit. Check: [Drivers Overview](/storage/drivers/overview#dca-exam-practice)" },
-            { "level": "interview", "question": "Which command allows you to rename a volume?", "type": "radio", "options": [{ "text": "docker volume rename", "answer": false }, { "text": "There is no rename command (must copy and recreate)", "answer": true }], "description": "Volumes cannot be renamed once created. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "foundation", "question": "Can you limit the size of a volume on disk natively in Docker?", "type": "radio", "options": [{ "text": "Only for certain drivers (e.g., tmpfs size, or XFS/Btrfs quotas)", "answer": true }, { "text": "Yes, for all volumes via --size", "answer": false }], "description": "Quotas are usually dependent on the underlying driver and filesystem support. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "What is the Difference between 'docker volume prune' and 'docker system prune --volumes'?", "type": "radio", "options": [{ "text": "No difference", "answer": false }, { "text": "System prune cleans images/containers too; volume prune only affects volumes", "answer": true }], "description": "Pruning scope is the primary difference. Check: [Volumes](/storage/volumes-deep-dive)" },
-            { "level": "interview", "question": "If two containers write to the same file in a shared volume, how does Docker handle the 'locking'?", "type": "radio", "options": [{ "text": "Docker uses a built-in flock mechanism", "answer": false }, { "text": "It doesn't; you risk data corruption unless the app handles it", "answer": true }, { "text": "The first container to mount gets the lock", "answer": false }, { "text": "The engine queues the writes automatically", "answer": false }], "description": "Docker provides storage but NO locking. Concurrency is the app's responsibility. Check: [Volumes](/storage/volumes-deep-dive#expert-q&a-volume-sharing-&-conflicts)" },
-            { "level": "interview", "question": "What is the 'Sidecar Pattern' in relation to Docker storage?", "type": "radio", "options": [{ "text": "A way to run containers on separate hosts", "answer": false }, { "text": "One container (Writer) sharing a volume with another (Reader/Shipper)", "answer": true }, { "text": "A backup strategy using S3", "answer": false }, { "text": "Running two apps in one container", "answer": false }], "description": "Sidecars use shared volumes for inter-container data handoffs. Check: [Volumes](/storage/volumes-deep-dive#expert-q&a-volume-sharing-&-conflicts)" },
-            { "level": "interview", "question": "To avoid 'Inconsistent Reads' in a sidecar pattern, which expert strategy is recommended?", "type": "radio", "options": [{ "text": "Wait for 5 seconds", "answer": false }, { "text": "Atomic Renames (Write to tmp, then rename)", "answer": true }, { "text": "Mounting the volume twice", "answer": false }, { "text": "Using a bind mount instead", "answer": false }], "description": "Renames are atomic in Linux, ensuring the reader never sees a half-written file. Check: [Volumes](/storage/volumes-deep-dive#expert-q&a-volume-sharing-&-conflicts)" },
-            { "level": "interview", "question": "When mounting a volume that already has data, what happens to the files at the container's mount point?", "type": "radio", "options": [{ "text": "They are merged with the volume data", "answer": false }, { "text": "They are moved to a backup folder", "answer": false }, { "text": "They are shadowed (hidden) by the volume data", "answer": true }, { "text": "The container fails to start", "answer": false }], "description": "Existing volume data 'wins' and obscures the container's original directory content. Check: [Volumes](/storage/volumes-deep-dive#expert-q&a-volume-sharing-&-conflicts)" },
-            { "level": "foundation", "question": "Can you choose the exact host path for a named Docker Volume?", "type": "radio", "options": [{ "text": "Yes, using the --path flag", "answer": false }, { "text": "No, Docker manages the path internally", "answer": true }, { "text": "Only on Windows", "answer": false }, { "text": "Only if using NFS", "answer": false }], "description": "Volumes are managed by Docker; if you need a specific host path, use a Bind Mount. Check: [Volumes](/storage/volumes-deep-dive#expert-q&a-volume-sharing-&-conflicts)" },
-            { "level": "interview", "question": "In the 'Physical Sticker' analogy for bind mounts, what does the sticker represent?", "type": "radio", "options": [{ "text": "The Read-Only Image Layer", "answer": false }, { "text": "The host folder (Mount Source) covering the container files", "answer": true }, { "text": "The Docker Engine", "answer": false }, { "text": "The writable layer", "answer": false }], "description": "The mount shadows existing container content, just like a sticker covers words. Check: [Bind Mounts](/storage/bind-mounts#expert-q&a-bind-mount-behavior)" },
-            { "level": "interview", "question": "Mounting which host folder as a bind mount poses the greatest security risk to the host?", "type": "radio", "options": [{ "text": "/tmp", "answer": false }, { "text": "/etc", "answer": true }, { "text": "./src", "answer": false }, { "text": "/var/log/app", "answer": false }], "description": "Mounting sensitive system directories can allow a container breakout to compromise the host. Check: [Bind Mounts](/storage/bind-mounts#expert-q&a-bind-mount-behavior)" },
-            { "level": "interview", "question": "If you stop a container and remove its bind mount, what happens to the original image files that were 'shadowed'?", "type": "radio", "options": [{ "text": "They are deleted", "answer": false }, { "text": "They reappear exactly as they were in the image", "answer": true }, { "text": "They are moved to the host", "answer": false }, { "text": "They remain hidden forever", "answer": false }], "description": "Image layers are read-only and immutable; shadowing is temporary. Check: [Bind Mounts](/storage/bind-mounts#expert-q&a-bind-mount-behavior)" },
-            { "level": "interview", "question": "What happens if 10 different containers all use a tmpfs mount at /app/cache at the same time?", "type": "radio", "options": [{ "text": "They share the same memory space", "answer": false }, { "text": "They each get a private, isolated slice of RAM", "answer": true }, { "text": "The host RAM crashes due to conflicts", "answer": false }, { "text": "Only the first container gets the mount", "answer": false }], "description": "tmpfs mounts are strictly isolated and private to each container. Check: [tmpfs Mounts](/storage/tmpfs-mounts#expert-q&a-tmpfs-concurrency)" },
-            { "level": "interview", "question": "Can you create a 'Named tmpfs Volume' to share in-memory data between containers natively?", "type": "radio", "options": [{ "text": "Yes, using 'docker volume create --type tmpfs'", "answer": false }, { "text": "No, tmpfs cannot be shared natively via Docker volumes", "answer": true }], "description": "Sharing memory-speed data requires expert workarounds like bind-mounting /dev/shm. Check: [tmpfs Mounts](/storage/tmpfs-mounts#expert-q&a-tmpfs-concurrency)" }
+            {
+                "level": "interview",
+                "question": "What does 'Mount Propagation' control?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "How fast data is copied",
+                        "answer": false
+                    },
+                    {
+                        "text": "How mounts inside the container interact with host mounts",
+                        "answer": true
+                    },
+                    {
+                        "text": "Volume naming conventions",
+                        "answer": false
+                    },
+                    {
+                        "text": "Image layer sharing",
+                        "answer": false
+                    }
+                ],
+                "description": "Propagation defines if sub-mounts are shared between Host and Container. Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)"
+            },
+            {
+                "level": "interview",
+                "question": "Which propagation setting is the default?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "shared",
+                        "answer": false
+                    },
+                    {
+                        "text": "slave",
+                        "answer": false
+                    },
+                    {
+                        "text": "private",
+                        "answer": true
+                    },
+                    {
+                        "text": "unbindable",
+                        "answer": false
+                    }
+                ],
+                "description": "Private means mounts in one namespace aren't visible in others. Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)"
+            },
+            {
+                "level": "scenario",
+                "question": "You want a volume named 'db_data'. What is the safest way to back it up while the DB is semi-active?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "git add /var/lib/docker/volumes",
+                        "answer": false
+                    },
+                    {
+                        "text": "Use a worker container with --volumes-from and run 'tar'",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker save db_data",
+                        "answer": false
+                    },
+                    {
+                        "text": "Use 'docker cp' on every file individually",
+                        "answer": false
+                    }
+                ],
+                "description": "The worker container pattern is the official recommendation for volume backup. Check: [Backup & Restore](/storage/volumes-deep-dive#backup-restore)"
+            },
+            {
+                "level": "interview",
+                "question": "What is the 'shared' propagation mode used for?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Encrypting data",
+                        "answer": false
+                    },
+                    {
+                        "text": "Allowing a container mount to be seen by the host's other mounts",
+                        "answer": true
+                    },
+                    {
+                        "text": "Sharing images over the network",
+                        "answer": false
+                    },
+                    {
+                        "text": "Improving SSD speed",
+                        "answer": false
+                    }
+                ],
+                "description": "Shared mode reflects changes in both directions (host and container). Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)"
+            },
+            {
+                "level": "foundation",
+                "question": "How do you specify a volume as read-only in 'docker run'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "-v vol:/app:ro",
+                        "answer": true
+                    },
+                    {
+                        "text": "-v vol:/app:safe",
+                        "answer": false
+                    },
+                    {
+                        "text": "--read-only",
+                        "answer": false
+                    },
+                    {
+                        "text": "--mount mode=locked",
+                        "answer": false
+                    }
+                ],
+                "description": "The :ro suffix is the standard way to restrict writes. Check: [Read Only](/storage/volumes-deep-dive#read-only)"
+            },
+            {
+                "level": "interview",
+                "question": "What happens if you use ':z' (lowercase) in a mount on an SELinux system?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "It compresses the folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "It relabels the folder as 'private' for only this container",
+                        "answer": true
+                    },
+                    {
+                        "text": "It disables SELinux for that folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "It renames the volume to 'z'",
+                        "answer": false
+                    }
+                ],
+                "description": "Lowercase z marks the mount as private to one container. Check: [Expert Q&A](/storage/volumes-deep-dive#expert-qa-sharing)"
+            },
+            {
+                "level": "interview",
+                "question": "What happens if you use ':Z' (uppercase) in a mount on an SELinux system?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "It relabels the folder as 'shared' among multiple containers",
+                        "answer": true
+                    },
+                    {
+                        "text": "It deletes the folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "It encrypts the folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "It creates a backup",
+                        "answer": false
+                    }
+                ],
+                "description": "Uppercase Z allows multiple containers to access the same volume under SELinux. Check: [Expert Q&A](/storage/volumes-deep-dive#expert-qa-sharing)"
+            },
+            {
+                "level": "foundation",
+                "question": "What was the 'Data-only container' pattern?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "A way to run containers without images",
+                        "answer": false
+                    },
+                    {
+                        "text": "An old (obsolete) way to manage volumes before Docker volumes were first-class",
+                        "answer": true
+                    },
+                    {
+                        "text": "A new Swarm feature",
+                        "answer": false
+                    },
+                    {
+                        "text": "A security setting",
+                        "answer": false
+                    }
+                ],
+                "description": "Legacy Docker required creating actual containers just to hold data volumes. Check: [What is Volume](/storage/volumes-deep-dive#what-is-volume)"
+            },
+            {
+                "level": "interview",
+                "question": "Why would you use 'tmpfs' instead of a Volume for a web server password?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "To hide it from the host OS",
+                        "answer": false
+                    },
+                    {
+                        "text": "To ensure it never touches the physical disk and disappears on reboot",
+                        "answer": true
+                    },
+                    {
+                        "text": "To make it faster to access",
+                        "answer": false
+                    },
+                    {
+                        "text": "Volumes don't support text files",
+                        "answer": false
+                    }
+                ],
+                "description": "Security and non-persistence are the primary drivers for tmpfs. Check: [Why Use tmpfs](/storage/tmpfs-mounts#why-tmpfs)"
+            },
+            {
+                "level": "scenario",
+                "question": "You need to mount a volume to a Swarm Service. Which flag is REQUIRED?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "-v",
+                        "answer": false
+                    },
+                    {
+                        "text": "--mount",
+                        "answer": true
+                    },
+                    {
+                        "text": "--volume",
+                        "answer": false
+                    },
+                    {
+                        "text": "--stack-vol",
+                        "answer": false
+                    }
+                ],
+                "description": "Swarm services ONLY support the verbose --mount syntax. Check: [Mounting](/storage/volumes-deep-dive#mounting)"
+            },
+            {
+                "level": "interview",
+                "question": "Can you share a local host volume across multiple machines in a Swarm cluster natively?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes, Docker syncs it",
+                        "answer": false
+                    },
+                    {
+                        "text": "No, you need a shared backend like NFS or a Cloud plugin",
+                        "answer": true
+                    }
+                ],
+                "description": "Standard volumes are local to the machine they were created on. Check: [Why Volumes](/storage/volumes-deep-dive#why-volumes)"
+            },
+            {
+                "level": "foundation",
+                "question": "Which management command helps you see the labels attached to a volume?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker volume ls",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker volume inspect",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker info",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker inspect label",
+                        "answer": false
+                    }
+                ],
+                "description": "Inspect returns full JSON metadata including labels. Check: [Manage Volumes](/storage/volumes-deep-dive#manage-volumes)"
+            },
+            {
+                "level": "scenario",
+                "question": "You want to clear all stopped containers AND their associated anonymous volumes in one command.",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker system prune",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker system prune --volumes",
+                        "answer": true
+                    },
+                    {
+                        "text": "docker volume prune",
+                        "answer": false
+                    },
+                    {
+                        "text": "docker rm -all",
+                        "answer": false
+                    }
+                ],
+                "description": "The --volumes flag extends the system prune to include volume cleanup. Check: [Cleanup](/storage/volumes-deep-dive#cleanup)"
+            },
+            {
+                "level": "interview",
+                "question": "What is 'Unbindable' propagation mode?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Prevents any sub-mounts from being used",
+                        "answer": false
+                    },
+                    {
+                        "text": "Mark a mount as private AND prevent it from being shared even if parent is shared",
+                        "answer": true
+                    },
+                    {
+                        "text": "Deletes the mount point",
+                        "answer": false
+                    },
+                    {
+                        "text": "Locks the filesystem",
+                        "answer": false
+                    }
+                ],
+                "description": "Unbindable is the most restrictive propagation setting. Check: [Volumes](/storage/volumes-deep-dive#senior-topic-mount-propagation)"
+            },
+            {
+                "level": "foundation",
+                "question": "TRUE or FALSE: Docker volumes can be used to mount an NFS share directly.",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "True",
+                        "answer": true
+                    },
+                    {
+                        "text": "False",
+                        "answer": false
+                    }
+                ],
+                "description": "Using volume-opt, you can map NFS directly at the Docker level. Check: [Drivers](/storage/volumes-deep-dive#drivers)"
+            },
+            {
+                "level": "scenario",
+                "question": "An application is writing TBs of data. Should you use the Storage Driver layer or a Volume?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Storage Driver (Overlay2)",
+                        "answer": false
+                    },
+                    {
+                        "text": "Volume",
+                        "answer": true
+                    }
+                ],
+                "description": "Volumes bypass the CoW overhead and offer native filesystem performance. Check: [When to Use Which?](/storage/when-to-use)"
+            },
+            {
+                "level": "interview",
+                "question": "If you use '--mount type=bind,source=/a/b,target=/c', what happens if '/a/b' doesn't exist?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Docker creates it as a folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker creates it as a file",
+                        "answer": false
+                    },
+                    {
+                        "text": "Docker throws an error and fails to start",
+                        "answer": true
+                    }
+                ],
+                "description": "This is the Missing Path Trap; --mount is explicit. Check: [Drivers Overview](/storage/drivers/overview#dca-exam-practice)"
+            },
+            {
+                "level": "interview",
+                "question": "Which command allows you to rename a volume?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker volume rename",
+                        "answer": false
+                    },
+                    {
+                        "text": "There is no rename command (must copy and recreate)",
+                        "answer": true
+                    }
+                ],
+                "description": "Volumes cannot be renamed once created. Check: [What is Volume](/storage/volumes-deep-dive#what-is-volume)"
+            },
+            {
+                "level": "foundation",
+                "question": "Can you limit the size of a volume on disk natively in Docker?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Only for certain drivers (e.g., tmpfs size, or XFS/Btrfs quotas)",
+                        "answer": true
+                    },
+                    {
+                        "text": "Yes, for all volumes via --size",
+                        "answer": false
+                    }
+                ],
+                "description": "Quotas are usually dependent on the underlying driver and filesystem support. Check: [Drivers](/storage/volumes-deep-dive#drivers)"
+            },
+            {
+                "level": "interview",
+                "question": "What is the Difference between 'docker volume prune' and 'docker system prune --volumes'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "No difference",
+                        "answer": false
+                    },
+                    {
+                        "text": "System prune cleans images/containers too; volume prune only affects volumes",
+                        "answer": true
+                    }
+                ],
+                "description": "Pruning scope is the primary difference. Check: [Cleanup](/storage/volumes-deep-dive#cleanup)"
+            },
+            {
+                "level": "interview",
+                "question": "If two containers write to the same file in a shared volume, how does Docker handle the 'locking'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Docker uses a built-in flock mechanism",
+                        "answer": false
+                    },
+                    {
+                        "text": "It doesn't; you risk data corruption unless the app handles it",
+                        "answer": true
+                    },
+                    {
+                        "text": "The first container to mount gets the lock",
+                        "answer": false
+                    },
+                    {
+                        "text": "The engine queues the writes automatically",
+                        "answer": false
+                    }
+                ],
+                "description": "Docker provides storage but NO locking. Concurrency is the app's responsibility. Check: [Expert Q&A](/storage/volumes-deep-dive#expert-qa-sharing)"
+            },
+            {
+                "level": "interview",
+                "question": "What is the 'Sidecar Pattern' in relation to Docker storage?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "A way to run containers on separate hosts",
+                        "answer": false
+                    },
+                    {
+                        "text": "One container (Writer) sharing a volume with another (Reader/Shipper)",
+                        "answer": true
+                    },
+                    {
+                        "text": "A backup strategy using S3",
+                        "answer": false
+                    },
+                    {
+                        "text": "Running two apps in one container",
+                        "answer": false
+                    }
+                ],
+                "description": "Sidecars use shared volumes for inter-container data handoffs. Check: [Expert Q&A](/storage/volumes-deep-dive#expert-qa-sharing)"
+            },
+            {
+                "level": "interview",
+                "question": "To avoid 'Inconsistent Reads' in a sidecar pattern, which expert strategy is recommended?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Wait for 5 seconds",
+                        "answer": false
+                    },
+                    {
+                        "text": "Atomic Renames (Write to tmp, then rename)",
+                        "answer": true
+                    },
+                    {
+                        "text": "Mounting the volume twice",
+                        "answer": false
+                    },
+                    {
+                        "text": "Using a bind mount instead",
+                        "answer": false
+                    }
+                ],
+                "description": "Renames are atomic in Linux, ensuring the reader never sees a half-written file. Check: [Expert Q&A](/storage/volumes-deep-dive#expert-qa-sharing)"
+            },
+            {
+                "level": "interview",
+                "question": "When mounting a volume that already has data, what happens to the files at the container's mount point?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "They are merged with the volume data",
+                        "answer": false
+                    },
+                    {
+                        "text": "They are moved to a backup folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "They are shadowed (hidden) by the volume data",
+                        "answer": true
+                    },
+                    {
+                        "text": "The container fails to start",
+                        "answer": false
+                    }
+                ],
+                "description": "Existing volume data 'wins' and obscures the container's original directory content. Check: [Expert Q&A](/storage/volumes-deep-dive#expert-qa-sharing)"
+            },
+            {
+                "level": "foundation",
+                "question": "Can you choose the exact host path for a named Docker Volume?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes, using the --path flag",
+                        "answer": false
+                    },
+                    {
+                        "text": "No, Docker manages the path internally",
+                        "answer": true
+                    },
+                    {
+                        "text": "Only on Windows",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only if using NFS",
+                        "answer": false
+                    }
+                ],
+                "description": "Volumes are managed by Docker; if you need a specific host path, use a Bind Mount. Check: [Expert Q&A](/storage/volumes-deep-dive#mount-any-folder)"
+            },
+            {
+                "level": "interview",
+                "question": "In the 'Physical Sticker' analogy for bind mounts, what does the sticker represent?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "The Read-Only Image Layer",
+                        "answer": false
+                    },
+                    {
+                        "text": "The host folder (Mount Source) covering the container files",
+                        "answer": true
+                    },
+                    {
+                        "text": "The Docker Engine",
+                        "answer": false
+                    },
+                    {
+                        "text": "The writable layer",
+                        "answer": false
+                    }
+                ],
+                "description": "The mount shadows existing container content, just like a sticker covers words. Check: [Expert Q&A](/storage/bind-mounts#expert-qa-behavior)"
+            },
+            {
+                "level": "interview",
+                "question": "Mounting which host folder as a bind mount poses the greatest security risk to the host?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "/tmp",
+                        "answer": false
+                    },
+                    {
+                        "text": "/etc",
+                        "answer": true
+                    },
+                    {
+                        "text": "./src",
+                        "answer": false
+                    },
+                    {
+                        "text": "/var/log/app",
+                        "answer": false
+                    }
+                ],
+                "description": "Mounting sensitive system directories can allow a container breakout to compromise the host. Check: [Expert Q&A](/storage/bind-mounts#mount-any-host-folder)"
+            },
+            {
+                "level": "interview",
+                "question": "If you stop a container and remove its bind mount, what happens to the original image files that were 'shadowed'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "They are deleted",
+                        "answer": false
+                    },
+                    {
+                        "text": "They reappear exactly as they were in the image",
+                        "answer": true
+                    },
+                    {
+                        "text": "They are moved to the host",
+                        "answer": false
+                    },
+                    {
+                        "text": "They remain hidden forever",
+                        "answer": false
+                    }
+                ],
+                "description": "Image layers are read-only and immutable; shadowing is temporary. Check: [Expert Q&A](/storage/bind-mounts#expert-qa-behavior)"
+            },
+            {
+                "level": "interview",
+                "question": "What happens if 10 different containers all use a tmpfs mount at /app/cache at the same time?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "They share the same memory space",
+                        "answer": false
+                    },
+                    {
+                        "text": "They each get a private, isolated slice of RAM",
+                        "answer": true
+                    },
+                    {
+                        "text": "The host RAM crashes due to conflicts",
+                        "answer": false
+                    },
+                    {
+                        "text": "Only the first container gets the mount",
+                        "answer": false
+                    }
+                ],
+                "description": "tmpfs mounts are strictly isolated and private to each container. Check: [Expert Q&A](/storage/tmpfs-mounts#expert-qa-concurrency)"
+            },
+            {
+                "level": "interview",
+                "question": "Can you create a 'Named tmpfs Volume' to share in-memory data between containers natively?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes, using 'docker volume create --type tmpfs'",
+                        "answer": false
+                    },
+                    {
+                        "text": "No, tmpfs cannot be shared natively via Docker volumes",
+                        "answer": true
+                    }
+                ],
+                "description": "Sharing memory-speed data requires expert workarounds like bind-mounting /dev/shm. Check: [Expert Q&A](/storage/tmpfs-mounts#expert-qa-concurrency)"
+            }
         ]
     },
     {
         "node": "Modern Containerd Store",
         "questions": [
-            { "level": "foundation", "question": "What is the main goal of the containerd image store integration?", "type": "radio", "options": [{ "text": "To replace linux kernels", "answer": false }, { "text": "To unify Docker with modern containerd snapshotter logic", "answer": true }, { "text": "To make Docker paid only", "answer": false }, { "text": "To remove images entirely", "answer": false }], "description": "Unification with containerd enables modern features. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "What replaced 'Graph Drivers' in the containerd architecture?", "type": "radio", "options": [{ "text": "Volume Plugins", "answer": false }, { "text": "Snapshotters", "answer": true }, { "text": "Registry Mirrors", "answer": false }, { "text": "Container Drivers", "answer": false }], "description": "Snapshotters are the modern way to manage layered filesystems. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "How do you enable containerd store in Docker Desktop?", "type": "radio", "options": [{ "text": "Via 'Use containerd for pulling and storing images' in Settings", "answer": true }, { "text": "It is always on by default since 2012", "answer": false }, { "text": "By running 'docker containerd-on'", "answer": false }, { "text": "By deleting Overlay2", "answer": false }], "description": "It is a feature flag in the settings dashboard. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "Does the containerd store support Windows containers?", "type": "radio", "options": [{ "text": "Yes", "answer": true }, { "text": "No", "answer": false }], "description": "Containerd architecture is designed to be cross-platform. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "What is a 'Snapshot' in containerd terms?", "type": "radio", "options": [{ "text": "A photo of the screen", "answer": false }, { "text": "An individual layer of an image (either read-only or active)", "answer": true }, { "text": "A full backup of the host", "answer": false }, { "text": "A volume backup", "answer": false }], "description": "Snapshots are the building blocks of containerd storage. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "True or False: The containerd store allows ARM and x86 images for the same tag to reside on the same host.", "type": "radio", "options": [{ "text": "True", "answer": true }, { "text": "False", "answer": false }], "description": "Multi-platform image management is a key containerd feature. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "scenario", "question": "You want to run a WebAssembly (Wasm) container. Which storage backend facilitates this best?", "type": "radio", "options": [{ "text": "legacy AUFS", "answer": false }, { "text": "containerd image store", "answer": true }, { "text": "VFS", "answer": false }, { "text": "Windows filter", "answer": false }], "description": "Wasm integration is tied to the modern containerd architecture. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "Why is image push/pull faster in some containerd workflows?", "type": "radio", "options": [{ "text": "It uses more bandwidth", "answer": false }, { "text": "It skips the redundant extraction step on some systems", "answer": true }, { "text": "It compresses files more", "answer": false }, { "text": "The registry is inside containerd", "answer": false }], "description": "Integration reduces extraction overhead. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "Where are containerd store feature toggles stored on Linux?", "type": "radio", "options": [{ "text": "daemon.json under 'features'", "answer": true }, { "text": "containerd.conf", "answer": false }, { "text": "/etc/default/docker", "answer": false }, { "text": "In the image itself", "answer": false }], "description": "The 'containerd-snapshotter' key is added to features in daemon.json. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "In containerd store, where are the local image artifacts actually saved?", "type": "radio", "options": [{ "text": "/var/lib/docker/containerd", "answer": true }, { "text": "/tmp/docker", "answer": false }, { "text": "/var/run/docker", "answer": false }, { "text": "/opt/containerd", "answer": false }], "description": "A dedicated directory next to the standard docker folders. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "What is 'Content Addressable Storage'?", "type": "radio", "options": [{ "text": "Identifying data by its location on disk", "answer": false }, { "text": "Identifying data by its cryptographic hash (SHA256)", "answer": true }, { "text": "Using IP addresses for files", "answer": false }, { "text": "Storing data only in the cloud", "answer": false }], "description": "This ensures data integrity and efficient deduplication. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "Can you use older Graph Drivers like Overlay2 simultaneously with the containerd store?", "type": "radio", "options": [{ "text": "Yes, they work in parallel", "answer": false }, { "text": "No, you must choose one architecture", "answer": true }], "description": "Enabling containerd snapshotters replaces the legacy graph driver path. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "Which tool would you use to inspect the 'unfiltered' state of containerd snapshotters?", "type": "radio", "options": [{ "text": "docker inspect", "answer": false }, { "text": "ctr (containerd CLI)", "answer": true }, { "text": "dockerd", "answer": false }, { "text": "ls -l", "answer": false }], "description": "ctr is the low-level maintenance tool for containerd. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "What is the 'native' snapshotter best used for?", "type": "radio", "options": [{ "text": "All production systems", "answer": false }, { "text": "Simple directory-based storage (similar to VFS)", "answer": true }, { "text": "ZFS only", "answer": false }, { "text": "Performance heavy DBs", "answer": false }], "description": "Native is the simple directory fallback in the containerd world. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "Does the containerd store significantly increase disk usage?", "type": "radio", "options": [{ "text": "Yes, because it stores both compressed and uncompressed blobs", "answer": true }, { "text": "No, it is smaller", "answer": false }, { "text": "It uses 0 disk space", "answer": false }], "description": "Currently, the dual-storage model uses more space than legacy Overlay2. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "True or False: The containerd store is required to run Wasm workloads in Docker.", "type": "radio", "options": [{ "text": "True", "answer": true }, { "text": "False", "answer": false }], "description": "Wasm runtimes are integrated into the containerd backend. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "scenario", "question": "You see 'Snapshotter: overlay' in 'docker info'. What does this mean?", "type": "radio", "options": [{ "text": "You are using legacy Overlay2", "answer": false }, { "text": "You have the containerd store enabled with the overlay snapshotter", "answer": true }, { "text": "Your system is crashed", "answer": false }, { "text": "You are using Registry V1", "answer": false }], "description": "Snapshotter info only appears when the containerd store is active. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "The containerd image store is based on which industry standard?", "type": "radio", "options": [{ "text": "OCI (Open Container Initiative)", "answer": true }, { "text": "ISO 9001", "answer": false }, { "text": "W3C", "answer": false }, { "text": "GNU", "answer": false }], "description": "OCI compliance ensures interoperability. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "interview", "question": "How does containerd handle layer sharing between different images?", "type": "radio", "options": [{ "text": "It doesn't", "answer": false }, { "text": "Deduplication via SHA256 of the content blobs", "answer": true }, { "text": "It stores all images in one folder", "answer": false }, { "text": "It uses git submodules", "answer": false }], "description": "Content-addressability allows for extreme efficient sharing. Check: [Containerd Image Store](/storage/containerd-store)" },
-            { "level": "foundation", "question": "Can you use official Docker Hub images with the containerd store?", "type": "radio", "options": [{ "text": "Yes, absolutely", "answer": true }, { "text": "No, only custom images", "answer": false }], "description": "The change is internal; external image sources remain compatible. Check: [Containerd Image Store](/storage/containerd-store)" }
+            {
+                "level": "foundation",
+                "question": "What is the main goal of the containerd image store integration?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "To replace linux kernels",
+                        "answer": false
+                    },
+                    {
+                        "text": "To unify Docker with modern containerd snapshotter logic",
+                        "answer": true
+                    },
+                    {
+                        "text": "To make Docker paid only",
+                        "answer": false
+                    },
+                    {
+                        "text": "To remove images entirely",
+                        "answer": false
+                    }
+                ],
+                "description": "Unification with containerd enables modern features. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "interview",
+                "question": "What replaced 'Graph Drivers' in the containerd architecture?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Volume Plugins",
+                        "answer": false
+                    },
+                    {
+                        "text": "Snapshotters",
+                        "answer": true
+                    },
+                    {
+                        "text": "Registry Mirrors",
+                        "answer": false
+                    },
+                    {
+                        "text": "Container Drivers",
+                        "answer": false
+                    }
+                ],
+                "description": "Snapshotters are the modern way to manage layered filesystems. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "foundation",
+                "question": "How do you enable containerd store in Docker Desktop?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Via 'Use containerd for pulling and storing images' in Settings",
+                        "answer": true
+                    },
+                    {
+                        "text": "It is always on by default since 2012",
+                        "answer": false
+                    },
+                    {
+                        "text": "By running 'docker containerd-on'",
+                        "answer": false
+                    },
+                    {
+                        "text": "By deleting Overlay2",
+                        "answer": false
+                    }
+                ],
+                "description": "It is a feature flag in the settings dashboard. Check: [Enable](/storage/containerd-store#enable)"
+            },
+            {
+                "level": "interview",
+                "question": "Does the containerd store support Windows containers?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes",
+                        "answer": true
+                    },
+                    {
+                        "text": "No",
+                        "answer": false
+                    }
+                ],
+                "description": "Containerd architecture is designed to be cross-platform. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "interview",
+                "question": "What is a 'Snapshot' in containerd terms?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "A photo of the screen",
+                        "answer": false
+                    },
+                    {
+                        "text": "An individual layer of an image (either read-only or active)",
+                        "answer": true
+                    },
+                    {
+                        "text": "A full backup of the host",
+                        "answer": false
+                    },
+                    {
+                        "text": "A volume backup",
+                        "answer": false
+                    }
+                ],
+                "description": "Snapshots are the building blocks of containerd storage. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "foundation",
+                "question": "True or False: The containerd store allows ARM and x86 images for the same tag to reside on the same host.",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "True",
+                        "answer": true
+                    },
+                    {
+                        "text": "False",
+                        "answer": false
+                    }
+                ],
+                "description": "Multi-platform image management is a key containerd feature. Check: [Why containerd](/storage/containerd-store#why-containerd)"
+            },
+            {
+                "level": "scenario",
+                "question": "You want to run a WebAssembly (Wasm) container. Which storage backend facilitates this best?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "legacy AUFS",
+                        "answer": false
+                    },
+                    {
+                        "text": "containerd image store",
+                        "answer": true
+                    },
+                    {
+                        "text": "VFS",
+                        "answer": false
+                    },
+                    {
+                        "text": "Windows filter",
+                        "answer": false
+                    }
+                ],
+                "description": "Wasm integration is tied to the modern containerd architecture. Check: [Why containerd](/storage/containerd-store#why-containerd)"
+            },
+            {
+                "level": "interview",
+                "question": "Why is image push/pull faster in some containerd workflows?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "It uses more bandwidth",
+                        "answer": false
+                    },
+                    {
+                        "text": "It skips the redundant extraction step on some systems",
+                        "answer": true
+                    },
+                    {
+                        "text": "It compresses files more",
+                        "answer": false
+                    },
+                    {
+                        "text": "The registry is inside containerd",
+                        "answer": false
+                    }
+                ],
+                "description": "Integration reduces extraction overhead. Check: [Why containerd](/storage/containerd-store#why-containerd)"
+            },
+            {
+                "level": "foundation",
+                "question": "Where are containerd store feature toggles stored on Linux?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "daemon.json under 'features'",
+                        "answer": true
+                    },
+                    {
+                        "text": "containerd.conf",
+                        "answer": false
+                    },
+                    {
+                        "text": "/etc/default/docker",
+                        "answer": false
+                    },
+                    {
+                        "text": "In the image itself",
+                        "answer": false
+                    }
+                ],
+                "description": "The 'containerd-snapshotter' key is added to features in daemon.json. Check: [Enable](/storage/containerd-store#enable)"
+            },
+            {
+                "level": "foundation",
+                "question": "In containerd store, where are the local image artifacts actually saved?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "/var/lib/docker/containerd",
+                        "answer": true
+                    },
+                    {
+                        "text": "/tmp/docker",
+                        "answer": false
+                    },
+                    {
+                        "text": "/var/run/docker",
+                        "answer": false
+                    },
+                    {
+                        "text": "/opt/containerd",
+                        "answer": false
+                    }
+                ],
+                "description": "A dedicated directory next to the standard docker folders. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "interview",
+                "question": "What is 'Content Addressable Storage'?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Identifying data by its location on disk",
+                        "answer": false
+                    },
+                    {
+                        "text": "Identifying data by its cryptographic hash (SHA256)",
+                        "answer": true
+                    },
+                    {
+                        "text": "Using IP addresses for files",
+                        "answer": false
+                    },
+                    {
+                        "text": "Storing data only in the cloud",
+                        "answer": false
+                    }
+                ],
+                "description": "This ensures data integrity and efficient deduplication. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "foundation",
+                "question": "Can you use older Graph Drivers like Overlay2 simultaneously with the containerd store?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes, they work in parallel",
+                        "answer": false
+                    },
+                    {
+                        "text": "No, you must choose one architecture",
+                        "answer": true
+                    }
+                ],
+                "description": "Enabling containerd snapshotters replaces the legacy graph driver path. Check: [Enable](/storage/containerd-store#enable)"
+            },
+            {
+                "level": "interview",
+                "question": "Which tool would you use to inspect the 'unfiltered' state of containerd snapshotters?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "docker inspect",
+                        "answer": false
+                    },
+                    {
+                        "text": "ctr (containerd CLI)",
+                        "answer": true
+                    },
+                    {
+                        "text": "dockerd",
+                        "answer": false
+                    },
+                    {
+                        "text": "ls -l",
+                        "answer": false
+                    }
+                ],
+                "description": "ctr is the low-level maintenance tool for containerd. Check: [Status](/storage/containerd-store#status)"
+            },
+            {
+                "level": "foundation",
+                "question": "What is the 'native' snapshotter best used for?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "All production systems",
+                        "answer": false
+                    },
+                    {
+                        "text": "Simple directory-based storage (similar to VFS)",
+                        "answer": true
+                    },
+                    {
+                        "text": "ZFS only",
+                        "answer": false
+                    },
+                    {
+                        "text": "Performance heavy DBs",
+                        "answer": false
+                    }
+                ],
+                "description": "Native is the simple directory fallback in the containerd world. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "interview",
+                "question": "Does the containerd store significantly increase disk usage?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes, because it stores both compressed and uncompressed blobs",
+                        "answer": true
+                    },
+                    {
+                        "text": "No, it is smaller",
+                        "answer": false
+                    },
+                    {
+                        "text": "It uses 0 disk space",
+                        "answer": false
+                    }
+                ],
+                "description": "Currently, the dual-storage model uses more space than legacy Overlay2. Check: [Disk Trade-off](/storage/containerd-store#disk-tradeoff)"
+            },
+            {
+                "level": "foundation",
+                "question": "True or False: The containerd store is required to run Wasm workloads in Docker.",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "True",
+                        "answer": true
+                    },
+                    {
+                        "text": "False",
+                        "answer": false
+                    }
+                ],
+                "description": "Wasm runtimes are integrated into the containerd backend. Check: [Why containerd](/storage/containerd-store#why-containerd)"
+            },
+            {
+                "level": "scenario",
+                "question": "You see 'Snapshotter: overlay' in 'docker info'. What does this mean?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "You are using legacy Overlay2",
+                        "answer": false
+                    },
+                    {
+                        "text": "You have the containerd store enabled with the overlay snapshotter",
+                        "answer": true
+                    },
+                    {
+                        "text": "Your system is crashed",
+                        "answer": false
+                    },
+                    {
+                        "text": "You are using Registry V1",
+                        "answer": false
+                    }
+                ],
+                "description": "Snapshotter info only appears when the containerd store is active. Check: [Status](/storage/containerd-store#status)"
+            },
+            {
+                "level": "foundation",
+                "question": "The containerd image store is based on which industry standard?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "OCI (Open Container Initiative)",
+                        "answer": true
+                    },
+                    {
+                        "text": "ISO 9001",
+                        "answer": false
+                    },
+                    {
+                        "text": "W3C",
+                        "answer": false
+                    },
+                    {
+                        "text": "GNU",
+                        "answer": false
+                    }
+                ],
+                "description": "OCI compliance ensures interoperability. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "interview",
+                "question": "How does containerd handle layer sharing between different images?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "It doesn't",
+                        "answer": false
+                    },
+                    {
+                        "text": "Deduplication via SHA256 of the content blobs",
+                        "answer": true
+                    },
+                    {
+                        "text": "It stores all images in one folder",
+                        "answer": false
+                    },
+                    {
+                        "text": "It uses git submodules",
+                        "answer": false
+                    }
+                ],
+                "description": "Content-addressability allows for extreme efficient sharing. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            },
+            {
+                "level": "foundation",
+                "question": "Can you use official Docker Hub images with the containerd store?",
+                "type": "radio",
+                "options": [
+                    {
+                        "text": "Yes, absolutely",
+                        "answer": true
+                    },
+                    {
+                        "text": "No, only custom images",
+                        "answer": false
+                    }
+                ],
+                "description": "The change is internal; external image sources remain compatible. Check: [What is containerd](/storage/containerd-store#what-is-containerd)"
+            }
         ]
     }
 ]

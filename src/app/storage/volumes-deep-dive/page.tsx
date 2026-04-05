@@ -32,7 +32,7 @@ export default function DockerVolumesPage() {
                                 <i className={"bi " + "bi-database-fill"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="what-is-volume">
                                 What is a Docker Volume?
                             </h2>
                         </div>
@@ -87,7 +87,7 @@ export default function DockerVolumesPage() {
                                 <i className={"bi " + "bi-gear-fill"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="why-volumes">
                                 Why Volumes Are Preferred
                             </h2>
 
@@ -124,7 +124,7 @@ export default function DockerVolumesPage() {
                                 <i className={"bi " + "bi-clock-history"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="persistence">
                                 Data Persistence
                             </h2>
 
@@ -163,7 +163,7 @@ export default function DockerVolumesPage() {
                                 <i className={"bi " + "bi-terminal"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="mounting">
                                 Mounting a Volume
                             </h2>
 
@@ -213,7 +213,7 @@ export default function DockerVolumesPage() {
                                 <i className={"bi " + "bi-plus-circle"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="manage-volumes">
                                 Create and Manage Volumes
                             </h2>
 
@@ -292,7 +292,7 @@ mysql:8`}
                                 <i className={"bi " + "bi-tags"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="named-vs-anonymous">
                                 Named vs Anonymous Volumes
                             </h2>
 
@@ -330,7 +330,7 @@ mysql:8`}
                                 <i className={"bi " + "bi-lock-fill"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="read-only">
                                 Read Only Volumes
                             </h2>
 
@@ -360,7 +360,7 @@ mysql:8`}
                             <div className="heading-icon text-info">
                                 <i className="bi bi-cloud-upload-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="drivers">
                                 Volume Drivers (Plugins)
                             </h2>
                         </div>
@@ -384,7 +384,7 @@ mysql:8`}
                             <div className="heading-icon text-warning">
                                 <i className="bi bi-shield-check"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="backup-restore">
                                 Backup & Restore (The Senior Pattern)
                             </h2>
                         </div>
@@ -414,7 +414,7 @@ mysql:8`}
                             <div className="heading-icon text-danger">
                                 <i className="bi bi-arrows-expand"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="mount-propagation">
                                 Senior Topic: Mount Propagation
                             </h2>
                         </div>
@@ -457,7 +457,7 @@ mysql:8`}
                                 <i className={"bi " + "bi-trash"}></i>
                             </div>
 
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="cleanup">
                                 Remove Unused Volumes
                             </h2>
 
@@ -550,7 +550,7 @@ volumes:
                             <div className="heading-icon text-primary">
                                 <i className="bi bi-patch-question-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="expert-qa-sharing">
                                 Expert Q&A: Volume Sharing & Conflicts
                             </h2>
                         </div>
@@ -666,7 +666,7 @@ volumes:
 
                             {/* QUESTION 4 */}
                             <div className="mb-0 mt-5 border-top pt-5" style={{ borderTopColor: '#30363d !important' }}>
-                                <h4 className="fs-5 text-info mb-3">
+                                <h4 className="fs-5 text-info mb-3" id="mount-any-folder">
                                     <i className="bi bi-question-circle me-2"></i>
                                     "Can I mount any folder I want as a Volume?"
                                 </h4>

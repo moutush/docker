@@ -29,7 +29,7 @@ export default function ContainerdStorePage() {
                             <div className="heading-icon">
                                 <i className="bi bi-box-seam-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="what-is-containerd">
                                 What is the containerd Store?
                             </h2>
                         </div>
@@ -53,7 +53,7 @@ export default function ContainerdStorePage() {
                             <div className="heading-icon">
                                 <i className="bi bi-stars"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="why-containerd">
                                 Why use it?
                             </h2>
                         </div>
@@ -88,7 +88,7 @@ export default function ContainerdStorePage() {
                             <div className="heading-icon bg-warning text-dark">
                                 <i className="bi bi-sd-card-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="disk-tradeoff">
                                 The Disk Space Trade-off
                             </h2>
                         </div>
@@ -121,7 +121,7 @@ export default function ContainerdStorePage() {
                             <div className="heading-icon bg-primary text-white">
                                 <i className="bi bi-power"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="enable">
                                 How to Enable It
                             </h2>
                         </div>
@@ -150,7 +150,7 @@ export default function ContainerdStorePage() {
                             <div className="heading-icon">
                                 <i className="bi bi-shield-check"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="status">
                                 Check Your Status
                             </h2>
                         </div>
@@ -171,7 +171,7 @@ export default function ContainerdStorePage() {
                             <div className="heading-icon text-primary">
                                 <i className="bi bi-mortarboard-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="expert-qa-exam">
                                 Expert Q&A: DCA Exam Strategy
                             </h2>
                         </div>

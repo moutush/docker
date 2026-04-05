@@ -29,7 +29,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-memory"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="what-is-tmpfs">
                                 What is a tmpfs Mount?
                             </h2>
                         </div>
@@ -59,7 +59,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-lightning-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="why-tmpfs">
                                 Why Use tmpfs?
                             </h2>
                         </div>
@@ -90,7 +90,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-exclamation-triangle-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="limitations">
                                 Critical Limitations
                             </h2>
                         </div>
@@ -126,7 +126,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-terminal"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="syntax">
                                 CLI Mounting Syntax
                             </h2>
                         </div>
@@ -167,7 +167,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon text-info">
                                 <i className="bi bi-file-earmark-code-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="compose-tmpfs">
                                 tmpfs with Docker Compose
                             </h2>
                         </div>
@@ -203,7 +203,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-sliders"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="advanced-options">
                                 Advanced Options
                             </h2>
                         </div>
@@ -240,7 +240,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon">
                                 <i className="bi bi-search"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="verify">
                                 How to Verify
                             </h2>
                         </div>
@@ -261,7 +261,7 @@ export default function DockerTmpfsMountsPage() {
                             <div className="heading-icon text-warning">
                                 <i className="bi bi-patch-question-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="expert-qa-concurrency">
                                 Expert Q&A: tmpfs Concurrency
                             </h2>
                         </div>

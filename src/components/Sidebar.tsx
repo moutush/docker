@@ -157,6 +157,9 @@ const NAV_CONFIG: NavItem[] = [
     icon: "bi-box-seam-fill",
     children: [
       { label: "Overview", icon: "bi-info-circle-fill", href: "/containers/overview" },
+      { label: "Starting Automatically", icon: "bi-arrow-clockwise", href: "/containers/starting-automatically" },
+      { label: "Multiple Processes", icon: "bi-diagram-3", href: "/containers/multiple-processes" },
+      { label: "Resource Constraints", icon: "bi-speedometer2", href: "/containers/resource-constraints" },
     ],
   },
 ];

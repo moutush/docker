@@ -49,10 +49,10 @@ export default function StorageQuizPage() {
 
   const handleNext = () => {
     if (selectedOption === null) return;
-    
+
     setUserAnswers(prev => [...prev, selectedOption]);
     setSelectedOption(null);
-    
+
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(prev => prev + 1);
     } else {
@@ -106,8 +106,8 @@ export default function StorageQuizPage() {
               const correctOptionIndex = q.options.findIndex(opt => opt.answer);
 
               return (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   className={`quiz-card-enter doc-section-card shadow-lg mb-4 border ${isCorrect ? 'border-success' : 'border-danger'}`}
                   style={{ animationDelay: `${idx * 0.1}s` }}
                 >
@@ -115,7 +115,7 @@ export default function StorageQuizPage() {
                     <div className={`heading-icon ${isCorrect ? 'text-success' : 'text-danger'}`}>
                       <i className={`bi ${isCorrect ? 'bi-check-circle-fill' : 'bi-x-circle-fill'}`}></i>
                     </div>
-                    <h3 className="doc-card-heading fs-5 mb-0" style={{lineHeight: 1.4}}>
+                    <h3 className="doc-card-heading fs-5 mb-0" style={{ lineHeight: 1.4 }}>
                       <span className="text-secondary x-small fw-bold text-uppercase d-block mb-1">{q.node}</span>
                       {idx + 1}. {q.question}
                     </h3>
@@ -125,7 +125,7 @@ export default function StorageQuizPage() {
                       {q.options.map((opt, optIdx) => {
                         let bgColor = "bg-dark bg-opacity-25";
                         let borderColor = "border-secondary border-opacity-25";
-                        
+
                         if (opt.answer) {
                           bgColor = "bg-success bg-opacity-10";
                           borderColor = "border-success";
@@ -145,17 +145,46 @@ export default function StorageQuizPage() {
                         );
                       })}
                     </div>
-                    <div className="doc-alert doc-alert-info mt-3 p-3 rounded">
-                      <p className="mb-0 small"><i className="bi bi-info-circle-fill me-2"></i><strong>Explanation:</strong> {q.description}</p>
-                    </div>
+                    {(() => {
+                      const regex = /(.*)Check:\s*\[(.*?)\]\((.*?)\)/;
+                      const match = q.description.match(regex);
+                      const text = match ? match[1].trim() : q.description;
+                      const linkText = match ? match[2] : null;
+                      const linkUrl = match ? match[3] : null;
+
+                      return (
+                        <div className="doc-alert doc-alert-info mt-3 p-3 rounded d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                          <div className="flex-grow-1">
+                            <p className="mb-0 small pe-md-2" style={{ lineHeight: 1.6 }}>
+                              <i className="bi bi-info-circle-fill me-2 text-info opacity-75"></i>
+                              <strong className="text-info me-1">Explanation:</strong>
+                              {text}
+                            </p>
+                          </div>
+                          {linkUrl && (
+                            <a
+                              href={linkUrl}
+                              className="btn btn-sm btn-success text-white text-nowrap align-self-start align-self-md-center fw-bold px-3"
+                              style={{
+                                transition: 'all 0.2s',
+                                border: '1px solid rgba(255,255,255,0.1)'
+                              }}
+                            >
+                              <i className="bi bi-journal-bookmark-fill me-2"></i>
+                              {linkText}
+                            </a>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               );
             })}
           </div>
-          
+
           <div className="text-center mt-5">
-            <button 
+            <button
               className="btn btn-outline-primary px-4 py-2 fw-bold"
               onClick={() => window.location.reload()}
             >
@@ -198,12 +227,12 @@ export default function StorageQuizPage() {
             <span>{Math.round(progressPercent)}% Completed</span>
           </div>
           <div className="progress bg-dark bg-opacity-50" style={{ height: '8px' }}>
-            <div 
-              className="progress-bar bg-primary" 
-              role="progressbar" 
+            <div
+              className="progress-bar bg-primary"
+              role="progressbar"
               style={{ width: `${progressPercent}%`, transition: 'width 0.3s ease' }}
-              aria-valuenow={progressPercent} 
-              aria-valuemin={0} 
+              aria-valuenow={progressPercent}
+              aria-valuemin={0}
               aria-valuemax={100}
             ></div>
           </div>
@@ -216,7 +245,7 @@ export default function StorageQuizPage() {
                 <div className="text-primary x-small fw-bold text-uppercase mb-2 tracking-wider d-flex justify-content-between align-items-center">
                   <span>Topic: {currentQ.node}</span>
                   {(currentQ.level === 'scenario' || currentQ.level === 'interview') && (
-                    <span className={`badge ${currentQ.level === 'interview' ? 'bg-danger' : 'bg-warning text-dark'} px-2 py-1 rounded-pill`} style={{fontSize: '10px'}}>
+                    <span className={`badge ${currentQ.level === 'interview' ? 'bg-danger' : 'bg-warning text-dark'} px-2 py-1 rounded-pill`} style={{ fontSize: '10px' }}>
                       <i className="bi bi-lightning-charge-fill me-1"></i>
                       {currentQ.level === 'interview' ? 'Interview Prep' : 'Scenario Analysis'}
                     </span>
@@ -230,19 +259,19 @@ export default function StorageQuizPage() {
               <div className="p-4 p-md-5">
                 <div className="d-flex flex-column gap-3">
                   {currentQ.options.map((opt, idx) => (
-                    <label 
-                      key={idx} 
+                    <label
+                      key={idx}
                       className={`
                         p-4 rounded border cursor-pointer position-relative flex-grow-1
-                        ${selectedOption === idx 
-                          ? 'border-primary bg-primary bg-opacity-10' 
+                        ${selectedOption === idx
+                          ? 'border-primary bg-primary bg-opacity-10'
                           : 'border-secondary border-opacity-25 bg-dark bg-opacity-25 hover-bg-light-opacity'
                         }
                       `}
                       style={{ cursor: 'pointer', transition: 'all 0.2s' }}
                     >
                       <div className="d-flex align-items-center">
-                        <div 
+                        <div
                           className={`
                             rounded-circle border d-flex justify-content-center align-items-center me-3 flex-shrink-0
                             ${selectedOption === idx ? 'border-primary' : 'border-secondary'}
@@ -253,10 +282,10 @@ export default function StorageQuizPage() {
                         </div>
                         <span className="fs-6">{opt.text}</span>
                       </div>
-                      <input 
-                        type="radio" 
-                        name="quiz-option" 
-                        className="d-none" 
+                      <input
+                        type="radio"
+                        name="quiz-option"
+                        className="d-none"
                         checked={selectedOption === idx}
                         onChange={() => handleOptionSelect(idx)}
                       />
@@ -265,7 +294,7 @@ export default function StorageQuizPage() {
                 </div>
 
                 <div className="mt-5 text-end">
-                  <button 
+                  <button
                     className={`btn btn-primary px-5 py-2 fw-bold text-white ${selectedOption === null ? 'disabled opacity-50' : ''}`}
                     onClick={handleNext}
                     disabled={selectedOption === null}

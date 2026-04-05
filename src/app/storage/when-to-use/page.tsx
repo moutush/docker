@@ -29,7 +29,7 @@ export default function StorageDecisionGuidePage() {
                             <div className="heading-icon">
                                 <i className="bi bi-list-check"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="quick-verdict">
                                 The Quick Verdict
                             </h2>
                         </div>
@@ -72,7 +72,7 @@ export default function StorageDecisionGuidePage() {
                             <div className="heading-icon bg-warning text-dark">
                                 <i className="bi bi-link-45deg"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="dev-scenario">
                                 Scenario 1: The Active Developer
                             </h2>
                         </div>
@@ -103,7 +103,7 @@ export default function StorageDecisionGuidePage() {
                             <div className="heading-icon bg-primary text-white">
                                 <i className="bi bi-hdd-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="db-scenario">
                                 Scenario 2: The Production Database
                             </h2>
                         </div>
@@ -129,7 +129,7 @@ export default function StorageDecisionGuidePage() {
                             <div className="heading-icon bg-info text-dark">
                                 <i className="bi bi-lightning-charge-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="secret-scenario">
                                 Scenario 3: Secure API Keys
                             </h2>
                         </div>
@@ -154,7 +154,7 @@ export default function StorageDecisionGuidePage() {
                             <div className="heading-icon">
                                 <i className="bi bi-diagram-3-fill"></i>
                             </div>
-                            <h2 className="doc-card-heading">
+                            <h2 className="doc-card-heading" id="cheat-sheet">
                                 Decision Cheat Sheet
                             </h2>
                         </div>
