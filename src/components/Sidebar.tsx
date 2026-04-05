@@ -21,7 +21,7 @@ interface NavItem {
 }
 
 
-const NAV_CONFIG: NavItem[] = [
+export const NAV_CONFIG: NavItem[] = [
   {
     section: "GETTING STARTED",
     label: "Getting Started",
@@ -288,6 +288,15 @@ export default function Sidebar() {
               </React.Fragment>
             );
           })}
+
+          <div className="nav-section-label mt-4">SETTINGS</div>
+          <Link 
+            href="/sync" 
+            className={`nav-link-item ${pathname === '/sync' ? 'active' : ''}`}
+          >
+            <i className="bi bi-cloud-arrow-down-fill nav-link-icon" />
+            <span className="nav-link-text">Sync for Offline</span>
+          </Link>
         </nav>
 
         {/* <div className="sidebar-footer">

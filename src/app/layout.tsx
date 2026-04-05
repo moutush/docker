@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "@/styles/globals.css";
@@ -7,8 +7,25 @@ import BootstrapInit from "@/components/BootstrapInit";
 import SearchBar from "@/components/SearchBar";
 
 export const metadata: Metadata = {
-    title: "Admin Panel | Dark Theme",
-    description: "Professional dark-themed admin panel built with Next.js and Bootstrap 5",
+    title: "Docker Documentation | Offline Ready",
+    description: "Professional Docker documentation with full offline support and PWA capabilities.",
+    manifest: "/manifest.json",
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: "default",
+        title: "Docker Docs",
+    },
+    formatDetection: {
+        telephone: false,
+    },
+    icons: {
+        shortcut: "/favicon.png",
+        apple: "/icons/icon-192x192.png",
+    },
+};
+
+export const viewport: Viewport = {
+    themeColor: "#002451",
 };
 
 export default function RootLayout({
