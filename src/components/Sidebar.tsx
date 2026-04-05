@@ -160,6 +160,7 @@ export const NAV_CONFIG: NavItem[] = [
       { label: "Starting Automatically", icon: "bi-arrow-clockwise", href: "/containers/starting-automatically" },
       { label: "Multiple Processes", icon: "bi-diagram-3", href: "/containers/multiple-processes" },
       { label: "Resource Constraints", icon: "bi-speedometer2", href: "/containers/resource-constraints" },
+      { label: "Runtime Metrics", icon: "bi-bar-chart-fill", href: "/containers/runtime-metrics" },
     ],
   },
 ];
