@@ -23,6 +23,12 @@ interface NavItem {
 
 export const NAV_CONFIG: NavItem[] = [
   {
+    section: "PLANNING",
+    label: "Study Plan",
+    icon: "bi-calendar-event-fill",
+    href: "/planning",
+  },
+  {
     section: "GETTING STARTED",
     label: "Getting Started",
     icon: "bi-rocket-takeoff-fill",
@@ -161,6 +167,7 @@ export const NAV_CONFIG: NavItem[] = [
       { label: "Multiple Processes", icon: "bi-diagram-3", href: "/containers/multiple-processes" },
       { label: "Resource Constraints", icon: "bi-speedometer2", href: "/containers/resource-constraints" },
       { label: "Runtime Metrics", icon: "bi-bar-chart-fill", href: "/containers/runtime-metrics" },
+      { label: "Other Concepts", icon: "bi-grid-fill", href: "/containers/other-concepts" },
     ],
   },
 ];
