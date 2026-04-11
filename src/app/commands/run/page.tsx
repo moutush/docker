@@ -21,135 +21,148 @@ export default function DockerRunPage() {
 
         <div className="doc-content-grid">
 
-          {/* SECTION */}
+          {/* SECTION: Quick Look */}
           <div className="doc-section-card shadow-lg">
             <div className="doc-card-header-wrapper">
               <div className="heading-icon">
-                <i className={"bi " + "bi-lightning-charge-fill"}></i>
+                <i className="bi bi-lightning-charge-fill"></i>
               </div>
               <h2 className="doc-card-heading">Quick Look</h2>
             </div>
             <div className="doc-card-body">
-              <div dangerouslySetInnerHTML={{ __html: `<p>Syntax: <code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></p>` }} />
-
-              <div dangerouslySetInnerHTML={{ __html: `<p><code>docker run</code> is the most common Docker command. It does two things at once: it <strong>creates</strong> a brand new container from an image, then immediately <strong>starts</strong> it.</p>` }} />
-
+              <p className="text-secondary mb-3">Syntax: <code className="text-white">docker run [OPTIONS] IMAGE [COMMAND] [ARG...]</code></p>
+              <p className="text-secondary">
+                <code className="text-white">docker run</code> is the most common Docker command. It does two things at once: it <strong>creates</strong> a brand new container from an image, then immediately <strong>starts</strong> it.
+              </p>
             </div>
           </div>
 
-          {/* SECTION */}
+          {/* SECTION: Pro Tip - Order Matters */}
+          <div className="doc-section-card shadow-lg border-primary">
+            <div className="doc-card-header-wrapper">
+              <div className="heading-icon text-primary">
+                <i className="bi bi-exclamation-triangle-fill"></i>
+              </div>
+              <h2 className="doc-card-heading">Critical: Order Matters!</h2>
+            </div>
+            <div className="doc-card-body">
+              <p className="text-secondary">
+                One of the most common mistakes is putting Docker flags <em>after</em> the image name. 
+                All Docker options (<code className="text-white">--name</code>, <code className="text-white">-d</code>, <code className="text-white">-p</code>, etc.) <strong>must come before the image name</strong>.
+              </p>
+              <div className="mt-3">
+                <div className="p-3 rounded bg-dark border border-success mb-2">
+                  <code className="text-success">docker run --name my-web nginx</code>
+                  <small className="d-block text-secondary mt-1">Correct: Docker knows the name is for the container.</small>
+                </div>
+                <div className="p-3 rounded bg-dark border border-danger">
+                  <code className="text-danger">docker run nginx --name my-web</code>
+                  <small className="d-block text-secondary mt-1">Wrong: Docker thinks "--name" is a command to run inside nginx.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* SECTION: Simple Example */}
           <div className="doc-section-card shadow-lg">
             <div className="doc-card-header-wrapper">
               <div className="heading-icon">
-                <i className={"bi " + "bi-emoji-smile-fill"}></i>
+                <i className="bi bi-info-circle-fill"></i>
               </div>
-              <h2 className="doc-card-heading">Noob-Friendly Example</h2>
+              <h2 className="doc-card-heading">Analogy</h2>
             </div>
             <div className="doc-card-body">
-              <div dangerouslySetInnerHTML={{ __html: `<p>Think of a Docker image like a video game disc. <code>docker run</code> is you putting that disc into your console and pressing Play — the game (container) starts running instantly. If you press Play again, a second, completely separate game session starts. Each session is its own world.</p>` }} />
+              <p className="text-secondary">
+                Think of a Docker image like a video game disc. <code className="text-white">docker run</code> is you putting that disc into your console and pressing Play — the game (container) starts running instantly. Each session is its own isolated world.
+              </p>
 
               <pre className="doc-code-block mt-3 mb-3">
-                <code className="language-bash">{`# Run the official "hello-world" image — the simplest possible test
+                <code className="language-bash">{`# Run the official "hello-world" image
 docker run hello-world`}</code>
               </pre>
-
             </div>
           </div>
 
-          {/* SECTION */}
+          {/* SECTION: Tech-Friendly Example */}
           <div className="doc-section-card shadow-lg">
             <div className="doc-card-header-wrapper">
               <div className="heading-icon">
-                <i className={"bi " + "bi-code-slash"}></i>
+                <i className="bi bi-code-slash"></i>
               </div>
-              <h2 className="doc-card-heading">Tech-Friendly Example</h2>
+              <h2 className="doc-card-heading">Real-World Command</h2>
             </div>
             <div className="doc-card-body">
-              <div dangerouslySetInnerHTML={{ __html: `<p>A real-world scenario: run an Nginx web server in the background, map port 8080 on your machine to port 80 inside the container, and give it a name so you can reference it later.</p>` }} />
+              <p className="text-secondary">
+                Run an Nginx web server in the background, map port 8080 on your machine to port 80 inside the container, and give it a name.
+              </p>
 
               <pre className="doc-code-block mt-3 mb-3">
                 <code className="language-bash">{`docker run -d -p 8080:80 --name my-nginx nginx:alpine`}</code>
               </pre>
 
-              <div dangerouslySetInnerHTML={{ __html: `<p>After running this, opening <code>http://localhost:8080</code> in your browser will show the Nginx welcome page.</p>` }} />
-
+              <p className="text-secondary mt-3">
+                After running this, opening <code className="text-white">http://localhost:8080</code> in your browser will show the Nginx welcome page.
+              </p>
             </div>
           </div>
 
-          {/* SECTION */}
+          {/* SECTION: Flag Reference */}
           <div className="doc-section-card shadow-lg">
             <div className="doc-card-header-wrapper">
               <div className="heading-icon">
-                <i className={"bi " + "bi-table"}></i>
+                <i className="bi bi-table"></i>
               </div>
               <h2 className="doc-card-heading">Flag / Parameter Reference</h2>
             </div>
             <div className="doc-card-body">
-              
-              <div dangerouslySetInnerHTML={{ __html: `
-        <div className="doc-table-wrapper shadow-sm mt-4">
-            <table className="table table-dark table-hover doc-table mb-0">
-                <thead>
+              <div className="doc-table-wrapper shadow-sm mt-4">
+                <table className="table table-dark table-hover doc-table mb-0">
+                  <thead>
                     <tr>
-                        <th>Flag / Argument</th>
-                        <th>Type</th>
-                        <th>What it does</th>
+                      <th>Flag / Argument</th>
+                      <th>Type</th>
+                      <th>What it does</th>
                     </tr>
-                </thead>
-                <tbody>
-        <tr>
-            <td><code>-d / --detach</code></td>
-            <td><span className="badge bg-secondary">Flag</span></td>
-            <td>Run the container in the background (detached mode). You get your terminal prompt back immediately.</td>
-        </tr>
-        <tr>
-            <td><code>-p HOST:CONTAINER</code></td>
-            <td><span className="badge bg-secondary">Option</span></td>
-            <td>Publish a port. Maps a port on your machine (HOST) to a port inside the container (CONTAINER).</td>
-        </tr>
-        <tr>
-            <td><code>--name NAME</code></td>
-            <td><span className="badge bg-secondary">Option</span></td>
-            <td>Assign a human-readable name to the container instead of a random one.</td>
-        </tr>
-        <tr>
-            <td><code>-e KEY=VALUE</code></td>
-            <td><span className="badge bg-secondary">Option</span></td>
-            <td>Set an environment variable inside the container.</td>
-        </tr>
-        <tr>
-            <td><code>-v HOST_PATH:CONTAINER_PATH</code></td>
-            <td><span className="badge bg-secondary">Option</span></td>
-            <td>Mount a volume. Binds a folder on your machine into the container's filesystem.</td>
-        </tr>
-        <tr>
-            <td><code>--rm</code></td>
-            <td><span className="badge bg-secondary">Flag</span></td>
-            <td>Automatically remove the container when it exits. Keeps things clean.</td>
-        </tr>
-        <tr>
-            <td><code>-it</code></td>
-            <td><span className="badge bg-secondary">Flag</span></td>
-            <td>Attach an interactive terminal (-i keeps stdin open, -t allocates a pseudo-TTY). Used when you want a shell inside the container.</td>
-        </tr>
-        <tr>
-            <td><code>--network NETWORK</code></td>
-            <td><span className="badge bg-secondary">Option</span></td>
-            <td>Connect the container to a specific Docker network.</td>
-        </tr>
-        <tr>
-            <td><code>IMAGE</code></td>
-            <td><span className="badge bg-secondary">Argument</span></td>
-            <td>The name (and optional tag) of the image to run, e.g. nginx:alpine or ubuntu:22.04.</td>
-        </tr>
-        <tr>
-            <td><code>COMMAND</code></td>
-            <td><span className="badge bg-secondary">Argument</span></td>
-            <td>Override the default command the container runs on startup.</td>
-        </tr></tbody>
-            </table>
-        </div>` }} />
-
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code className="text-white">-d / --detach</code></td>
+                      <td><span className="badge bg-secondary">Flag</span></td>
+                      <td>Run in the background (detached mode). You get your terminal back immediately.</td>
+                    </tr>
+                    <tr>
+                      <td><code className="text-white">-p HOST:CONTAINER</code></td>
+                      <td><span className="badge bg-secondary">Option</span></td>
+                      <td>Publish a port. Maps a port on your machine to a port inside the container.</td>
+                    </tr>
+                    <tr>
+                      <td><code className="text-white">--name NAME</code></td>
+                      <td><span className="badge bg-secondary">Option</span></td>
+                      <td>Assign a human-readable name to the container instead of a random one.</td>
+                    </tr>
+                    <tr>
+                      <td><code className="text-white">-e KEY=VALUE</code></td>
+                      <td><span className="badge bg-secondary">Option</span></td>
+                      <td>Set an environment variable inside the container.</td>
+                    </tr>
+                    <tr>
+                      <td><code className="text-white">-v HOST:CONT</code></td>
+                      <td><span className="badge bg-secondary">Option</span></td>
+                      <td>Mount a volume. Binds a machine folder into the container filesystem.</td>
+                    </tr>
+                    <tr>
+                      <td><code className="text-white">--rm</code></td>
+                      <td><span className="badge bg-secondary">Flag</span></td>
+                      <td>Automatically remove the container when it exits. Keeps things clean.</td>
+                    </tr>
+                    <tr>
+                      <td><code className="text-white">-it</code></td>
+                      <td><span className="badge bg-secondary">Flag</span></td>
+                      <td>Interactive terminal. Used when you want a shell <em>inside</em> the container.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 

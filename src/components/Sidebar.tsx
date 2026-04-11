@@ -37,6 +37,8 @@ export const NAV_CONFIG: NavItem[] = [
       { label: "Virtual Machines", icon: "bi-laptop", href: "/getting-started/virtual-machines" },
       { label: "Docker Architecture", icon: "bi-cpu-fill", href: "/getting-started/docker-architecture" },
       { label: "Images and Containers", icon: "bi-box-seam-fill", href: "/getting-started/images-containers" },
+       { label: "Tags", icon: "bi-tags-fill", href: "/getting-started/tags" },
+      { label: "Ports and Networking", icon: "bi-diagram-3-fill", href: "/getting-started/ports" },
       { label: "Layers", icon: "bi-layers-fill", href: "/getting-started/layers" },
       { label: "Volumes and Bind Mounts", icon: "bi-hdd-fill", href: "/getting-started/volumes-bind-mounts" },
       { label: "Rules and Case Studies", icon: "bi-lightbulb-fill", href: "/getting-started/rules-and-case-studies" },
@@ -168,6 +170,13 @@ export const NAV_CONFIG: NavItem[] = [
       { label: "Resource Constraints", icon: "bi-speedometer2", href: "/containers/resource-constraints" },
       { label: "Runtime Metrics", icon: "bi-bar-chart-fill", href: "/containers/runtime-metrics" },
       { label: "Other Concepts", icon: "bi-grid-fill", href: "/containers/other-concepts" },
+    ],
+  },
+  {
+    label: "Notes",
+    icon: "bi-journal-text",
+    children: [
+      { label: "Tech with nana", icon: "bi-journal-check", href: "/notes/tech-with-nana" },
     ],
   },
 ];
