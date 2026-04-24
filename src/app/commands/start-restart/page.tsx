@@ -131,6 +131,33 @@ docker start -a my-app`}</code>
             </div>
           </div>
 
+        {/* SECTION */}
+          <div className="doc-section-card shadow-lg border-danger">
+            <div className="doc-card-header-wrapper">
+              <div className="heading-icon text-danger">
+                <i className={"bi " + "bi-shield-fill-x"}></i>
+              </div>
+              <h2 className="doc-card-heading text-danger">DCA Exam Fact: The Immutability Rule</h2>
+            </div>
+            <div className="doc-card-body">
+              <p className="fw-bold text-light">Can I add a <code>-p</code> or <code>-v</code> flag when starting a container?</p>
+              <p className="text-danger fw-bold">NO. Absolutely not.</p>
+              
+              <p>This is a major part of Docker's "Immutable Infrastructure" philosophy. Once a container is created, its configuration is <strong>frozen</strong>.</p>
+              
+              <div className="doc-alert px-3 py-2 mt-3 mb-3 x-small" style={{ background: 'rgba(220, 53, 69, 0.1)', borderLeft: '4px solid #dc3545' }}>
+                <div>
+                    <strong className="text-danger d-block mb-2">The Light Switch Metaphor:</strong> 
+                    <p className="mb-0 text-light">Think of <code>docker run</code> as building a house (deciding where the wires go). Think of <code>docker start</code> as flipping the light switch. You cannot change the electrical wiring of a house just by flipping the switch!</p>
+                </div>
+              </div>
+
+              <p className="small text-secondary mb-0">
+                To "change" a container's ports, you must stop it, remove it (<code>docker rm</code>), and run it again (<code>docker run</code>) with the new configuration.
+              </p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

@@ -259,12 +259,29 @@ export default function TechWithNanaPage() {
                 </p>
               </div>
 
-              <div className="qa-item mb-2">
+              <div className="qa-item mb-4">
                 <h5 className="text-primary font-monospace">20. Is the DNS name the same as the "Image:Tag" name?</h5>
                 <p className="text-secondary text-sm">
                   <strong>No.</strong> The &quot;Image:Tag&quot; (like <code>redis:5</code>) is just the blueprint. You talk to containers using the <strong>Container Name</strong> assigned via the <code className="text-white">--name</code> flag. <br/><br/>
                   Example: <code>docker run --name my-cache redis:5</code> <br/>
                   Your app should connect to <code>http://my-cache:6379</code>. Docker DNS does not recognize image names as network addresses.
+                </p>
+              </div>
+
+              <div className="qa-item mb-4">
+                <h5 className="text-primary font-monospace">21. Why did "docker pull redis7.4.8-alpine" fail?</h5>
+                <p className="text-secondary text-sm">
+                  Because you forgot the <strong>Colon (:)</strong>! <br/><br/>
+                  Docker expects the repository and tag to be separated by a colon. Without it, Docker thinks the whole string <code>&quot;redis7.4.8-alpine&quot;</code> is the repository name. <br/><br/>
+                  <strong>Correct:</strong> <code className="text-white">docker pull redis:7.4.8-alpine</code>
+                </p>
+              </div>
+
+              <div className="qa-item mb-2">
+                <h5 className="text-primary font-monospace">22. Can I use wildcards (like redis:7.*) in Docker commands?</h5>
+                <p className="text-secondary text-sm">
+                  <strong>No.</strong> Docker does NOT support wildcards (<code className="text-white">*</code>) for image tags. You must specify an exact version or use a <strong>Floating Tag</strong>. <br/><br/>
+                  <strong>Floating Tag Example:</strong> Use <code className="text-white">redis:7-alpine</code> to automatically get the latest patch of version 7. Unlike a wildcard, this is a predefined label maintained by the developers.
                 </p>
               </div>
             </div>

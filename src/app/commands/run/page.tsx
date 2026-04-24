@@ -63,6 +63,31 @@ export default function DockerRunPage() {
             </div>
           </div>
 
+          {/* SECTION: No Wildcards */}
+          <div className="doc-section-card shadow-lg border-warning">
+            <div className="doc-card-header-wrapper">
+              <div className="heading-icon text-warning">
+                <i className="bi bi-slash-circle-fill"></i>
+              </div>
+              <h2 className="doc-card-heading">No Wildcards Allowed</h2>
+            </div>
+            <div className="doc-card-body">
+              <p className="text-secondary mb-3">
+                Docker does <strong>NOT</strong> support wildcards (<code className="text-white">*</code>) in tags. You cannot use <code className="text-white">redis:7.*</code> to get the latest v7 image.
+              </p>
+              <div className="p-3 bg-dark rounded border border-warning border-opacity-25">
+                <p className="text-warning text-xs uppercase fw-bold mb-2">The Solution: Floating Tags</p>
+                <p className="text-secondary text-sm">
+                  Instead of a wildcard, use a <strong>Floating Tag</strong>. Most images provide tags that represent major versions:
+                </p>
+                <ul className="text-secondary text-xs mt-2">
+                  <li className="mb-1"><code className="text-white">redis:7-alpine</code> : Automatically points to the newest 7.x Alpine build.</li>
+                  <li className="mb-0"><code className="text-white">redis:latest</code> : Points to the newest image version available.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* SECTION: Simple Example */}
           <div className="doc-section-card shadow-lg">
             <div className="doc-card-header-wrapper">

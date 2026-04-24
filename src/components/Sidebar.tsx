@@ -173,6 +173,25 @@ export const NAV_CONFIG: NavItem[] = [
     ],
   },
   {
+    label: "Networking",
+    icon: "bi-diagram-3-fill",
+    children: [
+      { label: "Overview", icon: "bi-info-circle-fill", href: "/networking/overview" },
+      { label: "Network Types", icon: "bi-diagram-2", href: "/networking/types" },
+      { label: "Port Publishing", icon: "bi-door-open-fill", href: "/networking/publishing" },
+      { label: "Legacy Links", icon: "bi-link-45deg", href: "/networking/legacy-links" },
+      { label: "Debugging", icon: "bi-bug-fill", href: "/networking/debugging" },
+      {
+        label: "Labs",
+        icon: "bi-flask",
+        children: [
+          { label: "Default Bridge Network", icon: "bi-hdd-network-fill", href: "/networking/labs/default-docker-bridge" },
+          { label: "User-Defined Bridge Network", icon: "bi-shield-check", href: "/networking/labs/user-defined-bridge" },
+        ]
+      },
+    ],
+  },
+  {
     label: "Notes",
     icon: "bi-journal-text",
     children: [
