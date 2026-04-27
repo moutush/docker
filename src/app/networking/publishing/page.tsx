@@ -114,6 +114,24 @@ export default function PortPublishingPage() {
                         </div>
                     </div>
 
+                    {/* 3. THE 80 VS 8080 DEBATE */}
+                    <div className="doc-alert doc-alert-info mt-4 p-3">
+                        <i className="bi bi-question-circle-fill"></i>
+                        <div>
+                            <strong className="d-block mb-1">Why use 8080 on the host instead of 80?</strong>
+                            <p className="mb-2 x-small text-secondary">
+                                You might wonder why every tutorial uses <code>-p 8080:80</code> instead of just <code>-p 80:80</code>. There are two main reasons:
+                            </p>
+                            <ul className="x-small text-secondary mb-0">
+                                <li className="mb-1"><strong>Privileged Ports:</strong> On Linux and macOS, ports below 1024 (like 80) are "privileged." You usually need <code>sudo</code> or root permissions to bind to them.</li>
+                                <li><strong>Conflicts:</strong> Port 80 is the default for almost everything. If you have a local web server (Apache, Nginx) or even some development tools running, port 80 is likely already "taken."</li>
+                            </ul>
+                            <p className="mt-2 mb-0 x-small fw-bold">
+                                Using 8080 (or any port &gt; 1024) is the "Safe Bet" for local development.
+                            </p>
+                        </div>
+                    </div>
+
                     {/* 3. THE SECURITY TRAP (DCA ESSENTIAL) */}
                     <div className="doc-section-card shadow-lg border-danger mt-4">
                         <div className="doc-card-header-wrapper">

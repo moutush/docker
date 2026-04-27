@@ -682,11 +682,17 @@ body {
 /* Alert styles directly targeting custom classes if stored in DB */
 .doc-alert {
   display: flex;
+  align-items: flex-start;
   gap: 1.2rem;
   padding: 1.5rem;
   border-radius: 16px;
   margin-bottom: 2rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  word-break: break-word;
+}
+
+.doc-alert > * {
+  min-width: 0;
 }
 
 .doc-alert-info {

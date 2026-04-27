@@ -229,7 +229,8 @@ export default function BridgeNetworkPage() {
 
                             <h5 className="fw-bold fs-6 text-light mt-4">The Solution: Port Publishing</h5>
                             <p className="small text-secondary">
-                                To make this server visible to the world, we must tell Docker to open a "Hallway" from our Host's port (8080) to the Container's port (80).
+                                To make this server visible to the world, we must tell Docker to open a "Hallway" from our Host's port (8080) to the Container's port (80). 
+                                <em> (We use 8080 on the host to avoid "Permission Denied" errors on privileged port 80).</em>
                             </p>
 
                             <pre className="doc-code-block mb-0 border-success text-success bg-dark x-small">

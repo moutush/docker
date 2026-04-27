@@ -113,8 +113,11 @@ docker network create my-net`}</pre>
   --name webapp \\
   --network host \\
   nginx`}</pre>
-                                        <div className="doc-alert doc-alert-warning mt-2 mb-0 py-1 px-2 x-small">
-                                            Notice you don't map ports (<code>-p 8080:80</code> is ignored because it claims port 80 natively).
+                                        <div className="doc-alert doc-alert-warning mt-2 mb-0 p-3">
+                                            <i className="bi bi-exclamation-triangle-fill"></i>
+                                            <div>
+                                                Notice you don't map ports (<code>-p 8080:80</code> is ignored because it claims port 80 natively).
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -245,6 +248,24 @@ docker network create my-net`}</pre>
                                         <p className="small text-secondary mt-2 fw-bold text-light">
                                             Result: The Nginx server cannot talk to the Mongo database! Only the Node app bridging both networks can talk to both.
                                         </p>
+
+                                        <div className="mt-4">
+                                            <p className="x-small mb-1 text-info fw-bold">How to build this:</p>
+                                            <pre className="doc-code-block x-small mb-0">
+{`# 1. Create the networks
+docker network create frontend-net
+docker network create backend-net
+
+# 2. Launch Node app on frontend
+docker run -d --name node-app --network frontend-net node-img
+
+# 3. Connect Node app to backend (The Bridge!)
+docker network connect backend-net node-app
+
+# 4. Launch Mongo on backend only
+docker run -d --name mongo --network backend-net mongo`}
+                                            </pre>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
@@ -260,9 +281,11 @@ docker network create my-net`}</pre>
                                         <p className="x-small mb-1 text-secondary">Disconnect Node app from frontend:</p>
                                         <pre className="doc-code-block x-small mb-0">{`docker network disconnect frontend-net node-app`}</pre>
                                         
-                                        <div className="doc-alert doc-alert-info mt-3 py-2 px-3 x-small">
-                                            <i className="bi bi-info-circle-fill me-2"></i>
-                                            When a container connects to multiple networks, it simply gets multiple virtual network interfaces (like plugging multiple ethernet cables into one computer).
+                                        <div className="doc-alert doc-alert-info mt-3 p-3">
+                                            <i className="bi bi-info-circle-fill"></i>
+                                            <div>
+                                                When a container connects to multiple networks, it simply gets multiple virtual network interfaces (like plugging multiple ethernet cables into one computer).
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
