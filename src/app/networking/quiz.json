@@ -1,0 +1,671 @@
+[
+  {
+    "node": "Bridge & Default Networking",
+    "questions": [
+      {
+        "level": "foundation",
+        "question": "What is the default network driver used when you run a standalone container without specifying a network?",
+        "type": "radio",
+        "options": [
+          { "text": "host", "answer": false },
+          { "text": "bridge", "answer": true },
+          { "text": "overlay", "answer": false },
+          { "text": "macvlan", "answer": false }
+        ],
+        "description": "Docker automatically connects containers to the default bridge network if no other network is specified.",
+        "link": "/networking/labs/default-docker-bridge"
+      },
+      {
+        "level": "scenario",
+        "question": "You have two containers on the default 'bridge' network. You try to ping one container from the other using its container name, but it fails. Why?",
+        "type": "radio",
+        "options": [
+          { "text": "The default bridge network does not support automatic DNS resolution.", "answer": true },
+          { "text": "Ping is not installed in the containers.", "answer": false },
+          { "text": "Containers on the default bridge cannot communicate with each other.", "answer": false },
+          { "text": "You need to expose port 53 for DNS.", "answer": false }
+        ],
+        "description": "The default bridge network requires legacy '--link' flags for name resolution, or you must use IP addresses. User-defined bridges provide automatic DNS resolution.",
+        "link": "/networking/labs/default-docker-bridge"
+      },
+      {
+        "level": "interview",
+        "question": "How do you create a user-defined bridge network in Docker?",
+        "type": "radio",
+        "options": [
+          { "text": "docker create bridge my-net", "answer": false },
+          { "text": "docker network create -d bridge my-net", "answer": true },
+          { "text": "docker network init my-net", "answer": false },
+          { "text": "docker run --network my-net nginx", "answer": false }
+        ],
+        "description": "The 'docker network create' command with the '-d' (driver) flag set to 'bridge' creates a user-defined bridge network.",
+        "link": "/networking/labs/user-defined-bridge"
+      },
+      {
+        "level": "foundation",
+        "question": "Which of the following is an advantage of user-defined bridge networks over the default bridge?",
+        "type": "radio",
+        "options": [
+          { "text": "They provide better isolation and automatic DNS resolution.", "answer": true },
+          { "text": "They bypass NAT for better performance.", "answer": false },
+          { "text": "They span across multiple Docker hosts.", "answer": false },
+          { "text": "They allow containers to have public IP addresses.", "answer": false }
+        ],
+        "description": "User-defined bridges isolate container traffic to only those attached to it and provide built-in DNS for container name resolution.",
+        "link": "/networking/labs/user-defined-bridge"
+      },
+      {
+        "level": "scenario",
+        "question": "A container is running on the default bridge. You want to connect it to a user-defined bridge named 'app-net' without stopping the container. Which command do you use?",
+        "type": "radio",
+        "options": [
+          { "text": "docker attach container-name app-net", "answer": false },
+          { "text": "docker network connect app-net container-name", "answer": true },
+          { "text": "docker link container-name app-net", "answer": false },
+          { "text": "You must stop and recreate the container.", "answer": false }
+        ],
+        "description": "The 'docker network connect' command allows you to attach a running container to an existing network dynamically.",
+        "link": "/networking/labs/user-defined-bridge"
+      },
+      {
+        "level": "foundation",
+        "question": "What happens if a container on a user-defined bridge is removed and re-created?",
+        "type": "radio",
+        "options": [
+          { "text": "Its IP address is guaranteed to stay the same.", "answer": false },
+          { "text": "Other containers can still reach it via its container name.", "answer": true },
+          { "text": "The bridge network is deleted.", "answer": false },
+          { "text": "It falls back to the default bridge network.", "answer": false }
+        ],
+        "description": "User-defined bridges use DNS based on container names. Even if the IP changes, the DNS resolver routes traffic to the new IP seamlessly.",
+        "link": "/networking/labs/user-defined-bridge"
+      },
+      {
+        "level": "scenario",
+        "question": "You inspect a container and see it is attached to the 'bridge' network. What is the typical IP subnet assigned to this network by default?",
+        "type": "radio",
+        "options": [
+          { "text": "10.0.0.0/8", "answer": false },
+          { "text": "192.168.1.0/24", "answer": false },
+          { "text": "172.17.0.0/16", "answer": true },
+          { "text": "127.0.0.0/8", "answer": false }
+        ],
+        "description": "Docker typically assigns the 172.17.0.0/16 subnet to the default 'docker0' bridge.",
+        "link": "/networking/labs/default-docker-bridge"
+      },
+      {
+        "level": "interview",
+        "question": "How do you disconnect a running container from a network?",
+        "type": "radio",
+        "options": [
+          { "text": "docker network remove container-name network-name", "answer": false },
+          { "text": "docker network disconnect network-name container-name", "answer": true },
+          { "text": "docker container detach network-name", "answer": false },
+          { "text": "docker network unbind container-name", "answer": false }
+        ],
+        "description": "The 'docker network disconnect' command removes a container from a network.",
+        "link": "/networking/labs/user-defined-bridge"
+      },
+      {
+        "level": "foundation",
+        "question": "Can a single container be attached to multiple user-defined bridge networks simultaneously?",
+        "type": "radio",
+        "options": [
+          { "text": "Yes", "answer": true },
+          { "text": "No", "answer": false }
+        ],
+        "description": "Yes, containers can connect to multiple networks, allowing them to act as a bridge between isolated systems (e.g., a web server connected to a frontend net and a backend net).",
+        "link": "/networking/labs/user-defined-bridge"
+      },
+      {
+        "level": "scenario",
+        "question": "You attempt to remove a user-defined bridge network using 'docker network rm', but it fails with an error. What is the most likely cause?",
+        "type": "radio",
+        "options": [
+          { "text": "The network is the default bridge.", "answer": false },
+          { "text": "You do not have root privileges.", "answer": false },
+          { "text": "There are active containers still attached to the network.", "answer": true },
+          { "text": "The network was created with the --attachable flag.", "answer": false }
+        ],
+        "description": "Docker prevents the deletion of a network if there are still containers actively connected to it.",
+        "link": "/networking/labs/user-defined-bridge"
+      }
+    ]
+  },
+  {
+    "node": "Host Networking",
+    "questions": [
+      {
+        "level": "foundation",
+        "question": "What is the primary benefit of using the 'host' network driver?",
+        "type": "radio",
+        "options": [
+          { "text": "It provides maximum network isolation.", "answer": false },
+          { "text": "It allows containers to span multiple physical hosts.", "answer": false },
+          { "text": "It bypasses Docker's NAT and proxy, providing bare-metal network performance.", "answer": true },
+          { "text": "It automatically load balances traffic.", "answer": false }
+        ],
+        "description": "The host driver removes network isolation, allowing the container to use the host's networking stack directly without NAT overhead.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You run a container with '--network host'. You also pass the flag '-p 8080:80'. What will happen?",
+        "type": "radio",
+        "options": [
+          { "text": "The container listens on port 8080 of the host.", "answer": false },
+          { "text": "The '-p' flag is completely ignored.", "answer": true },
+          { "text": "Docker throws an error and fails to start.", "answer": false },
+          { "text": "The container listens on port 80 inside, and 8080 outside.", "answer": false }
+        ],
+        "description": "When using the host network, port publishing is meaningless because the container does not have its own IP or network namespace.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "interview",
+        "question": "You deploy an Nginx container using '--network host' on your Docker Desktop for Mac installation. However, you cannot reach it at localhost:80. Why?",
+        "type": "radio",
+        "options": [
+          { "text": "Nginx requires port 8080.", "answer": false },
+          { "text": "The host network driver only functions on Linux hosts.", "answer": true },
+          { "text": "You must use sudo.", "answer": false },
+          { "text": "Mac addresses block host networking.", "answer": false }
+        ],
+        "description": "The host network driver relies on Linux kernel namespaces and does not work on Docker Desktop for Mac or Windows.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You attempt to run three identical Apache web server containers on the same machine using '--network host'. What is the expected outcome?",
+        "type": "radio",
+        "options": [
+          { "text": "All three start and Docker load balances them.", "answer": false },
+          { "text": "The first starts, the other two fail instantly due to a port collision.", "answer": true },
+          { "text": "Docker automatically assigns them sequential ports (80, 81, 82).", "answer": false },
+          { "text": "They all start but share the same port via round-robin.", "answer": false }
+        ],
+        "description": "Because they share the host's network, they will all try to bind to port 80 on the host OS. The second and third containers will fail because the port is already in use.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "foundation",
+        "question": "Which of the following is compromised when using the host network driver?",
+        "type": "radio",
+        "options": [
+          { "text": "CPU performance", "answer": false },
+          { "text": "Disk I/O speed", "answer": false },
+          { "text": "Network security isolation", "answer": true },
+          { "text": "Container portability", "answer": false }
+        ],
+        "description": "By using the host network, the container can see all host network interfaces and intercept traffic meant for the host, breaking isolation.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "interview",
+        "question": "Which tool is commonly used to demonstrate the performance latency differences between bridge and host networks?",
+        "type": "radio",
+        "options": [
+          { "text": "ping", "answer": false },
+          { "text": "wrk", "answer": true },
+          { "text": "netstat", "answer": false },
+          { "text": "traceroute", "answer": false }
+        ],
+        "description": "wrk is a modern HTTP benchmarking tool capable of exposing the microsecond latency overhead introduced by Docker's NAT proxy.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "scenario",
+        "question": "If a container is using host networking, what IP address does it use to communicate with external services?",
+        "type": "radio",
+        "options": [
+          { "text": "172.17.0.2", "answer": false },
+          { "text": "10.0.0.2", "answer": false },
+          { "text": "The exact IP address of the Docker host machine.", "answer": true },
+          { "text": "A randomly generated IP.", "answer": false }
+        ],
+        "description": "Because it shares the host's networking stack, its traffic originates directly from the host's IP address.",
+        "link": "/networking/labs/host-network"
+      },
+      {
+        "level": "foundation",
+        "question": "Can you attach a container to both the 'host' network and a 'bridge' network simultaneously?",
+        "type": "radio",
+        "options": [
+          { "text": "Yes", "answer": false },
+          { "text": "No", "answer": true }
+        ],
+        "description": "No. The host network driver disables network isolation entirely. It cannot be combined with virtualized networks like bridge or overlay on the same container.",
+        "link": "/networking/labs/host-network"
+      }
+    ]
+  },
+  {
+    "node": "Macvlan Networking",
+    "questions": [
+      {
+        "level": "foundation",
+        "question": "What is the defining characteristic of a Macvlan network?",
+        "type": "radio",
+        "options": [
+          { "text": "It encrypts traffic between hosts.", "answer": false },
+          { "text": "It assigns a unique physical MAC address to the container.", "answer": true },
+          { "text": "It uses NAT to hide the container.", "answer": false },
+          { "text": "It requires Docker Swarm.", "answer": false }
+        ],
+        "description": "Macvlan bypasses the bridge entirely and gives the container a physical presence on the network with its own MAC address.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You create a Macvlan network. You try to ping the container from the Docker host itself, but it fails. Why?",
+        "type": "radio",
+        "options": [
+          { "text": "You forgot to publish the port.", "answer": false },
+          { "text": "Host-to-container communication over Macvlan is blocked by the Linux kernel.", "answer": true },
+          { "text": "Macvlan requires Swarm.", "answer": false },
+          { "text": "The container has no IP address.", "answer": false }
+        ],
+        "description": "For security reasons to prevent routing loops, the Linux kernel prevents the host from communicating directly with its own macvlan virtual sub-interfaces.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "interview",
+        "question": "Which flag is strictly required when creating a Macvlan network to specify the physical network card?",
+        "type": "radio",
+        "options": [
+          { "text": "--interface", "answer": false },
+          { "text": "--card", "answer": false },
+          { "text": "-o parent", "answer": true },
+          { "text": "--parent", "answer": false }
+        ],
+        "description": "The '-o parent=eth0' flag tells Docker which physical network interface to bind the macvlan to.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You are taking the DCA exam. A scenario asks how to connect a container to an enterprise 802.1Q VLAN with ID 50. How do you configure the parent interface?",
+        "type": "radio",
+        "options": [
+          { "text": "-o vlan=50", "answer": false },
+          { "text": "--vlan 50", "answer": false },
+          { "text": "-o parent=eth0.50", "answer": true },
+          { "text": "-d macvlan-50", "answer": false }
+        ],
+        "description": "By appending the VLAN ID to the parent interface using a dot (eth0.50), the Linux kernel automatically tags packets with that VLAN ID.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "foundation",
+        "question": "If Macvlan is used, what state must the physical network switch or hypervisor be in to allow traffic to flow?",
+        "type": "radio",
+        "options": [
+          { "text": "Isolated mode", "answer": false },
+          { "text": "Promiscuous mode", "answer": true },
+          { "text": "NAT mode", "answer": false },
+          { "text": "Bridge mode", "answer": false }
+        ],
+        "description": "Because a single physical port will be receiving traffic for multiple MAC addresses, the NIC/Switch must be in promiscuous mode.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "interview",
+        "question": "Why does Macvlan frequently fail when deployed over an 802.11 Wi-Fi network?",
+        "type": "radio",
+        "options": [
+          { "text": "Wi-Fi is too slow for Docker.", "answer": false },
+          { "text": "Docker cannot read Wi-Fi passwords.", "answer": false },
+          { "text": "Wi-Fi Access Points reject frames from MAC addresses that did not authenticate.", "answer": true },
+          { "text": "Wi-Fi does not support subnets.", "answer": false }
+        ],
+        "description": "Macvlan generates new MAC addresses. The 802.11 protocol drops frames from MAC addresses that haven't performed a Wi-Fi handshake.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "scenario",
+        "question": "If Macvlan fails over Wi-Fi, which alternative driver can you use to achieve similar physical network presence while sharing the host's MAC address?",
+        "type": "radio",
+        "options": [
+          { "text": "bridge", "answer": false },
+          { "text": "overlay", "answer": false },
+          { "text": "ipvlan", "answer": true },
+          { "text": "host", "answer": false }
+        ],
+        "description": "ipvlan shares the host's MAC address but gives containers unique IP addresses, bypassing the Wi-Fi security rejection.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "foundation",
+        "question": "When creating a macvlan network, which of the following details must you manually provide that bridge networks guess automatically?",
+        "type": "radio",
+        "options": [
+          { "text": "DNS servers", "answer": false },
+          { "text": "Subnet and Gateway", "answer": true },
+          { "text": "Container names", "answer": false },
+          { "text": "VLAN IDs", "answer": false }
+        ],
+        "description": "Docker cannot guess your physical network topology. You must explicitly provide the --subnet and --gateway flags.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You run a container on a macvlan network and assign it --ip 192.168.1.150. A physical laptop on the same office LAN pings 192.168.1.150. What happens?",
+        "type": "radio",
+        "options": [
+          { "text": "The ping fails because it's a container.", "answer": false },
+          { "text": "The ping succeeds; the laptop reaches the container directly.", "answer": true },
+          { "text": "The ping reaches the Docker host instead.", "answer": false },
+          { "text": "The traffic is blocked by Docker's NAT.", "answer": false }
+        ],
+        "description": "Macvlan makes the container a full citizen of the physical network. Physical devices can communicate with it as if it were a physical server.",
+        "link": "/networking/labs/macvlan-network"
+      },
+      {
+        "level": "interview",
+        "question": "What is the primary use case for Macvlan?",
+        "type": "radio",
+        "options": [
+          { "text": "To connect containers across multiple cloud providers.", "answer": false },
+          { "text": "To satisfy legacy applications or IT security requirements demanding unique physical IPs and MACs.", "answer": true },
+          { "text": "To improve CPU performance of load balancers.", "answer": false },
+          { "text": "To isolate containers from the internet.", "answer": false }
+        ],
+        "description": "Macvlan is almost exclusively used for legacy lift-and-shift operations where corporate networks require auditing via MAC/IP addresses.",
+        "link": "/networking/labs/macvlan-network"
+      }
+    ]
+  },
+  {
+    "node": "Overlay Networking & Swarm",
+    "questions": [
+      {
+        "level": "foundation",
+        "question": "What is the primary purpose of an Overlay network?",
+        "type": "radio",
+        "options": [
+          { "text": "To bypass NAT for better performance.", "answer": false },
+          { "text": "To assign physical MAC addresses.", "answer": false },
+          { "text": "To allow containers on different physical hosts to communicate securely.", "answer": true },
+          { "text": "To connect legacy apps to VLANs.", "answer": false }
+        ],
+        "description": "Overlay networks create a distributed network among multiple Docker daemon hosts.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "foundation",
+        "question": "Before you can create an overlay network, what must you do?",
+        "type": "radio",
+        "options": [
+          { "text": "Install the overlay plugin.", "answer": false },
+          { "text": "Initialize Docker Swarm.", "answer": true },
+          { "text": "Disable the host firewall.", "answer": false },
+          { "text": "Create a macvlan.", "answer": false }
+        ],
+        "description": "Overlay networks require a cluster manager, meaning you must run 'docker swarm init' or join a swarm first.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "interview",
+        "question": "Which port is used by Docker Overlay networks for the actual encrypted VXLAN data tunnel traffic?",
+        "type": "radio",
+        "options": [
+          { "text": "TCP 2377", "answer": false },
+          { "text": "TCP 7946", "answer": false },
+          { "text": "UDP 4789", "answer": true },
+          { "text": "UDP 53", "answer": false }
+        ],
+        "description": "UDP port 4789 is strictly used for the overlay network data plane (VXLAN).",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "interview",
+        "question": "Which port is required for Docker Swarm cluster management communications?",
+        "type": "radio",
+        "options": [
+          { "text": "TCP 2377", "answer": true },
+          { "text": "UDP 7946", "answer": false },
+          { "text": "UDP 4789", "answer": false },
+          { "text": "TCP 8080", "answer": false }
+        ],
+        "description": "TCP port 2377 is used for cluster management communications between Manager nodes.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You create an overlay network using 'docker network create -d overlay my-net'. You try to run a standalone container with 'docker run --network my-net nginx', but it fails. Why?",
+        "type": "radio",
+        "options": [
+          { "text": "Overlay networks don't support nginx.", "answer": false },
+          { "text": "You must use 'docker service create' unless the network was created with the --attachable flag.", "answer": true },
+          { "text": "You are not on a manager node.", "answer": false },
+          { "text": "The ports are blocked.", "answer": false }
+        ],
+        "description": "By default, overlay networks only support Swarm Services. To use standalone containers via 'docker run', you MUST create it with the --attachable flag.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "scenario",
+        "question": "Two nodes are in a Swarm. You can deploy services, but containers on Node A cannot ping containers on Node B. What is the most likely cause?",
+        "type": "radio",
+        "options": [
+          { "text": "Node B is down.", "answer": false },
+          { "text": "TCP 2377 is blocked.", "answer": false },
+          { "text": "UDP 4789 is blocked by a firewall.", "answer": true },
+          { "text": "Overlay networks do not support ping.", "answer": false }
+        ],
+        "description": "If swarm management works but data traffic fails, the VXLAN data port (UDP 4789) is usually blocked by a firewall.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "foundation",
+        "question": "How does Docker secure traffic passing through an overlay network across the public internet?",
+        "type": "radio",
+        "options": [
+          { "text": "By using HTTPS proxies.", "answer": false },
+          { "text": "By encrypting the VXLAN tunnel using IPSec.", "answer": true },
+          { "text": "By using TLS certificates manually installed.", "answer": false },
+          { "text": "It is not secure by default.", "answer": false }
+        ],
+        "description": "Docker automatically uses IPSec encryption for overlay network data plane traffic if configured, or automatically secures control plane traffic.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "scenario",
+        "question": "You want to inspect the details of an overlay network on a Swarm Worker node, but 'docker network inspect' shows empty container lists. Why?",
+        "type": "radio",
+        "options": [
+          { "text": "Worker nodes do not have access to overlay networks.", "answer": false },
+          { "text": "The network is broken.", "answer": false },
+          { "text": "Overlay networks are only extended to nodes that have containers running on them.", "answer": true },
+          { "text": "You must be root.", "answer": false }
+        ],
+        "description": "Docker Swarm uses a 'gossip' protocol and only extends overlay networks to worker nodes if a container assigned to that network is scheduled on that node.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "interview",
+        "question": "Which two default networks are created automatically when you initialize a Docker Swarm?",
+        "type": "radio",
+        "options": [
+          { "text": "ingress and docker_gwbridge", "answer": true },
+          { "text": "bridge and host", "answer": false },
+          { "text": "overlay and macvlan", "answer": false },
+          { "text": "swarm_net and mesh_net", "answer": false }
+        ],
+        "description": "Swarm creates 'ingress' (an overlay for routing mesh) and 'docker_gwbridge' (a bridge connecting individual containers to the host's physical network).",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "foundation",
+        "question": "What is the purpose of the Swarm routing mesh?",
+        "type": "radio",
+        "options": [
+          { "text": "To connect swarm nodes to the internet.", "answer": false },
+          { "text": "To route incoming requests to any node in the swarm to an active container, regardless of which node it's on.", "answer": true },
+          { "text": "To bypass the overlay network.", "answer": false },
+          { "text": "To manage TLS certificates.", "answer": false }
+        ],
+        "description": "The routing mesh allows you to publish a port on the swarm. If you hit that port on Node A, but the container is on Node B, Swarm routes it automatically.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "interview",
+        "question": "Which port is used for container network discovery across Swarm nodes?",
+        "type": "radio",
+        "options": [
+          { "text": "TCP 2377", "answer": false },
+          { "text": "UDP 4789", "answer": false },
+          { "text": "TCP and UDP 7946", "answer": true },
+          { "text": "TCP 80", "answer": false }
+        ],
+        "description": "Port 7946 (TCP/UDP) is used for communication among nodes for container network discovery.",
+        "link": "/networking/labs/overlay-network"
+      },
+      {
+        "level": "scenario",
+        "question": "A developer asks you to deploy a standalone database container using 'docker run' and connect it to a Swarm overlay network so services can use it. What command creates the network?",
+        "type": "radio",
+        "options": [
+          { "text": "docker network create -d overlay --attachable db-net", "answer": true },
+          { "text": "docker network create -d overlay db-net", "answer": false },
+          { "text": "docker network create -d swarm db-net", "answer": false },
+          { "text": "docker swarm network init db-net", "answer": false }
+        ],
+        "description": "You MUST use the --attachable flag to allow 'docker run' containers to attach to an overlay network.",
+        "link": "/networking/labs/overlay-network"
+      }
+    ]
+  },
+  {
+    "node": "Publishing, Legacy Links & DNS",
+    "questions": [
+      {
+        "level": "foundation",
+        "question": "What does the command 'docker run -p 8080:80 nginx' do?",
+        "type": "radio",
+        "options": [
+          { "text": "Maps port 8080 inside the container to port 80 on the host.", "answer": false },
+          { "text": "Maps port 8080 on the host to port 80 inside the container.", "answer": true },
+          { "text": "Exposes port 80 to other containers.", "answer": false },
+          { "text": "Changes the nginx default port to 8080.", "answer": false }
+        ],
+        "description": "The syntax is always -p HOST_PORT:CONTAINER_PORT.",
+        "link": "/networking/publishing"
+      },
+      {
+        "level": "scenario",
+        "question": "You run a container with '-P' (capital P). What does Docker do?",
+        "type": "radio",
+        "options": [
+          { "text": "It maps all exposed container ports to random ports on the host.", "answer": true },
+          { "text": "It prevents the container from being published.", "answer": false },
+          { "text": "It publishes ports using UDP instead of TCP.", "answer": false },
+          { "text": "It publishes ports across the Swarm routing mesh.", "answer": false }
+        ],
+        "description": "Capital -P publishes all ports defined in the Dockerfile's EXPOSE instruction to random high-numbered ephemeral ports on the host.",
+        "link": "/networking/publishing"
+      },
+      {
+        "level": "interview",
+        "question": "By default, '-p 8080:80' binds to which host IP address?",
+        "type": "radio",
+        "options": [
+          { "text": "127.0.0.1", "answer": false },
+          { "text": "0.0.0.0 (All interfaces)", "answer": true },
+          { "text": "The docker0 bridge IP", "answer": false },
+          { "text": "The host's eth0 IP only", "answer": false }
+        ],
+        "description": "By default, Docker binds published ports to 0.0.0.0, meaning it is accessible from any IP address attached to the host.",
+        "link": "/networking/publishing"
+      },
+      {
+        "level": "scenario",
+        "question": "How do you securely publish a database port so it is ONLY accessible from localhost on the host machine?",
+        "type": "radio",
+        "options": [
+          { "text": "-p 3306:3306", "answer": false },
+          { "text": "-p localhost:3306", "answer": false },
+          { "text": "-p 127.0.0.1:3306:3306", "answer": true },
+          { "text": "--expose 3306", "answer": false }
+        ],
+        "description": "By specifying the host IP (127.0.0.1), Docker restricts the port binding so it cannot be accessed from external networks.",
+        "link": "/networking/publishing"
+      },
+      {
+        "level": "interview",
+        "question": "How do you publish a UDP port in Docker?",
+        "type": "radio",
+        "options": [
+          { "text": "-p 53:53/udp", "answer": true },
+          { "text": "-p udp://53:53", "answer": false },
+          { "text": "-u 53:53", "answer": false },
+          { "text": "--udp 53", "answer": false }
+        ],
+        "description": "You append /udp to the port mapping definition. By default, -p assumes TCP.",
+        "link": "/networking/publishing"
+      },
+      {
+        "level": "foundation",
+        "question": "What is the primary difference between EXPOSE and publish (-p)?",
+        "type": "radio",
+        "options": [
+          { "text": "They do exactly the same thing.", "answer": false },
+          { "text": "EXPOSE maps ports to the host; -p is for internal networks.", "answer": false },
+          { "text": "EXPOSE is just documentation; -p actually opens the port on the host.", "answer": true },
+          { "text": "EXPOSE is for UDP; -p is for TCP.", "answer": false }
+        ],
+        "description": "The EXPOSE instruction in a Dockerfile does not actually publish ports to the host. It serves as documentation for the person running the container.",
+        "link": "/networking/publishing"
+      },
+      {
+        "level": "interview",
+        "question": "What was the purpose of the legacy '--link' flag?",
+        "type": "radio",
+        "options": [
+          { "text": "To connect containers to swarm nodes.", "answer": false },
+          { "text": "To map container names to IPs in the /etc/hosts file on the default bridge.", "answer": true },
+          { "text": "To link a container to a volume.", "answer": false },
+          { "text": "To publish ports automatically.", "answer": false }
+        ],
+        "description": "Before user-defined bridges and DNS, '--link' was used to manually inject IP addresses and environment variables into containers on the default bridge.",
+        "link": "/networking/legacy-links"
+      },
+      {
+        "level": "foundation",
+        "question": "Should you use the '--link' flag in modern Docker environments?",
+        "type": "radio",
+        "options": [
+          { "text": "Yes, it is the standard.", "answer": false },
+          { "text": "No, it is a legacy feature deprecated in favor of user-defined bridge networks.", "answer": true }
+        ],
+        "description": "User-defined bridges provide automatic DNS resolution, rendering the --link flag obsolete and deprecated.",
+        "link": "/networking/legacy-links"
+      },
+      {
+        "level": "scenario",
+        "question": "You want to troubleshoot network connectivity inside a running container that lacks tools like 'ping' or 'curl'. What is the modern approach?",
+        "type": "radio",
+        "options": [
+          { "text": "Run a netshoot container attached to the same network using '--network container:<id>'.", "answer": true },
+          { "text": "Rebuild the image to include the tools.", "answer": false },
+          { "text": "Use 'docker exec ping'.", "answer": false },
+          { "text": "You cannot troubleshoot it.", "answer": false }
+        ],
+        "description": "Attaching a troubleshooting container (like nicolaka/netshoot) to the target container's network namespace is the best practice.",
+        "link": "/networking/debugging"
+      },
+      {
+        "level": "interview",
+        "question": "When troubleshooting, what does the internal Docker DNS server use to resolve a container's name?",
+        "type": "radio",
+        "options": [
+          { "text": "The host's /etc/hosts file.", "answer": false },
+          { "text": "An embedded DNS server listening at 127.0.0.11.", "answer": true },
+          { "text": "Google's 8.8.8.8.", "answer": false },
+          { "text": "The --link environment variables.", "answer": false }
+        ],
+        "description": "Docker injects a virtual DNS server at 127.0.0.11 inside containers on user-defined networks to resolve container names to IPs.",
+        "link": "/networking/debugging"
+      }
+    ]
+  }
+]

@@ -73,6 +73,58 @@ docker network create my-net`}</pre>
                         </div>
                     </div>
 
+                    {/* THE 3 WALLS OF BRIDGE NETWORKING */}
+                    <div className="doc-section-card shadow-lg border-info mt-4" style={{ backgroundColor: 'rgba(13, 202, 253, 0.05)' }}>
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon text-info">
+                                <i className="bi bi-bricks"></i>
+                            </div>
+                            <h2 className="doc-card-heading text-info" style={{ fontSize: '1.5rem' }}>
+                                Why Bridge Isn't Always Enough: The 3 Walls
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <p className="mb-4 text-light">
+                                A custom bridge network is fantastic for local development and simple, single-host deployments. It provides automatic DNS resolution and secure isolation. However, in enterprise or high-performance environments, you will inevitably hit one of these three walls:
+                            </p>
+                            <div className="row g-4">
+                                <div className="col-md-4">
+                                    <div className="doc-sub-card border-info h-100">
+                                        <h5 className="fw-bold text-light"><i className="bi bi-server text-primary me-2"></i>1. The Multi-Host Wall</h5>
+                                        <p className="small text-secondary mb-2">
+                                            <strong>The Problem:</strong> Bridge networks are restricted to a single physical host. If your application scales across multiple servers, a container on Server A cannot communicate with a container on Server B via a bridge.
+                                        </p>
+                                        <p className="small text-secondary fw-bold mb-0">
+                                            <i className="bi bi-arrow-right-short text-info"></i> Leads to: <span className="text-light">Overlay Network</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="doc-sub-card border-warning h-100">
+                                        <h5 className="fw-bold text-light"><i className="bi bi-speedometer2 text-warning me-2"></i>2. The Performance Wall</h5>
+                                        <p className="small text-secondary mb-2">
+                                            <strong>The Problem:</strong> Port mapping (<code>-p 80:80</code>) uses NAT and a proxy, adding latency. For high-frequency trading apps or extreme load balancers, even a millisecond of NAT overhead is unacceptable.
+                                        </p>
+                                        <p className="small text-secondary fw-bold mb-0">
+                                            <i className="bi bi-arrow-right-short text-warning"></i> Leads to: <span className="text-warning">Host Network</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="col-md-4">
+                                    <div className="doc-sub-card border-secondary h-100">
+                                        <h5 className="fw-bold text-light"><i className="bi bi-building text-secondary me-2"></i>3. The Corporate IT Wall</h5>
+                                        <p className="small text-secondary mb-2">
+                                            <strong>The Problem:</strong> Bridge networks hide containers behind the host IP. Legacy apps or strict corporate networks often mandate that every service has its own direct MAC and IP address on the physical router.
+                                        </p>
+                                        <p className="small text-secondary fw-bold mb-0">
+                                            <i className="bi bi-arrow-right-short text-secondary"></i> Leads to: <span className="text-secondary">Macvlan Network</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* 2. THE HOST NETWORK */}
                     <div className="doc-section-card shadow-lg border-warning mt-4">
                         <div className="doc-card-header-wrapper">

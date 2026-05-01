@@ -187,8 +187,12 @@ export const NAV_CONFIG: NavItem[] = [
         children: [
           { label: "Default Bridge Network", icon: "bi-hdd-network-fill", href: "/networking/labs/default-docker-bridge" },
           { label: "User-Defined Bridge Network", icon: "bi-shield-check", href: "/networking/labs/user-defined-bridge" },
+          { label: "Host Network", icon: "bi-lightning-charge-fill", href: "/networking/labs/host-network" },
+          { label: "Macvlan Network", icon: "bi-router-fill", href: "/networking/labs/macvlan-network" },
+          { label: "Overlay Network", icon: "bi-diagram-2-fill", href: "/networking/labs/overlay-network" },
         ]
       },
+      { label: "Knowledge Check", icon: "bi-clipboard-check-fill", href: "/networking/quiz" },
     ],
   },
   {
