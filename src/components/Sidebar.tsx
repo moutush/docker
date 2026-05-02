@@ -23,6 +23,16 @@ interface NavItem {
 
 export const NAV_CONFIG: NavItem[] = [
   {
+    section: "PRACTICE",
+    label: "Daily Drills",
+    icon: "bi-lightning-charge-fill",
+    children: [
+      { label: "Containers", icon: "bi-box-seam", href: "/practice/containers" },
+      { label: "Volumes", icon: "bi-hdd-fill", href: "/practice/volumes" },
+      { label: "Networking", icon: "bi-diagram-3-fill", href: "/practice/networking" },
+    ],
+  },
+  {
     section: "PLANNING",
     label: "Study Plan",
     icon: "bi-calendar-event-fill",
@@ -156,6 +166,15 @@ export const NAV_CONFIG: NavItem[] = [
         ],
       },
       { label: "Containerd Image Store", icon: "bi-box-seam-fill", href: "/storage/containerd-store" },
+      {
+        label: "Labs",
+        icon: "bi-flask",
+        children: [
+          { label: "Volumes", icon: "bi-hdd-fill", href: "/storage/labs/volumes" },
+          { label: "Bind Mounts", icon: "bi-link-45deg", href: "/storage/labs/bind-mounts" },
+          { label: "tmpfs Mounts", icon: "bi-lightning-charge-fill", href: "/storage/labs/tmpfs-mounts" },
+        ]
+      },
       { label: "Revision Notes", icon: "bi-journal-check", href: "/storage/revision-notes" },
       { label: "Knowledge Check", icon: "bi-clipboard-check-fill", href: "/storage/quiz" },
     ],
