@@ -29,6 +29,7 @@ export const NAV_CONFIG: NavItem[] = [
     children: [
       { label: "Containers", icon: "bi-box-seam", href: "/practice/containers" },
       { label: "Volumes", icon: "bi-hdd-fill", href: "/practice/volumes" },
+      { label: "Bind Mounts", icon: "bi-link-45deg", href: "/practice/bind-mounts" },
       { label: "Networking", icon: "bi-diagram-3-fill", href: "/practice/networking" },
     ],
   },

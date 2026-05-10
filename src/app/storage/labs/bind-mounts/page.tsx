@@ -115,12 +115,81 @@ export default function BindMountsLabPage() {
   nginx:latest`}
                             </pre>
 
-                            <div className="p-3 rounded border border-secondary mb-0" style={{ background: 'rgba(255, 255, 255, 0.02)' }}>
-                                <ul className="small text-secondary mb-0">
-                                    <li className="mb-2"><strong>type=bind</strong>: Explicitly tells Docker this is a host directory.</li>
-                                    <li className="mb-2"><strong>source="$(pwd)"/html</strong>: Bind mounts REQUIRE absolute paths. Using <code>$(pwd)</code> is the standard way to provide this.</li>
-                                    <li><strong>target</strong>: The path inside the container to be replaced.</li>
-                                </ul>
+                            <div className="row g-4">
+                                <div className="col-md-6">
+                                    <div className="doc-sub-card h-100">
+                                        <div className="doc-sub-card-header">
+                                            <div className="doc-sub-card-icon">
+                                                <i className="bi bi-compass"></i>
+                                            </div>
+                                            <h5 className="doc-sub-card-title">Source vs Target</h5>
+                                        </div>
+                                        <div className="doc-sub-card-body">
+                                            <p className="small text-secondary mb-3">
+                                                Think of this as a <strong>portal</strong> between your machine and the container.
+                                            </p>
+                                            <ul className="small text-secondary ps-3 mb-0">
+                                                <li className="mb-2">
+                                                    <strong className="text-info">Source:</strong> Your PC's physical folder (<code>$(pwd)/html</code>).
+                                                </li>
+                                                <li>
+                                                    <strong className="text-warning">Target:</strong> Where Nginx looks inside the container (<code>/usr/share/nginx/html</code>).
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className="doc-sub-card h-100">
+                                        <div className="doc-sub-card-header">
+                                            <div className="doc-sub-card-icon">
+                                                <i className="bi bi-person-badge"></i>
+                                            </div>
+                                            <h5 className="doc-sub-card-title">The User Identity</h5>
+                                        </div>
+                                        <div className="doc-sub-card-body">
+                                            <p className="small text-secondary mb-3">
+                                                Prevents "Root Lockout" by running the process as <strong>YOU</strong>.
+                                            </p>
+                                            <ul className="small text-secondary ps-3 mb-0">
+                                                <li className="mb-2">
+                                                    <code>$(id -u)</code>: Your User ID (e.g. 1000).
+                                                </li>
+                                                <li>
+                                                    <code>$(id -g)</code>: Your Group ID (e.g. 1000).
+                                                </li>
+                                            </ul>
+                                            <div className="mt-3 p-2 rounded bg-dark border border-secondary">
+                                                <p className="x-small text-secondary mb-0 opacity-75">
+                                                    <em>"Run this as me, so I can still edit the files!"</em>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="doc-alert doc-alert-info mt-4">
+                                <i className="bi bi-info-circle-fill"></i>
+                                <div>
+                                    <h6 className="fw-bold mb-1 text-info">Pro Tip: Finding the Target</h6>
+                                    <p className="mb-0 x-small text-secondary">
+                                        Not sure what the <code>target</code> path should be? Use <code>docker image inspect [image]</code> 
+                                        and look for the <b>WorkingDir</b>. If that's empty, check the image's official documentation.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="doc-alert doc-alert-warning mt-4">
+                                <i className="bi bi-lightbulb-fill"></i>
+                                <div>
+                                    <h6 className="fw-bold mb-1 text-warning">Memory Hack: S before T</h6>
+                                    <p className="mb-0 x-small text-secondary">
+                                        <b>S</b>ource = <b>S</b>ystem (Your PC) <br />
+                                        <b>T</b>arget = <b>T</b>ank (The Container)
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -218,45 +287,68 @@ export default function BindMountsLabPage() {
                         </div>
                         <div className="doc-card-body">
                             <p>
-                                This is a highly technical topic often found in the "Advanced Operation" section of the DCA exam. It defines whether mounts created <strong>inside</strong> a bind mount are visible to the host or other containers.
+                                <strong>What is it?</strong> Mount Propagation is just a fancy way of saying: <em>"If I mount a folder inside my already mounted folder, who gets to see it?"</em>
                             </p>
 
                             <div className="p-3 rounded border border-info mb-4" style={{ background: 'rgba(13, 202, 253, 0.05)' }}>
-                                <h6 className="fw-bold text-info mb-3">Propagation Modes:</h6>
+                                <h6 className="fw-bold text-info mb-3"><i className="bi bi-briefcase-fill me-2"></i>The "Shared Suitcase" Analogy</h6>
+                                <p className="small text-secondary mb-3">
+                                    Imagine the Bind Mount is a <b>Suitcase</b> you share with the container. Propagation only matters if you put a <b>Smaller Bag</b> (a sub-mount) inside that suitcase:
+                                </p>
                                 <div className="table-responsive">
                                     <table className="table table-dark table-sm mb-0 x-small">
                                         <thead>
                                             <tr>
                                                 <th>Mode</th>
-                                                <th>Description</th>
+                                                <th>Human Translation</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td><code>private</code></td>
-                                                <td>Sub-mounts inside the mount are not visible to the host or container (Default).</td>
+                                                <td><b>"No sharing."</b> Sub-mounts added by the Host are invisible to the Container (Default).</td>
                                             </tr>
                                             <tr>
                                                 <td><code>shared</code></td>
-                                                <td>Sub-mounts created on the host are visible in the container, and vice versa.</td>
+                                                <td><b>"Full sharing."</b> Both the Host and Container see every sub-mount the other adds.</td>
                                             </tr>
                                             <tr>
                                                 <td><code>slave</code></td>
-                                                <td>One-way: Host sub-mounts are visible in the container, but not vice-versa.</td>
+                                                <td><b>"One-way mirror."</b> The Container sees the Host's sub-mounts, but the Host cannot see the Container's.</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <div className="mt-3 p-3 rounded bg-black bg-opacity-50 border border-info border-opacity-25">
+                                    <h6 className="fw-bold text-info small mb-2"><i className="bi bi-lightbulb me-2"></i>Real-World Scenarios:</h6>
+                                    <ul className="x-small text-secondary ps-3 mb-0">
+                                        <li className="mb-2"><b>Private:</b> Standard app development. Prevents external drive changes from confusing your app.</li>
+                                        <li className="mb-2"><b>Shared:</b> A container that manages backups or cloud drives. Mounts created inside the container appear on your PC.</li>
+                                        <li><b>Slave:</b> A log-monitoring tool. It sees every new disk the Host mounts, but its own internal mounts don't clutter your PC.</li>
+                                    </ul>
+                                </div>
                             </div>
 
-                            <p className="small text-secondary mb-2">
+                            <div className="doc-alert doc-alert-info mt-3">
+                                <i className="bi bi-info-circle-fill"></i>
+                                <div>
+                                    <h6 className="fw-bold mb-1 text-info">The "Inception" Rule</h6>
+                                    <p className="mb-0 x-small text-secondary">
+                                        Propagation only matters if you are mounting <b>folders inside folders</b>. 
+                                        If you are just mounting a simple code folder, the default <code>private</code> setting is exactly what you want!
+                                    </p>
+                                </div>
+                            </div>
+
+                            <p className="small text-secondary mt-4 mb-2">
                                 You define this using the <code>bind-propagation</code> option:
                             </p>
                             <pre className="doc-code-block mb-0 border-info text-info bg-dark x-small">
 {`--mount type=bind,source=/app,target=/app,bind-propagation=rshared`}
                             </pre>
                             <p className="x-small text-secondary mt-2 opacity-75">
-                                * The <code>r</code> prefix (e.g., <code>rshared</code>) stands for <strong>recursive</strong> propagation.
+                                * The <code>r</code> prefix (e.g., <code>rshared</code>) stands for <b>recursive</b> (affects all sub-folders).
                             </p>
                         </div>
                     </div>
@@ -283,8 +375,19 @@ export default function BindMountsLabPage() {
                                     When you bind mount a host folder into <code>/etc/config</code> inside a container, the container's <strong>original configs are instantly hidden</strong>.
                                 </p>
                                 <p className="small text-secondary mb-0">
-                                    <strong>Exam Tip:</strong> If your container crashes because a "required file is missing" immediately after you added a bind mount, it's because you shadowed the directory and didn't provide that file on your host!
+                                    <strong>Exam Tip:</strong> If your container crashes because a \"required file is missing\" immediately after you added a bind mount, it's because you shadowed the directory and didn't provide that file on your host!
                                 </p>
+                            </div>
+
+                            <div className="doc-alert doc-alert-info mt-3">
+                                <i className="bi bi-info-circle-fill"></i>
+                                <div>
+                                    <h6 className="fw-bold mb-1 text-info">Important Distinction</h6>
+                                    <p className="mb-0 x-small text-secondary">
+                                        <b>Host files:</b> Are never deleted or changed by the mount itself. Your code is always safe.<br />
+                                        <b>Container files:</b> Are "shadowed" (hidden) by your host files. If your host folder is empty, the container directory will appear empty, hiding the original image data!
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -310,9 +413,44 @@ export default function BindMountsLabPage() {
   my-app`}
                             </pre>
 
-                            <div className="doc-alert doc-alert-success mt-3 p-3">
+                            <div className="row g-4 mt-2">
+                                <div className="col-md-6">
+                                    <div className="doc-sub-card h-100">
+                                        <div className="doc-sub-card-header">
+                                            <div className="doc-sub-card-icon">
+                                                <i className="bi bi-signpost-split"></i>
+                                            </div>
+                                            <h5 className="doc-sub-card-title">The "One-Way Street"</h5>
+                                        </div>
+                                        <div className="doc-sub-card-body">
+                                            <ul className="small text-secondary ps-3 mb-0">
+                                                <li className="mb-2"><strong className="text-success">Host → Container:</strong> Container can read your files.</li>
+                                                <li><strong className="text-danger">Container → Host:</strong> Container CANNOT edit or delete files.</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="col-md-6">
+                                    <div className="doc-sub-card h-100 border-danger">
+                                        <div className="doc-sub-card-header">
+                                            <div className="doc-sub-card-icon text-danger">
+                                                <i className="bi bi-cloud-upload"></i>
+                                            </div>
+                                            <h5 className="doc-sub-card-title text-danger">The Upload Trap</h5>
+                                        </div>
+                                        <div className="doc-sub-card-body">
+                                            <p className="small text-secondary mb-0">
+                                                If your project involves <strong>uploading files</strong>, <code>readonly</code> will break it. The container must have write access to save data.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="doc-alert doc-alert-success mt-4 p-3">
                                 <p className="mb-0 x-small text-dark">
-                                    <strong>Production Rule:</strong> Never give a container write access to your host filesystem unless absolutely necessary (like for logs or DB storage).
+                                    <strong>Production Rule:</strong> Use <code>readonly</code> for configs and source code. Use standard mounts for uploads, logs, and databases.
                                 </p>
                             </div>
                         </div>
