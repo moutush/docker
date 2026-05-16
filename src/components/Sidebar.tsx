@@ -31,6 +31,7 @@ export const NAV_CONFIG: NavItem[] = [
       { label: "Volumes", icon: "bi-hdd-fill", href: "/practice/volumes" },
       { label: "Bind Mounts", icon: "bi-link-45deg", href: "/practice/bind-mounts" },
       { label: "Networking", icon: "bi-diagram-3-fill", href: "/practice/networking" },
+      { label: "Swarm", icon: "bi-tornado", href: "/practice/swarm" },
     ],
   },
   {
@@ -178,6 +179,24 @@ export const NAV_CONFIG: NavItem[] = [
       },
       { label: "Revision Notes", icon: "bi-journal-check", href: "/storage/revision-notes" },
       { label: "Knowledge Check", icon: "bi-clipboard-check-fill", href: "/storage/quiz" },
+    ],
+  },
+  {
+    label: "Swarm",
+    icon: "bi-tornado",
+    children: [
+      { label: "Overview", icon: "bi-info-circle-fill", href: "/getting-started/swarm" },
+      {
+        label: "Labs",
+        icon: "bi-flask",
+        children: [
+          { label: "Init & Nodes", icon: "bi-diagram-3-fill", href: "/swarm/labs/init-and-nodes" },
+          { label: "Services & Scaling", icon: "bi-layers-fill", href: "/swarm/labs/services" },
+          { label: "Updates & Rollback", icon: "bi-arrow-repeat", href: "/swarm/labs/updates-and-rollback" },
+          { label: "Stacks & Compose", icon: "bi-stack", href: "/swarm/labs/stacks" },
+          { label: "Secrets & Configs", icon: "bi-shield-lock-fill", href: "/swarm/labs/secrets-and-configs" },
+        ],
+      },
     ],
   },
   {
