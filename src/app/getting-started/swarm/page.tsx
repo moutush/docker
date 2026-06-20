@@ -127,6 +127,159 @@ export default function SwarmPage() {
                         </div>
                     </div>
 
+                    {/* 2. THE FUNDAMENTALS: KEY TERMS BREAKDOWN */}
+                    <div className="doc-section-card shadow-lg mt-4">
+                        <div className="doc-card-header-wrapper">
+                            <div className="heading-icon">
+                                <i className="bi bi-list-nested"></i>
+                            </div>
+                            <h2 className="doc-card-heading">
+                                The Three Pillars: Service, Task, Replica
+                            </h2>
+                        </div>
+                        <div className="doc-card-body">
+                            <p className="text-secondary opacity-75">To understand Swarm, you must understand how a single order becomes multiple running containers:</p>
+
+                            <div className="row g-4 mt-2">
+                                {/* 1. SERVICE */}
+                                <div className="col-md-4">
+                                    <div className="doc-sub-card border-info h-100">
+                                        <h3 className="fs-6 fw-bold text-info mb-3">1. Service = The Blueprint (The Plan)</h3>
+                                        <p className="small text-secondary mb-3">
+                                            A Service is the instruction manual for your app. It defines <strong>What</strong> you want to run.
+                                        </p>
+                                        <ul className="x-small text-secondary opacity-75 list-unstyled mb-3">
+                                            <li className="mb-1"><i className="bi bi-check2 text-info me-2"></i>Which image to run</li>
+                                            <li className="mb-1"><i className="bi bi-check2 text-info me-2"></i>How many copies</li>
+                                            <li className="mb-1"><i className="bi bi-check2 text-info me-2"></i>What ports to expose</li>
+                                            <li><i className="bi bi-check2 text-info me-2"></i>Restart rules</li>
+                                        </ul>
+                                        <div className="p-2 rounded bg-info bg-opacity-10 border border-info border-opacity-20 mb-3">
+                                            <div className="fw-bold x-small text-info mb-1">Simple analogy:</div>
+                                            <p className="x-small text-secondary mb-0">"I want 3 ice cream stalls, selling vanilla, always open." You are NOT creating the stalls yet; you are defining the <strong>requirement</strong>.</p>
+                                        </div>
+                                        <div className="doc-code-block x-small p-2 bg-dark rounded border border-secondary border-opacity-25">
+                                            <span className="text-info">docker service create</span> --name web --replicas 3 nginx
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 2. TASK */}
+                                <div className="col-md-4">
+                                    <div className="doc-sub-card border-primary h-100">
+                                        <h3 className="fs-6 fw-bold text-primary mb-3">2. Task = The Work Unit (The Container)</h3>
+                                        <p className="small text-secondary mb-3">
+                                            A Task is the real container instance running on a machine. Each task = 1 running container.
+                                        </p>
+                                        <div className="p-2 rounded bg-primary bg-opacity-10 border border-primary border-opacity-20 mb-3">
+                                            <div className="fw-bold x-small text-primary mb-1">Analogy:</div>
+                                            <p className="x-small text-secondary mb-0">If Service is the plan, then Task is <strong>"One actual ice cream stall opened in a real location."</strong></p>
+                                        </div>
+                                        <div className="doc-alert bg-dark border-secondary border-opacity-25 p-2 rounded">
+                                            <div className="fw-bold x-small text-secondary mb-1">Important rule:</div>
+                                            <p className="x-small text-secondary mb-0">Tasks are created, destroyed, and replaced by Swarm <strong>automatically</strong>. If a task dies, Swarm creates a new one.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* 3. REPLICA */}
+                                <div className="col-md-4">
+                                    <div className="doc-sub-card border-warning h-100">
+                                        <h3 className="fs-6 fw-bold text-warning mb-3">3. Replica = Number of Copies</h3>
+                                        <p className="small text-secondary mb-3">
+                                            A Replica defines the <strong>"Desired State"</strong>. It tells Swarm exactly how many identical tasks must be alive at all times.
+                                        </p>
+                                        <div className="p-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-20 mb-3">
+                                            <div className="fw-bold x-small text-warning mb-1">Analogy (Scaling Factor):</div>
+                                            <ul className="x-small text-secondary list-unstyled mb-0">
+                                                <li className="mb-1"><strong>1 replica:</strong> Single stall. If the worker gets sick, the business stops. (No High Availability).</li>
+                                                <li className="mb-1"><strong>3 replicas:</strong> 3 stalls. If one worker disappears, 2 others keep serving. (Resilient).</li>
+                                                <li><strong>10 replicas:</strong> High capacity. Massive scale for busy events.</li>
+                                            </ul>
+                                        </div>
+                                        <div className="text-center p-2 rounded border border-warning border-opacity-10 bg-dark bg-opacity-25">
+                                            <div className="x-small text-secondary opacity-50 mb-1">The Scaling Flag:</div>
+                                            <span className="fw-bold text-warning fs-4">--replicas 3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* PUTTING IT ALL TOGETHER */}
+                            <div className="mt-5 p-4 rounded bg-dark bg-opacity-25 border border-secondary border-opacity-20">
+                                <h3 className="fs-6 fw-bold mb-3"><i className="bi bi-arrow-repeat me-2"></i>Putting it all together</h3>
+                                <div className="doc-code-block p-3 bg-dark rounded border border-primary border-opacity-25 mb-3">
+                                    docker service create --name web --replicas 3 nginx
+                                </div>
+                                <div className="row g-4 align-items-center text-center">
+                                    <div className="col-md-3">
+                                        <div className="p-2 rounded border border-info border-opacity-50">
+                                            <div className="fw-bold text-info small">Service</div>
+                                            <div className="x-small text-secondary">"Run nginx, keep 3 alive"</div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-1"><i className="bi bi-arrow-down fs-4 opacity-25"></i></div>
+                                    <div className="col-md-4">
+                                        <div className="p-2 rounded border border-primary border-opacity-50">
+                                            <div className="fw-bold text-primary small">Tasks Created</div>
+                                            <div className="x-small text-secondary">Task 1 (Node A), Task 2 (Node B), Task 3 (Node C)</div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-1"><i className="bi bi-arrow-down fs-4 opacity-25"></i></div>
+                                    <div className="col-md-3">
+                                        <div className="p-2 rounded border border-warning border-opacity-50">
+                                            <div className="fw-bold text-warning small">Replicas Ensure</div>
+                                            <div className="x-small text-secondary">If Task 2 dies, it is recreated.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* FINAL MENTAL MODEL */}
+                            <div className="mt-4 row g-4">
+                                <div className="col-md-7">
+                                    <div className="table-responsive rounded border border-secondary border-opacity-10">
+                                        <table className="table table-dark table-sm mb-0 x-small">
+                                            <thead>
+                                                <tr className="bg-dark">
+                                                    <th className="p-2">Concept</th>
+                                                    <th className="p-2">Meaning</th>
+                                                    <th className="p-2">Real-world Analogy</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td className="p-2 fw-bold text-info">Service</td>
+                                                    <td className="p-2 text-secondary">Blueprint / Plan</td>
+                                                    <td className="p-2 text-secondary">"Open 3 coffee shops"</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="p-2 fw-bold text-primary">Task</td>
+                                                    <td className="p-2 text-secondary">Running Container</td>
+                                                    <td className="p-2 text-secondary">One actual shop</td>
+                                                </tr>
+                                                <tr>
+                                                    <td className="p-2 fw-bold text-warning">Replica</td>
+                                                    <td className="p-2 text-secondary">Count of tasks</td>
+                                                    <td className="p-2 text-secondary">Number of shops</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div className="col-md-5">
+                                    <div className="doc-alert bg-primary bg-opacity-10 border-primary border-opacity-25 p-3 h-100 rounded d-flex flex-column justify-content-center align-items-center text-center">
+                                        <div className="fw-bold text-primary mb-2">⚡ One-liner memory trick</div>
+                                        <div className="fs-6 text-light">
+                                            <strong>Service</strong> = What to run<br />
+                                            <strong>Task</strong> = Running instance<br />
+                                            <strong>Replica</strong> = How many instances
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     {/* 2. FAILURE ANALYSIS: THE MANAGER CRISIS */}
                     <div className="doc-section-card shadow-lg border-danger mt-4 overflow-hidden">
                         <div className="doc-card-header-wrapper">
@@ -234,43 +387,7 @@ export default function SwarmPage() {
                         </div>
                     </div>
 
-                    {/* 2. THE FUNDAMENTALS: KEY TERMS BREAKDOWN */}
-                    <div className="doc-section-card shadow-lg mt-4">
-                        <div className="doc-card-header-wrapper">
-                            <div className="heading-icon">
-                                <i className="bi bi-list-nested"></i>
-                            </div>
-                            <h2 className="doc-card-heading">
-                                The Three Pillars: Service, Task, Replica
-                            </h2>
-                        </div>
-                        <div className="doc-card-body">
-                            <p className="text-secondary opacity-75">To understand Swarm, you must understand these three levels of organization:</p>
-                            <div className="doc-sub-cards-grid mt-4">
-                                <div className="doc-sub-card border-info border-opacity-25">
-                                    <h3 className="doc-sub-card-title text-info">1. Service (The Job)</h3>
-                                    <p className="doc-sub-card-text small text-secondary">
-                                        The definition of what you want to run. Instead of saying "Run this container,"
-                                        you say "I want a Service that runs Nginx on Port 80."
-                                    </p>
-                                </div>
-                                <div className="doc-sub-card border-warning border-opacity-25">
-                                    <h3 className="doc-sub-card-title text-warning">2. Replica (The Copies)</h3>
-                                    <p className="doc-sub-card-text small text-secondary">
-                                        How many "copies" of the container you want. Swarm ensures that even if a machine dies,
-                                        the number of replicas stays exactly what you asked for.
-                                    </p>
-                                </div>
-                                <div className="doc-sub-card border-info border-opacity-25">
-                                    <h3 className="doc-sub-card-title text-info">3. Task (The Container)</h3>
-                                    <p className="doc-sub-card-text small text-secondary">
-                                        The actual running instance. A Service is the "plan," and a Task is the "work."
-                                        If you have 3 Replicas, Swarm will create 3 Tasks.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
 
                     {/* 3. VISUALIZATION: THE SELF-HEALING LOOP */}
                     <div className="doc-section-card shadow-lg border-success col-md-12 mt-4 overflow-hidden">

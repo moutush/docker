@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -185,7 +185,7 @@ export const NAV_CONFIG: NavItem[] = [
     label: "Swarm",
     icon: "bi-tornado",
     children: [
-      { label: "Overview", icon: "bi-info-circle-fill", href: "/getting-started/swarm" },
+      { label: "Overview", icon: "bi-info-circle-fill", href: "/swarm/overview" },
       {
         label: "Labs",
         icon: "bi-flask",
@@ -197,6 +197,89 @@ export const NAV_CONFIG: NavItem[] = [
           { label: "Secrets & Configs", icon: "bi-shield-lock-fill", href: "/swarm/labs/secrets-and-configs" },
         ],
       },
+    ],
+  },
+  {
+    label: "Dockerfile",
+    icon: "bi-file-earmark-code-fill",
+    children: [
+      { label: "Overview", icon: "bi-info-circle-fill", href: "/dockerfile/overview" },
+      { label: "Structure & Caching", icon: "bi-layers-fill", href: "/dockerfile/structure" },
+      {
+        label: "Commands",
+        icon: "bi-terminal-fill",
+        children: [
+          { label: "FROM", icon: "bi-arrow-right-short", href: "/dockerfile/commands/from" },
+          { label: "RUN", icon: "bi-arrow-right-short", href: "/dockerfile/commands/run" },
+          { label: "CMD", icon: "bi-arrow-right-short", href: "/dockerfile/commands/cmd" },
+          { label: "ENTRYPOINT", icon: "bi-arrow-right-short", href: "/dockerfile/commands/entrypoint" },
+          { label: "COPY", icon: "bi-arrow-right-short", href: "/dockerfile/commands/copy" },
+          { label: "ADD", icon: "bi-arrow-right-short", href: "/dockerfile/commands/add" },
+          { label: "WORKDIR", icon: "bi-arrow-right-short", href: "/dockerfile/commands/workdir" },
+          { label: "ENV", icon: "bi-arrow-right-short", href: "/dockerfile/commands/env" },
+          { label: "ARG", icon: "bi-arrow-right-short", href: "/dockerfile/commands/arg" },
+          { label: "EXPOSE", icon: "bi-arrow-right-short", href: "/dockerfile/commands/expose" },
+          { label: "USER", icon: "bi-arrow-right-short", href: "/dockerfile/commands/user" },
+          { label: "VOLUME", icon: "bi-arrow-right-short", href: "/dockerfile/commands/volume" },
+          { label: "LABEL", icon: "bi-arrow-right-short", href: "/dockerfile/commands/label" },
+        ],
+      },
+      { label: "Intermediate", icon: "bi-gem", href: "/dockerfile/intermediate" },
+      { label: "Practical Projects", icon: "bi-flask", href: "/dockerfile/projects" },
+      { label: "DevOps Integration", icon: "bi-cpu-fill", href: "/dockerfile/devops" },
+    ],
+  },
+  {
+    label: "Docker Compose",
+    icon: "bi-stack",
+    children: [
+      { label: "Overview", icon: "bi-info-circle-fill", href: "/compose/overview" },
+      { label: "Why Compose?", icon: "bi-question-circle-fill", href: "/compose/why-compose" },
+      {
+        label: "Fundamentals",
+        icon: "bi-book-fill",
+        children: [
+          { label: "File Structure", icon: "bi-file-earmark-code-fill", href: "/compose/fundamentals/file-structure" },
+          { label: "Services", icon: "bi-gear-fill", href: "/compose/fundamentals/services" },
+          { label: "Ports & Environment", icon: "bi-diagram-3-fill", href: "/compose/fundamentals/ports-env" },
+          { label: "CLI Commands", icon: "bi-terminal-fill", href: "/compose/fundamentals/commands" },
+          { label: "Restart Policies", icon: "bi-arrow-clockwise", href: "/compose/fundamentals/restart" },
+        ],
+      },
+      {
+        label: "Intermediate",
+        icon: "bi-gem",
+        children: [
+          { label: "Volumes & Bind Mounts", icon: "bi-hdd-fill", href: "/compose/intermediate/volumes" },
+          { label: "Networks", icon: "bi-diagram-2-fill", href: "/compose/intermediate/networks" },
+          { label: "depends_on & Healthchecks", icon: "bi-heart-pulse-fill", href: "/compose/intermediate/depends-on" },
+          { label: ".env Files", icon: "bi-file-earmark-lock2-fill", href: "/compose/intermediate/env-files" },
+        ],
+      },
+      {
+        label: "Advanced",
+        icon: "bi-rocket-takeoff-fill",
+        children: [
+          { label: "Profiles", icon: "bi-person-badge-fill", href: "/compose/advanced/profiles" },
+          { label: "Secrets & Configs", icon: "bi-shield-lock-fill", href: "/compose/advanced/secrets" },
+          { label: "Scaling & Resources", icon: "bi-speedometer2", href: "/compose/advanced/scaling" },
+          { label: "Production Patterns", icon: "bi-building-fill", href: "/compose/advanced/production" },
+        ],
+      },
+      {
+        label: "Projects",
+        icon: "bi-flask",
+        children: [
+          { label: "Nginx Website", icon: "bi-globe", href: "/compose/projects/nginx" },
+          { label: "PHP + MySQL", icon: "bi-filetype-php", href: "/compose/projects/php-mysql" },
+          { label: "FastAPI Stack", icon: "bi-filetype-py", href: "/compose/projects/fastapi" },
+          { label: "Node.js + MongoDB", icon: "bi-node-plus-fill", href: "/compose/projects/node-mongo" },
+          { label: "Full-Stack App", icon: "bi-boxes", href: "/compose/projects/fullstack" },
+        ],
+      },
+      { label: "DevOps Integration", icon: "bi-cpu-fill", href: "/compose/devops" },
+      { label: "DCA Preparation", icon: "bi-award-fill", href: "/compose/dca-prep" },
+      { label: "Interview Prep", icon: "bi-chat-quote-fill", href: "/compose/interview" },
     ],
   },
   {
@@ -249,6 +332,33 @@ export default function Sidebar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
   const pathname = usePathname();
+
+  // ── Auto-open ancestor menus for the current URL ──────────────────────────
+  useEffect(() => {
+    const keysToOpen: Record<string, boolean> = {};
+
+    const walk = (items: NavChild[], parentKey?: string): boolean => {
+      return items.some((item) => {
+        const key = parentKey ? `${parentKey}-${item.label}` : item.label;
+        const selfActive =
+          !!item.href &&
+          (pathname === item.href || pathname.startsWith(item.href + "/"));
+        const childActive = item.children ? walk(item.children, key) : false;
+        if (childActive) keysToOpen[key] = true;
+        return selfActive || childActive;
+      });
+    };
+
+    NAV_CONFIG.forEach((item) => {
+      const key = item.label;
+      const childActive = item.children ? walk(item.children, key) : false;
+      if (childActive) keysToOpen[key] = true;
+    });
+
+    if (Object.keys(keysToOpen).length > 0) {
+      setOpenMenus((prev) => ({ ...prev, ...keysToOpen }));
+    }
+  }, [pathname]);
 
 
 
