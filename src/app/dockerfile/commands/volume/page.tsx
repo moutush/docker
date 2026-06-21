@@ -89,6 +89,68 @@ VOLUME /var/log /var/db`}
           </div>
         </div>
 
+        {/* SECTION: Volumes vs Bind Mounts */}
+        <div className="doc-section-card shadow-lg border-info">
+          <div className="doc-card-header-wrapper">
+            <div className="heading-icon text-info">
+              <i className="bi bi-hdd-stack-fill"></i>
+            </div>
+            <h2 className="doc-card-heading text-info">Volumes vs. Bind Mounts (The Portability Rule)</h2>
+          </div>
+          <div className="doc-card-body">
+            <p className="text-secondary small mb-3">
+              A common point of confusion is how to define a <strong>Bind Mount</strong> in a Dockerfile. The answer is: <strong>You can't.</strong>
+            </p>
+            
+            <p className="text-secondary small mb-3">
+              A Dockerfile is an image blueprint that must be perfectly portable across any machine (Windows, Mac, Linux). Because host paths (like <code>/home/raj/data</code> or <code>C:\\data</code>) vary wildly between machines, Docker strictly forbids hardcoding host paths inside a <code>VOLUME</code> instruction.
+            </p>
+
+            <div className="table-responsive mb-4">
+              <table className="table table-dark table-bordered table-hover x-small mb-0">
+                <thead>
+                  <tr>
+                    <th>Where Defined</th>
+                    <th>Purpose</th>
+                    <th>Can be Anonymous/Named Volume?</th>
+                    <th>Can be Bind Mount?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Dockerfile</strong> <code>VOLUME</code></td>
+                    <td>Build a universally portable image</td>
+                    <td><span className="badge bg-success">Yes (Anonymous only)</span></td>
+                    <td><span className="badge bg-danger">Never</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong><code>docker run -v</code></strong></td>
+                    <td>Run a container on a specific machine</td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                  </tr>
+                  <tr>
+                    <td><strong><code>compose.yaml</code></strong></td>
+                    <td>Deploy an environment-specific stack</td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div className="doc-alert doc-alert-info mb-0">
+              <i className="bi bi-info-circle-fill"></i>
+              <div>
+                <h6 className="fw-bold mb-1 text-info">Wait, why does Compose allow Bind Mounts?</h6>
+                <p className="mb-0 x-small text-secondary">
+                  Because a <code>compose.yaml</code> file is an <strong>operational deployment config</strong>, not an image blueprint. It is never baked into the image. You might have a <code>compose.dev.yaml</code> that uses bind mounts for live-reloading code on your laptop, and a separate <code>compose.prod.yaml</code> that uses named volumes for production storage. Bind mounts are always a <strong>runtime deployment decision</strong>, never a build-time image definition.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* SECTION: The DCA Gotcha */}
         <div className="doc-section-card shadow-lg border-danger">
           <div className="doc-card-header-wrapper">
@@ -98,21 +160,69 @@ VOLUME /var/log /var/db`}
             <h2 className="doc-card-heading text-danger">CRITICAL DCA GOTCHA: Build-Time Volume Writes</h2>
           </div>
           <div className="doc-card-body">
-            <div className="doc-alert doc-alert-danger mb-0">
-              <i className="bi bi-exclamation-triangle-fill"></i>
-              <div>
-                <h6 className="fw-bold mb-1 text-danger">THE STAGING DISCONNECT</h6>
+            <p className="text-secondary small mb-3">
+              This is the most common mistake with the <code>VOLUME</code> command. Any files you try to write <strong>after</strong> the <code>VOLUME</code> instruction will silently disappear. Here is exactly why:
+            </p>
 
-                If you declare a volume on line 3, **you cannot write permanent files to that directory in subsequent RUN commands!**
-                <pre className="x-small text-secondary mt-2 mb-2">
-                  {`# LINE 3: Declare volume
+            <div className="p-3 bg-dark rounded border border-secondary mb-3">
+              <h6 className="text-warning x-small mb-3">Step-by-step: What Docker actually does during <code>docker build</code></h6>
+              <div className="d-flex flex-column gap-2">
+                <div className="p-2 rounded border border-secondary">
+                  <span className="badge bg-info me-2">Step 1</span>
+                  <span className="x-small text-secondary">Docker reads <code>VOLUME ["/app/data"]</code> in the Dockerfile.</span>
+                </div>
+                <div className="p-2 rounded border border-secondary">
+                  <span className="badge bg-info me-2">Step 2</span>
+                  <span className="x-small text-secondary">Docker immediately mounts a <strong>brand new, empty, temporary volume</strong> at <code>/app/data</code> for this build layer. The folder is now "owned" by the volume, not the image.</span>
+                </div>
+                <div className="p-2 rounded border border-secondary">
+                  <span className="badge bg-warning text-dark me-2">Step 3</span>
+                  <span className="x-small text-secondary">You run: <code>RUN touch /app/data/log.txt</code>. The file is written into the <strong>temporary volume</strong>, not into the image filesystem.</span>
+                </div>
+                <div className="p-2 rounded border border-danger border-opacity-50">
+                  <span className="badge bg-danger me-2">Step 4</span>
+                  <span className="x-small text-secondary">The build layer finishes. Docker <strong>unmounts and destroys</strong> that temporary volume. The <code>log.txt</code> file was living on the volume, so it is gone forever. The final image has an empty <code>/app/data</code> directory.</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="row g-3 mb-3">
+              <div className="col-md-6">
+                <div className="p-3 bg-dark rounded border border-danger border-opacity-50 h-100">
+                  <h6 className="text-danger x-small mb-2">❌ WRONG — File disappears silently</h6>
+                  <pre className="x-small text-secondary mb-0">{`FROM alpine
+WORKDIR /app
+
+# VOLUME declared first ← TRAP!
 VOLUME ["/app/data"]
 
-# LINE 4: Write file into the volume (TRAP!)
-RUN touch /app/data/log.txt`}
-                </pre>
-                When Docker executes Line 4 during build-time, it mounts a temporary throwaway volume to build the layer. As soon as the step completes, that temporary volume is unmounted, and the file `log.txt` **vanishes completely** from the final image!
-                Always write default files to the directory **before** declaring it as a <code>VOLUME</code>.
+# This file is written to the temp volume
+# and is LOST when the build layer ends
+RUN touch /app/data/log.txt`}</pre>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="p-3 bg-dark rounded border border-success border-opacity-50 h-100">
+                  <h6 className="text-success x-small mb-2">✅ CORRECT — File is baked into the image first</h6>
+                  <pre className="x-small text-secondary mb-0">{`FROM alpine
+WORKDIR /app
+
+# Create the file BEFORE declaring as VOLUME
+RUN mkdir -p /app/data && \
+    touch /app/data/log.txt
+
+# NOW declare VOLUME — the file already exists
+# in the image and will be copied into any
+# volume that mounts here at runtime
+VOLUME ["/app/data"]`}</pre>
+                </div>
+              </div>
+            </div>
+
+            <div className="doc-alert doc-alert-info mb-0">
+              <i className="bi bi-lightbulb-fill"></i>
+              <div className="x-small text-secondary">
+                <strong className="text-info">The simple rule:</strong> Think of <code>VOLUME</code> as a "hand-off" point. Everything you want pre-seeded in that directory must be written <strong>before</strong> the hand-off. Once you declare <code>VOLUME</code>, that directory is no longer part of the image — it belongs to the external storage system.
               </div>
             </div>
           </div>

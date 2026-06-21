@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: "Dockerfile ARG Command - Docker Documentation",
-  description: "Learn how to use the ARG command to pass build-time variables into your Dockerfile."
+  description: "Learn how to use the ARG command to pass build-time variables into your Dockerfile. When to use ARG vs ENV, scoping rules, and global ARGs explained."
 };
 
 export default function DockerfileArgPage() {
@@ -16,135 +16,237 @@ export default function DockerfileArgPage() {
           <h1 className="doc-section-title mb-0" style={{ fontSize: '40px' }}>ARG Command</h1>
         </div>
         <p className="text-secondary opacity-75 fs-5 mb-0">
-          Enables developers to pass dynamic compilation arguments during the image building process.
+          Defines a variable that exists <strong>only during image build</strong>. Pass dynamic values at build-time without hardcoding them into the Dockerfile.
         </p>
       </div>
 
       <div className="doc-content-grid">
+
         {/* SECTION: Quick Look */}
         <div className="doc-section-card shadow-lg">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-info">
-              <i className="bi bi-lightning-charge-fill"></i>
-            </div>
+            <div className="heading-icon text-info"><i className="bi bi-lightning-charge-fill"></i></div>
             <h2 className="doc-card-heading">Quick Look</h2>
           </div>
           <div className="doc-card-body">
-            <p className="text-secondary">Syntax:</p>
+            <p className="text-secondary mb-2">Syntax:</p>
             <pre className="doc-code-block mb-3 bg-dark text-light border-secondary p-2 x-small">
-{`# 1. Declaring an argument with no default (must be passed via CLI)
+{`# 1. Declare with no default — MUST be passed via CLI or build will use empty string
 ARG VERSION
 
-# 2. Declaring an argument with a default fallback
-ARG APP_PORT=8080`}
+# 2. Declare with a default fallback value
+ARG APP_PORT=8080
+
+# 3. Pass a value at build time using the CLI flag:
+docker build --build-arg APP_PORT=9090 -t my-image .`}
             </pre>
-            <p className="text-secondary mb-0">
-              The <code>ARG</code> instruction defines a variable that users can pass at build-time to the builder using the <code>docker build</code> command with the <code>--build-arg &lt;varname&gt;=&lt;value&gt;</code> flag.
-            </p>
           </div>
         </div>
 
         {/* SECTION: Analogy */}
         <div className="doc-section-card shadow-lg border-success">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-success">
-              <i className="bi bi-egg-fried"></i>
-            </div>
+            <div className="heading-icon text-success"><i className="bi bi-egg-fried"></i></div>
             <h2 className="doc-card-heading text-success">Real-World Analogy</h2>
           </div>
           <div className="doc-card-body">
-            <p className="text-secondary">
-              Imagine hiring a contractor to build a dining room table:
-            </p>
+            <p className="text-secondary">Imagine hiring a carpenter to build you a dining table:</p>
             <div className="p-3 bg-dark rounded border border-success border-opacity-25 mt-3">
               <p className="text-secondary small mb-0">
-                You hand them the blueprint. The blueprint has a variable parameter: wood type (<code>ARG WOOD_TYPE=oak</code>). 
+                The blueprint has a variable parameter: wood type (<code>ARG WOOD_TYPE=oak</code>).
+                Before they start sawing, you tell them: <em>"Make it cherry wood instead"</em> (<code>--build-arg WOOD_TYPE=cherry</code>).
+                The carpenter builds the table from cherry wood (build-time).
                 <br /><br />
-                Before they start sawing, you tell them: *"I want cherry wood instead"* (<code>--build-arg WOOD_TYPE=cherry</code>). 
-                The carpenter builds the table out of cherry wood (build-time). Once the table is finished and delivered to your house, the wood type is locked. The family sitting at the table cannot dynamically change the wood to pine while eating dinner (no runtime presence).
+                Once the table is <strong>finished and delivered</strong>, the wood type is permanently locked. The family eating dinner at the table cannot dynamically change the wood to pine at runtime — because the table is already built! That is exactly how <code>ARG</code> works — once the image is built, the variable is gone.
               </p>
             </div>
           </div>
         </div>
 
-        {/* SECTION: Scoping Rules */}
+        {/* SECTION: WHEN TO USE ARG */}
         <div className="doc-section-card shadow-lg border-primary">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-primary">
-              <i className="bi bi-shield-exclamation"></i>
-            </div>
-            <h2 className="doc-card-heading">The Scoping Rules (DCA Trap!)</h2>
+            <div className="heading-icon text-primary"><i className="bi bi-question-circle-fill"></i></div>
+            <h2 className="doc-card-heading">When Should You Use ARG?</h2>
           </div>
           <div className="doc-card-body">
-            <p className="text-secondary">
-              An <code>ARG</code> instruction goes out of scope at the end of the build stage in which it is defined. 
-              Crucially, an <code>ARG</code> declared **before the `FROM` instruction** is outside of the main build stage!
+            <p className="text-secondary small mb-3">
+              Use <code>ARG</code> when you need to pass a value into the Dockerfile <strong>that only matters while the image is being built</strong>, not when the container is actually running.
             </p>
-            <pre className="doc-code-block mb-3 bg-dark text-light border-secondary p-3 x-small">
-{`# Declared before FROM:
-ARG VERSION=3.18
-FROM alpine:$VERSION
-
-# This will fail! $VERSION is not accessible here:
-RUN echo "Building version $VERSION"
-
-# Solution: Re-declare it inside the build stage:
-ARG VERSION
-RUN echo "Building version $VERSION" (Works!)`}
-            </pre>
+            <div className="row g-3">
+              <div className="col-md-6">
+                <div className="p-3 bg-dark rounded border border-primary border-opacity-25 h-100">
+                  <h6 className="text-primary x-small mb-2">✅ GOOD use cases for ARG:</h6>
+                  <ul className="x-small text-secondary mb-0 ps-3">
+                    <li className="mb-1">Pinning a base image version (<code>ARG ALPINE_VER=3.19</code>)</li>
+                    <li className="mb-1">Selecting a target architecture (<code>ARG TARGETARCH</code>)</li>
+                    <li className="mb-1">Passing CI/CD build numbers</li>
+                    <li className="mb-1">Toggling compile-time feature flags</li>
+                    <li>Installing different package sets for dev vs. prod</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="col-md-6">
+                <div className="p-3 bg-dark rounded border border-danger border-opacity-25 h-100">
+                  <h6 className="text-danger x-small mb-2">❌ WRONG use cases for ARG:</h6>
+                  <ul className="x-small text-secondary mb-0 ps-3">
+                    <li className="mb-1">Database connection URLs (not accessible at runtime)</li>
+                    <li className="mb-1">API keys your app code reads at startup</li>
+                    <li className="mb-1">Passwords (also visible in build history!)</li>
+                    <li>Anything your app needs via <code>os.getenv()</code></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* SECTION: ARG vs ENV */}
         <div className="doc-section-card shadow-lg border-warning">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-warning">
-              <i className="bi bi-shuffle"></i>
-            </div>
-            <h2 className="doc-card-heading text-warning">Key Difference: ARG vs. ENV</h2>
+            <div className="heading-icon text-warning"><i className="bi bi-shuffle"></i></div>
+            <h2 className="doc-card-heading text-warning">ARG vs. ENV — The Core Difference</h2>
           </div>
           <div className="doc-card-body">
-            <p className="text-secondary">
-              Unlike <code>ENV</code>, variables created with <code>ARG</code> **do not persist inside the final built image**. 
-            </p>
-            <p className="text-secondary mb-0">
-              This means you cannot check them using <code>docker inspect</code>, and they are completely unavailable inside the container shell during runtime. 
-              They are purely variables for the builder engine during compilation.
-            </p>
+            <div className="table-responsive mb-3">
+              <table className="table table-dark table-bordered table-hover x-small mb-0">
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th className="text-info">ARG</th>
+                    <th className="text-success">ENV</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Available <strong>during build</strong></td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                  </tr>
+                  <tr>
+                    <td>Available <strong>at runtime</strong> (in container)</td>
+                    <td><span className="badge bg-danger">No</span></td>
+                    <td><span className="badge bg-success">Yes</span></td>
+                  </tr>
+                  <tr>
+                    <td>Visible in <code>docker inspect</code></td>
+                    <td><span className="badge bg-danger">No</span></td>
+                    <td><span className="badge bg-warning text-dark">Yes</span></td>
+                  </tr>
+                  <tr>
+                    <td>Stored in image history</td>
+                    <td><span className="badge bg-warning text-dark">Yes (security risk!)</span></td>
+                    <td><span className="badge bg-warning text-dark">Yes</span></td>
+                  </tr>
+                  <tr>
+                    <td>Can be overridden at runtime</td>
+                    <td><span className="badge bg-danger">No</span></td>
+                    <td><span className="badge bg-success">Yes (via -e flag)</span></td>
+                  </tr>
+                  <tr>
+                    <td>Passed via</td>
+                    <td><code>--build-arg KEY=val</code></td>
+                    <td>Baked into the image</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="doc-alert doc-alert-info mb-0">
+              <i className="bi bi-lightbulb-fill"></i>
+              <div className="x-small text-secondary">
+                <strong className="text-info">The Simple Rule:</strong> If your <em>running application code</em> needs to read it via <code>os.environ</code>, <code>process.env</code>, or <code>getenv()</code>, use <code>ENV</code>. If it only affects how Docker <em>assembles</em> the image, use <code>ARG</code>.
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* SECTION: Examples */}
-        <div className="doc-section-card shadow-lg">
+        {/* SECTION: Global ARG (before FROM) */}
+        <div className="doc-section-card shadow-lg border-primary">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-primary">
-              <i className="bi bi-code-slash"></i>
-            </div>
-            <h2 className="doc-card-heading">Code Examples</h2>
+            <div className="heading-icon text-primary"><i className="bi bi-globe"></i></div>
+            <h2 className="doc-card-heading">Can ARG Be Global? (The Before-FROM Trick)</h2>
           </div>
           <div className="doc-card-body">
-            <h6 className="text-light fw-bold">Beginner Example: Dynamic OS Versioning</h6>
-            <pre className="doc-code-block mb-3 bg-dark text-light border-secondary p-3 x-small">
-{`ARG DEBIAN_VER=bullseye-slim
-FROM debian:$DEBIAN_VER`}
-            </pre>
-
-            <h6 className="text-light fw-bold mt-4">Production Example: Combining ARG and ENV</h6>
-            <p className="small text-secondary">
-              Sometimes you want a build-time argument to become a persistent environment setting. You do this by passing the ARG into an ENV:
+            <p className="text-secondary small mb-3">
+              Yes — but with a critical catch. An <code>ARG</code> declared <strong>before</strong> the first <code>FROM</code> is called a <strong>global ARG</strong>. It is the only variable that can control the <code>FROM</code> line itself (e.g., to select which base image to use).
             </p>
-            <pre className="doc-code-block mb-0 bg-dark text-light border-secondary p-3 x-small">
-{`FROM python:3.9-slim
+            <pre className="doc-code-block mb-3 bg-dark text-light border-secondary p-3 x-small">
+{`# ✅ GLOBAL ARG: declared BEFORE FROM, controls the base image
+ARG PYTHON_VER=3.11-slim
+
+FROM python:$PYTHON_VER   # This works!
+
+# ⚠️ SCOPING TRAP: $PYTHON_VER is now OUT of scope!
+RUN echo "Version is: $PYTHON_VER"   # This prints nothing!
+
+# ✅ FIX: Re-declare the ARG inside the stage (it inherits the value passed via CLI)
+ARG PYTHON_VER
+RUN echo "Version is: $PYTHON_VER"   # Now it works!`}
+            </pre>
+            <div className="doc-alert doc-alert-warning mb-0">
+              <i className="bi bi-exclamation-triangle-fill"></i>
+              <div className="x-small text-secondary">
+                <strong className="text-warning">DCA Exam Trap:</strong> A global <code>ARG</code> (before <code>FROM</code>) goes <strong>out of scope</strong> the moment the first <code>FROM</code> line is processed. To reuse the value inside the build stage, you must re-declare it with a bare <code>ARG VARIABLE_NAME</code> (no value needed — it inherits whatever was passed via <code>--build-arg</code>).
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION: Scoping in Multi-Stage Builds */}
+        <div className="doc-section-card shadow-lg border-primary">
+          <div className="doc-card-header-wrapper">
+            <div className="heading-icon text-primary"><i className="bi bi-diagram-2-fill"></i></div>
+            <h2 className="doc-card-heading">ARG Scoping in Multi-Stage Builds</h2>
+          </div>
+          <div className="doc-card-body">
+            <p className="text-secondary small mb-3">
+              Each <code>FROM</code> starts a new build stage, and <code>ARG</code>s do <strong>not</strong> automatically carry over between stages. You must re-declare them in each stage that needs them.
+            </p>
+            <pre className="doc-code-block bg-dark text-light border-secondary p-3 x-small mb-0">
+{`ARG APP_VERSION=2.0   # Global — only usable in FROM lines
+
+# --- Stage 1: Build ---
+FROM node:20-alpine AS builder
+ARG APP_VERSION          # Re-declare to use it in this stage
+RUN echo "Building v$APP_VERSION"
+
+# --- Stage 2: Production ---
+FROM nginx:alpine
+ARG APP_VERSION          # Must re-declare AGAIN in every new stage
+RUN echo "Serving v$APP_VERSION"`}
+            </pre>
+          </div>
+        </div>
+
+        {/* SECTION: ARG + ENV Pattern */}
+        <div className="doc-section-card shadow-lg">
+          <div className="doc-card-header-wrapper">
+            <div className="heading-icon text-success"><i className="bi bi-code-slash"></i></div>
+            <h2 className="doc-card-heading">The ARG + ENV Combination Pattern</h2>
+          </div>
+          <div className="doc-card-body">
+            <p className="text-secondary small mb-2">
+              The most powerful and common real-world pattern is passing a build-time <code>ARG</code> into a persistent runtime <code>ENV</code>. This lets you inject a value at build time that your application code can also read at runtime:
+            </p>
+            <pre className="doc-code-block mb-3 bg-dark text-light border-secondary p-3 x-small">
+{`FROM python:3.11-slim
 WORKDIR /app
 
-# Declare build argument
+# Declare a build-time argument
 ARG APP_VERSION=1.0.0
 
-# Pass build arg value to persistent env
-ENV PERSISTENT_VERSION=$APP_VERSION
+# Bake the build argument into a persistent runtime environment variable
+ENV APP_VERSION=$APP_VERSION
 
-# We can query this version at runtime!
-CMD ["python", "-c", "import os; print(os.environ['PERSISTENT_VERSION'])"]`}
+COPY . .
+CMD ["python", "app.py"]`}
+            </pre>
+            <pre className="doc-code-block mb-0 bg-dark text-success border-success p-3 x-small">
+{`# Build with a custom version:
+docker build --build-arg APP_VERSION=2.5.0 -t my-app .
+
+# At runtime, the container can read it:
+docker run my-app   # app.py can read os.environ["APP_VERSION"] → "2.5.0"`}
             </pre>
           </div>
         </div>
@@ -152,76 +254,65 @@ CMD ["python", "-c", "import os; print(os.environ['PERSISTENT_VERSION'])"]`}
         {/* SECTION: Interview Tips */}
         <div className="doc-section-card shadow-lg border-warning">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-warning">
-              <i className="bi bi-journal-bookmark-fill"></i>
-            </div>
-            <h2 className="doc-card-heading text-warning">Interview Questions (DCA Level)</h2>
+            <div className="heading-icon text-warning"><i className="bi bi-journal-bookmark-fill"></i></div>
+            <h2 className="doc-card-heading text-warning">Interview & DCA Questions</h2>
           </div>
           <div className="doc-card-body">
+            <div className="doc-alert doc-alert-danger mb-3">
+              <i className="bi bi-shield-exclamation"></i>
+              <div>
+                <h6 className="fw-bold mb-1 text-danger">Q: Can you safely pass passwords using ARG?</h6>
+                <p className="mb-0 x-small text-secondary">
+                  <strong>No, absolutely never!</strong> Even though <code>ARG</code> values do not exist in the running container, they are permanently recorded in the image&apos;s build history. Anyone can run <code>docker history &lt;image-name&gt;</code> and see the plain text password. Use Docker Secrets or external secret managers instead.
+                </p>
+              </div>
+            </div>
             <div className="doc-alert doc-alert-info mb-3">
               <i className="bi bi-info-circle-fill"></i>
               <div>
-                <h6 className="fw-bold mb-1 text-info">Question: Can you pass secret passwords using ARG?</h6>
+                <h6 className="fw-bold mb-1 text-info">Q: What is the difference between ARG and ENV?</h6>
                 <p className="mb-0 x-small text-secondary">
-                  <strong>No, never!</strong> While it's true that <code>ARG</code> variables are not present in the active container, they **are recorded inside the image build history**. Anyone running <code>docker history &lt;image-name&gt;</code> will be able to see the plain text password arguments passed.
+                  <code>ARG</code> exists only during the build phase and is gone after the image is built. <code>ENV</code> is baked permanently into the image and is available both during build and at runtime inside the container.
                 </p>
               </div>
             </div>
             <div className="doc-alert doc-alert-warning mb-0">
               <i className="bi bi-exclamation-triangle-fill"></i>
               <div>
-                <h6 className="fw-bold mb-1 text-warning">Question: How do built-in ARGs work?</h6>
+                <h6 className="fw-bold mb-1 text-warning">Q: What are Docker&apos;s pre-defined build ARGs?</h6>
                 <p className="mb-0 x-small text-secondary">
-                  Docker has pre-defined default build arguments that you can use without declaring them, such as: <code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>FTP_PROXY</code>, <code>NO_PROXY</code>. These are automatically excluded from the image history logs for security.
+                  Docker ships with several pre-defined build args you can use without declaring them: <code>HTTP_PROXY</code>, <code>HTTPS_PROXY</code>, <code>FTP_PROXY</code>, <code>NO_PROXY</code>, <code>TARGETARCH</code>, <code>TARGETOS</code>. These are automatically excluded from image history logs for security.
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* SECTION: Common Mistakes */}
-        <div className="doc-section-card shadow-lg">
-          <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-danger">
-              <i className="bi bi-bug-fill"></i>
-            </div>
-            <h2 className="doc-card-heading">Common Mistakes</h2>
-          </div>
-          <div className="doc-card-body">
-            <ul className="text-secondary small mb-0">
-              <li className="mb-2">
-                <span className="text-danger fw-bold">Relying on ARG in RUN scripts at runtime:</span> Writing a python script that expects `os.environ['ARG_VAR']` to exist at runtime. If you need it at runtime, you must write `ENV VAR_NAME=$ARG_VAR_NAME`.
-              </li>
-              <li>
-                <span className="text-danger fw-bold">Incorrect syntax matching:</span> Forgetting that <code>ARG</code> names must match exactly case-sensitively when executing the build CLI command.
-              </li>
-            </ul>
-          </div>
-        </div>
-
         {/* SECTION: Mini Exercise */}
         <div className="doc-section-card shadow-lg border-info">
           <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-info">
-              <i className="bi bi-pencil-square"></i>
-            </div>
-            <h2 className="doc-card-heading text-info">Mini Exercise</h2>
+            <div className="heading-icon text-info"><i className="bi bi-pencil-square"></i></div>
+            <h2 className="doc-card-heading text-info">Hands-On Lab</h2>
           </div>
           <div className="doc-card-body">
-            <p className="small text-secondary">
-              Build an image that compiles code for different environments (dev/prod):
-            </p>
-            <ol className="small text-secondary pl-3 mb-0">
-              <li className="mb-2">Create a Dockerfile:
-                <pre className="x-small text-secondary mt-1 mb-1">
+            <p className="small text-secondary mb-3">Build the same image for different environments using a single Dockerfile:</p>
+            <pre className="doc-code-block mb-3 bg-dark text-light border-secondary p-3 x-small">
 {`FROM alpine
-ARG BUILD_TYPE=development
-RUN echo "Building app in $BUILD_TYPE mode!"`}
-                </pre>
-              </li>
-              <li className="mb-2">Build Dev: <code>docker build -t app-dev .</code> (Notice the log output)</li>
-              <li>Build Prod: <code>docker build --build-arg BUILD_TYPE=production -t app-prod .</code> (Check that the build output changed to production mode!)</li>
-            </ol>
+ARG BUILD_ENV=development
+ENV APP_ENV=$BUILD_ENV
+RUN echo "Baking image for: $BUILD_ENV"`}
+            </pre>
+            <pre className="doc-code-block mb-0 bg-dark text-success border-success p-3 x-small">
+{`# Build for development (uses the default value)
+docker build -t my-app:dev .
+
+# Build for production (overrides the default)
+docker build --build-arg BUILD_ENV=production -t my-app:prod .
+
+# Prove ENV persisted into the container at runtime:
+docker run --rm my-app:prod sh -c 'echo $APP_ENV'
+# Output: production`}
+            </pre>
           </div>
         </div>
 
