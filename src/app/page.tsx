@@ -31,21 +31,20 @@ export default function RootLandingPage() {
         </div>
 
         <div className="col-md-6">
-          <div className="card bg-dark border-secondary border-opacity-50 h-100 opacity-75">
-            <div className="card-body p-5 text-center">
-              <div className="position-absolute top-0 end-0 p-3">
-                <span className="badge bg-warning text-dark">Coming Soon</span>
-              </div>
-              <i className="bi bi-bezier2 text-secondary display-3 mb-4 opacity-75"></i>
-              <h2 className="text-white mb-3 opacity-75 fw-bold">Kubernetes (CKA)</h2>
-              <p className="text-secondary mb-0">
-                Advanced Kubernetes administration, cluster architecture, troubleshooting, and CKA exam preparation.
-              </p>
-              <div className="mt-4 pt-3 border-top border-secondary border-opacity-25 text-secondary">
-                In Development
+          <Link href="/cka/introduction/why-kubernetes" className="text-decoration-none h-100 d-block">
+            <div className="card bg-dark border-info h-100 course-card position-relative overflow-hidden group">
+              <div className="card-body p-5 text-center">
+                <i className="bi bi-bezier2 text-info display-3 mb-4"></i>
+                <h2 className="text-white mb-3 fw-bold">Kubernetes (CKA)</h2>
+                <p className="text-secondary mb-0">
+                  Advanced Kubernetes administration, cluster architecture, troubleshooting, and CKA exam preparation.
+                </p>
+                <div className="mt-4 pt-3 border-top border-info border-opacity-25 text-info fw-bold">
+                  Enter Course <i className="bi bi-arrow-right ms-2"></i>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
 
