@@ -2,18 +2,16 @@ import type { Metadata, Viewport } from "next";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "@/styles/globals.css";
-import Sidebar from "@/components/Sidebar";
 import BootstrapInit from "@/components/BootstrapInit";
-import SearchBar from "@/components/SearchBar";
 
 export const metadata: Metadata = {
-    title: "Docker Documentation | Offline Ready",
-    description: "Professional Docker documentation with full offline support and PWA capabilities.",
+    title: "DevOps Learning Platform",
+    description: "Professional Docker and CKA documentation with full offline support and PWA capabilities.",
     manifest: "/manifest.json",
     appleWebApp: {
         capable: true,
         statusBarStyle: "default",
-        title: "Docker Docs",
+        title: "DevOps Platform",
     },
     formatDetection: {
         telephone: false,
@@ -40,21 +38,7 @@ export default function RootLayout({
             </head>
             <body>
                 <BootstrapInit />
-                <div className="app-wrapper">
-                    <Sidebar />
-                    <main className="main-content" id="main-content">
-                        {/* Topbar */}
-                        <header className="topbar">
-                            <div className="container-fluid px-4">
-                                <SearchBar />
-                            </div>
-                        </header>
-
-                        <div className="content-area">
-                            {children}
-                        </div>
-                    </main>
-                </div>
+                {children}
             </body>
         </html>
     );
