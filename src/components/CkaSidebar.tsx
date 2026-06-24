@@ -29,6 +29,21 @@ export const CKA_NAV_CONFIG: NavItem[] = [
       { label: "Why Kubernetes?", icon: "bi-question-circle-fill", href: "/cka/introduction/why-kubernetes" },
     ],
   },
+  {
+    section: "CORE CONCEPTS",
+    label: "Architecture",
+    icon: "bi-diagram-3-fill",
+    children: [
+      { label: "Cluster Architecture", icon: "bi-server", href: "/cka/architecture" },
+    ],
+  },
+  {
+    label: "Pods",
+    icon: "bi-box-seam-fill",
+    children: [
+      { label: "Understanding Pods", icon: "bi-info-circle-fill", href: "/cka/core-concepts/pods" },
+    ],
+  },
 ];
 
 export default function CkaSidebar() {
