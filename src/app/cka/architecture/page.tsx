@@ -22,7 +22,7 @@ export default function ArchitecturePage() {
       </div>
 
       <div className="doc-content-grid">
-        
+
         {/* SECTION: Architecture Flow Diagram */}
         <div className="doc-section-card shadow-lg border-primary mb-5">
           <div className="doc-card-header-wrapper">
@@ -67,7 +67,7 @@ export default function ArchitecturePage() {
                 <div className="p-3 bg-dark rounded border border-secondary border-opacity-50">
                   <h5 className="text-light fw-bold mb-2"><i className="bi bi-door-open-fill text-primary me-2"></i>kube-apiserver</h5>
                   <p className="text-secondary small mb-2">
-                    The absolute center of Kubernetes. Every single request—whether from a user, a worker node, or another control plane component—must go through the API server. 
+                    The absolute center of Kubernetes. Every single request—whether from a user, a worker node, or another control plane component—must go through the API server.
                   </p>
                   <p className="text-secondary small mb-0">
                     <strong>Flow:</strong> It receives the request, <em>Authenticates</em> the user, <em>Validates</em> the request syntax, and then writes the new desired state to etcd.
@@ -89,7 +89,7 @@ export default function ArchitecturePage() {
                 <div className="p-3 bg-dark rounded border border-secondary border-opacity-50">
                   <h5 className="text-light fw-bold mb-2"><i className="bi bi-calendar2-check-fill text-success me-2"></i>kube-scheduler</h5>
                   <p className="text-secondary small mb-2">
-                    The matchmaker. When the API server says "we need a new Pod", the Scheduler looks at all available Worker Nodes to pick the absolute best Node for the Pod to run on. 
+                    The matchmaker. When the API server says "we need a new Pod", the Scheduler looks at all available Worker Nodes to pick the absolute best Node for the Pod to run on.
                   </p>
                   <p className="text-secondary small mb-0">
                     <strong className="text-info">Crucial Detail:</strong> The scheduler <em>does not</em> physically scan or ping the nodes. Instead, it reads the <code>Node</code> objects cached in the API Server (which the Kubelets continuously update with their CPU/Memory availability). It analyzes these constraints and anti-affinity rules, and simply tells the API server "Bind this Pod to Node X". It does <em>not</em> run the Pod itself.
@@ -134,7 +134,7 @@ export default function ArchitecturePage() {
                 <div className="p-3 bg-dark rounded border border-success border-opacity-50 h-100">
                   <h5 className="text-light fw-bold mb-2"><i className="bi bi-router-fill text-success me-2"></i>kube-proxy &amp; CNI</h5>
                   <p className="text-secondary small mb-2">
-                    The network traffic cop. It runs on every node and watches the API server for new Services. It then writes <strong>iptables or IPVS rules</strong> locally on that node. 
+                    The network traffic cop. It runs on every node and watches the API server for new Services. It then writes <strong>iptables or IPVS rules</strong> locally on that node.
                   </p>
                   <p className="text-secondary small mb-0">
                     <strong className="text-warning">How cross-node routing works:</strong> If a request hits Node A, but the Pod is on Node B, <code>kube-proxy</code> uses its iptables to rewrite the destination IP to the Pod's IP (NAT). However, <code>kube-proxy</code> doesn't physically transport the packet across nodes! The actual cross-node networking (the overlay network/virtualization) is handled by the <strong>CNI (Container Network Interface)</strong> plugin, like Calico or Flannel.
@@ -162,7 +162,7 @@ export default function ArchitecturePage() {
             <h2 className="doc-card-heading text-danger">Interview Focus (CKA Essentials)</h2>
           </div>
           <div className="doc-card-body">
-            
+
             <div className="mb-4">
               <h6 className="text-light fw-bold">Q: What happens to the cluster if the API Server goes down?</h6>
               <p className="text-secondary small border-start border-3 border-secondary ps-3 py-1">

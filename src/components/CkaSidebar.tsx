@@ -27,14 +27,17 @@ export const CKA_NAV_CONFIG: NavItem[] = [
     icon: "bi-rocket-takeoff-fill",
     children: [
       { label: "Why Kubernetes?", icon: "bi-question-circle-fill", href: "/cka/introduction/why-kubernetes" },
+      { label: "Installation", icon: "bi-download", href: "/cka/introduction/installation" },
     ],
   },
   {
     section: "CORE CONCEPTS",
-    label: "Architecture",
+    label: "Cluster",
     icon: "bi-diagram-3-fill",
     children: [
+      { label: "What is a Cluster?", icon: "bi-question-circle-fill", href: "/cka/architecture/what-is-cluster" },
       { label: "Cluster Architecture", icon: "bi-server", href: "/cka/architecture" },
+      { label: "Create a Cluster", icon: "bi-plus-circle-fill", href: "/cka/architecture/create-cluster" },
     ],
   },
   {

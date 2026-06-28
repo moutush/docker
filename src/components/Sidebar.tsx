@@ -23,6 +23,12 @@ interface NavItem {
 
 export const NAV_CONFIG: NavItem[] = [
   {
+    section: "OVERVIEW",
+    label: "Dashboard",
+    icon: "bi-house-fill",
+    href: "/docker",
+  },
+  {
     section: "PRACTICE",
     label: "Daily Drills",
     icon: "bi-lightning-charge-fill",
@@ -477,6 +483,13 @@ export default function Sidebar() {
               </React.Fragment>
             );
           })}
+
+
+          <div className="nav-section-label mt-4">BACK TO PORTAL</div>
+          <Link href="/" className="nav-link-item">
+            <i className="bi bi-house-door-fill nav-link-icon" />
+            <span className="nav-link-text">Home Portal</span>
+          </Link>
 
           <div className="nav-section-label mt-4">SETTINGS</div>
           <Link 
