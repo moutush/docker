@@ -57,6 +57,21 @@ export default function CreateClusterPage() {
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small">
 {`kind create cluster --name cka-single --image kindest/node:v1.34.0`}
             </pre>
+            <div className="mt-2 mb-1">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-tag-fill me-1 text-warning"></i>Flag breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>--name cka-single</code></td>
+                    <td className="text-secondary">Names the cluster. Kind stores it in kubeconfig as <code>kind-cka-single</code> (always prefixes with <code>kind-</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><code>--image kindest/node:v1.34.0</code></td>
+                    <td className="text-secondary">Selects the node container image — this is how you pin the exact Kubernetes version. Omitting it uses Kind&apos;s default version</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <div className="doc-alert doc-alert-warning mt-3 mb-4">
               <i className="bi bi-exclamation-triangle-fill"></i>
@@ -88,16 +103,58 @@ nodes:
   - role: control-plane
     image: kindest/node:v1.34.0`}
             </pre>
+            <div className="mt-2 mb-3">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-file-earmark-code-fill me-1 text-info"></i>YAML field breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>kind: Cluster</code></td>
+                    <td className="text-secondary">Tells Kind what type of resource this file describes. Always <code>Cluster</code> for cluster configs (Kind also has other resource types like <code>InitConfiguration</code>)</td>
+                  </tr>
+                  <tr>
+                    <td><code>apiVersion: kind.x-k8s.io/v1alpha4</code></td>
+                    <td className="text-secondary">The schema version Kind uses to parse this file. <code>v1alpha4</code> is the current stable version — it determines which fields are valid</td>
+                  </tr>
+                  <tr>
+                    <td><code>name: cka-single</code></td>
+                    <td className="text-secondary">The cluster name. Kind stores it in kubeconfig as <code>kind-cka-single</code> (always prefixes with <code>kind-</code>). This overrides any <code>--name</code> CLI flag</td>
+                  </tr>
+                  <tr>
+                    <td><code>nodes:</code></td>
+                    <td className="text-secondary">A list of node definitions. Each <code>-</code> entry becomes one Docker container acting as a Kubernetes node</td>
+                  </tr>
+                  <tr>
+                    <td><code>role: control-plane</code></td>
+                    <td className="text-secondary">Marks this node as the control plane — it runs the API server, scheduler, etcd, and controller manager. Every cluster needs exactly one</td>
+                  </tr>
+                  <tr>
+                    <td><code>image: kindest/node:v1.34.0</code></td>
+                    <td className="text-secondary">The Docker image for this node. The tag (<code>v1.34.0</code>) is the Kubernetes version that will be installed on this node</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <p className="text-secondary small">Then apply the config:</p>
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small">
 {`kind create cluster --config single-node.yaml`}
             </pre>
+            <div className="mt-2 mb-1">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-tag-fill me-1 text-warning"></i>Flag breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>--config single-node.yaml</code></td>
+                    <td className="text-secondary">Points Kind to a YAML file for cluster definition. The cluster name, node roles, and image are all declared inside — no extra CLI flags needed</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             {/* 1.3 Verify */}
             <h5 className="text-light fw-bold mt-4 mb-3">Step 1.3: Verify the Cluster</h5>
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small">
-{`# List all clusters Kind is managing:
-kind get clusters
+{`# List all clusters defined in your kubeconfig:
+kubectl config get-clusters
 
 # Check nodes (should show 1 node, Ready status):
 kubectl get nodes
@@ -108,6 +165,25 @@ kubectl get pods -n kube-system
 # Inspect cluster info:
 kubectl cluster-info --context kind-cka-single`}
             </pre>
+            <div className="mt-2 mb-1">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-tag-fill me-1 text-warning"></i>Flag breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>config get-clusters</code></td>
+                    <td className="text-secondary">Sub-command of <code>kubectl config</code> — reads your <code>~/.kube/config</code> and lists every cluster entry by name</td>
+                  </tr>
+                  <tr>
+                    <td><code>get pods -n kube-system</code></td>
+                    <td className="text-secondary"><code>-n</code> (short for <code>--namespace</code>) scopes the query to a specific namespace. <code>kube-system</code> holds the core control-plane pods</td>
+                  </tr>
+                  <tr>
+                    <td><code>cluster-info --context kind-cka-single</code></td>
+                    <td className="text-secondary"><code>--context</code> tells kubectl which cluster to target for this one command, without changing your active context permanently</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <div className="doc-alert doc-alert-info mt-4 mb-0">
               <i className="bi bi-link-45deg"></i>
@@ -156,12 +232,64 @@ nodes:
   - role: worker
     image: kindest/node:v1.34.0`}
             </pre>
+            <div className="mt-2 mb-3">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-file-earmark-code-fill me-1 text-info"></i>YAML field breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>kind / apiVersion</code></td>
+                    <td className="text-secondary">Same as single-node — <code>Cluster</code> resource type, <code>v1alpha4</code> schema. These two lines are always identical in Kind configs</td>
+                  </tr>
+                  <tr>
+                    <td><code>name: cka-multi</code></td>
+                    <td className="text-secondary">Cluster name, stored in kubeconfig as <code>kind-cka-multi</code>. Defined here in the file so no <code>--name</code> flag is needed on the CLI</td>
+                  </tr>
+                  <tr>
+                    <td><code>nodes:</code></td>
+                    <td className="text-secondary">List of nodes. Each <code>-</code> entry becomes a separate Docker container. The order determines boot sequence — control-plane always comes first</td>
+                  </tr>
+                  <tr>
+                    <td><code>role: control-plane</code></td>
+                    <td className="text-secondary">This node hosts the Kubernetes control plane components (API server, etcd, scheduler, controller manager). A cluster has exactly one</td>
+                  </tr>
+                  <tr>
+                    <td><code>role: worker</code></td>
+                    <td className="text-secondary">A pure workload node — no control plane components. Pods you schedule will run here. Add as many <code>- role: worker</code> entries as you need</td>
+                  </tr>
+                  <tr>
+                    <td><code>image: kindest/node:v1.34.0</code></td>
+                    <td className="text-secondary">Set per-node. Each node can have a different image (and therefore a different K8s version) — useful for testing version skew scenarios</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div className="doc-alert doc-alert-info mt-3 mb-4">
+              <i className="bi bi-info-circle-fill"></i>
+              <div>
+                <h6 className="fw-bold mb-1 text-info">Where is the cluster name?</h6>
+                <p className="mb-0 x-small text-secondary">
+                  Notice the <code>name: cka-multi</code> field in the YAML file. When using a config file, Kind uses this field to name the cluster. You don't need to pass the <code>--name</code> flag in the CLI command, as the config file takes precedence.
+                </p>
+              </div>
+            </div>
 
             {/* 2.2 Create */}
             <h5 className="text-light fw-bold mt-4 mb-3">Step 2.2: Create the Cluster</h5>
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small">
 {`kind create cluster --config multi-node.yaml`}
             </pre>
+            <div className="mt-2 mb-3">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-tag-fill me-1 text-warning"></i>Flag breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>--config multi-node.yaml</code></td>
+                    <td className="text-secondary">Reads the cluster topology from the YAML file — number of nodes, their roles, images, and the cluster name are all declared there. No extra flags needed</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
             <p className="text-secondary small mt-2">
               Kind will pull the node image once and reuse it for each node container. This may take a few minutes the first time.
             </p>
@@ -169,15 +297,37 @@ nodes:
             {/* 2.3 Verify */}
             <h5 className="text-light fw-bold mt-4 mb-3">Step 2.3: Verify the Cluster</h5>
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small">
-{`# All 3 nodes should appear as Ready:
+{`# List all clusters defined in your kubeconfig to see your new multi-node cluster:
+kubectl config get-clusters
+
+# All 3 nodes should appear as Ready:
 kubectl get nodes -o wide
 
-# Check the context Kind registered:
+# Check the active context:
 kubectl config current-context
 
 # Describe a specific worker node:
 kubectl describe node cka-multi-worker`}
             </pre>
+            <div className="mt-2 mb-1">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-tag-fill me-1 text-warning"></i>Flag breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>get nodes -o wide</code></td>
+                    <td className="text-secondary"><code>-o wide</code> (output format) adds extra columns like internal IP, OS image, and container runtime — more detail than the default view</td>
+                  </tr>
+                  <tr>
+                    <td><code>config current-context</code></td>
+                    <td className="text-secondary">Prints only the name of whichever context is currently active — confirms your commands are targeting the right cluster</td>
+                  </tr>
+                  <tr>
+                    <td><code>describe node &lt;name&gt;</code></td>
+                    <td className="text-secondary">Shows full details for one node: labels, taints, conditions, resource capacity, and all pods scheduled on it</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <div className="doc-alert doc-alert-info mt-4 mb-0">
               <i className="bi bi-link-45deg"></i>
@@ -224,8 +374,8 @@ kubectl config current-context`}
 
             <h5 className="text-light fw-bold mt-4 mb-3">Listing and Deleting Clusters</h5>
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small">
-{`# List all Kind-managed clusters:
-kind get clusters
+{`# List all clusters known to kubectl (from your kubeconfig):
+kubectl config get-clusters
 
 # Delete a specific cluster (stops containers, removes kubeconfig context):
 kind delete cluster --name cka-single
@@ -234,6 +384,21 @@ kind delete cluster --name cka-multi
 # Delete ALL Kind clusters at once:
 kind delete clusters --all`}
             </pre>
+            <div className="mt-2 mb-1">
+              <p className="text-secondary x-small mb-1 fw-semibold"><i className="bi bi-tag-fill me-1 text-warning"></i>Flag breakdown:</p>
+              <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                <tbody>
+                  <tr>
+                    <td style={{width:'42%'}}><code>delete cluster --name &lt;name&gt;</code></td>
+                    <td className="text-secondary">Targets a named cluster for deletion. Without <code>--name</code>, Kind defaults to deleting the cluster named <code>kind</code> — you&apos;d silently delete the wrong one</td>
+                  </tr>
+                  <tr>
+                    <td><code>delete clusters --all</code></td>
+                    <td className="text-secondary">Note the plural <code>clusters</code>. Stops all Kind Docker containers and removes every Kind entry from your kubeconfig in one shot</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
 
             <div className="doc-alert doc-alert-info mt-4 mb-0">
               <i className="bi bi-link-45deg"></i>
@@ -280,8 +445,8 @@ kind delete clusters --all`}
                     <td><code>kind create cluster --config cluster.yaml</code></td>
                   </tr>
                   <tr>
-                    <td className="text-light">List all Kind clusters</td>
-                    <td><code>kind get clusters</code></td>
+                    <td className="text-light">List all clusters in kubeconfig</td>
+                    <td><code>kubectl config get-clusters</code></td>
                   </tr>
                   <tr>
                     <td className="text-light">List cluster nodes</td>

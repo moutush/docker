@@ -38,6 +38,7 @@ export const CKA_NAV_CONFIG: NavItem[] = [
       { label: "What is a Cluster?", icon: "bi-question-circle-fill", href: "/cka/architecture/what-is-cluster" },
       { label: "Cluster Architecture", icon: "bi-server", href: "/cka/architecture" },
       { label: "Create a Cluster", icon: "bi-plus-circle-fill", href: "/cka/architecture/create-cluster" },
+      { label: "List Clusters & Nodes", icon: "bi-list-ul", href: "/cka/architecture/list-clusters" },
     ],
   },
   {
@@ -46,6 +47,12 @@ export const CKA_NAV_CONFIG: NavItem[] = [
     children: [
       { label: "Understanding Pods", icon: "bi-info-circle-fill", href: "/cka/core-concepts/pods" },
     ],
+  },
+  {
+    section: "PRACTICE",
+    label: "Practice Tasks",
+    icon: "bi-laptop",
+    href: "/cka/practice-tasks",
   },
 ];
 
