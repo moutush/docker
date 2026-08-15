@@ -366,237 +366,13 @@ spec:                 # ④ The desired state — what you WANT the Pod to look 
           </div>
         </div>
 
-        {/* ── SECTION 6: HANDS-ON WORKFLOW ─────────────────────────────────── */}
-        <div className="doc-section-card shadow-lg border-success mb-4">
-          <div className="doc-card-header-wrapper">
-            <div className="heading-icon text-success">
-              <i className="bi bi-terminal-fill"></i>
-            </div>
-            <h2 className="doc-card-heading text-success">6. Hands-On — Full Pod Lifecycle Workflow</h2>
-          </div>
-          <div className="doc-card-body">
-            <p className="text-secondary mb-4">
-              Follow every step in order. We&apos;ll create a Pod, break it, diagnose it, fix it, and clean up.
-            </p>
-
-            {/* Step 1 */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-success text-dark me-2">Step 1</span>Create the hello-pod
-              </h6>
-              <p className="text-secondary small mb-2">Save the YAML from Section 4 as <code>hello-pod.yaml</code>, then apply it:</p>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-0">
-{`kubectl apply -f hello-pod.yaml
-# Output: pod/hello-pod created`}
-              </pre>
-            </div>
-
-            {/* Step 2 */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-success text-dark me-2">Step 2</span>List all Pods
-              </h6>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`kubectl get pods
-# NAME        READY   STATUS    RESTARTS   AGE
-# hello-pod   1/1     Running   0          12s`}
-              </pre>
-              <div className="mt-2">
-                <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
-                  <tbody>
-                    <tr><td style={{width:'35%'}}><code>READY 1/1</code></td><td className="text-secondary">1 out of 1 containers is running. If it shows 0/1, the container hasn&apos;t started yet</td></tr>
-                    <tr><td><code>STATUS</code></td><td className="text-secondary">The Pod&apos;s current phase: Pending → ContainerCreating → Running → Completed/Error</td></tr>
-                    <tr><td><code>RESTARTS</code></td><td className="text-secondary">How many times the container has crashed and been restarted. Non-zero means trouble</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Step 3 */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-success text-dark me-2">Step 3</span>Delete the Pod
-              </h6>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`kubectl delete pod hello-pod
-# pod "hello-pod" deleted
-# (waits ~30 seconds for graceful shutdown)
-
-# Impatient? Force-delete immediately:
-kubectl delete pod hello-pod --force
-# Warning: Immediate deletion does not wait for confirmation that the running resource has been terminated.`}
-              </pre>
-              <p className="text-secondary x-small mb-0">
-                <strong className="text-light">What happens:</strong> Kubernetes sends <code>SIGTERM</code> to the container, waits 30s (the <code>terminationGracePeriodSeconds</code>), then sends <code>SIGKILL</code>.
-                <code>--force</code> skips the wait and kills immediately. Use it in the exam to save time.
-              </p>
-            </div>
-
-            {/* Step 4 — Corrupt */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-danger text-light me-2">Step 4</span>Corrupt the Pod — break it on purpose
-              </h6>
-              <p className="text-secondary small mb-2">
-                Re-create the Pod first, then break it by editing the YAML to use a bad image name:
-              </p>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`kubectl apply -f hello-pod.yaml          # create it again
-
-# Now open the file and change the image to something that doesn't exist:
-nano hello-pod.yaml
-# Change:  image: nginx:1.25
-# To:      image: nginx:this-tag-does-not-exist
-
-# Apply the broken version:
-kubectl apply -f hello-pod.yaml`}
-              </pre>
-              <div className="doc-alert doc-alert-warning mb-0">
-                <i className="bi bi-exclamation-triangle-fill"></i>
-                <div>
-                  <p className="mb-0 x-small text-secondary">
-                    Note: for a <em>running</em> Pod, changing the image in YAML and re-applying doesn&apos;t work for bare Pods (the spec is immutable).
-                    In this exercise, first delete the Pod, edit the YAML, then apply — this creates a fresh broken Pod.
-                    <code className="d-block mt-1">kubectl delete pod hello-pod && kubectl apply -f hello-pod.yaml</code>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 5 — List broken */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-warning text-dark me-2">Step 5</span>List Pods — spot the broken one
-              </h6>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`kubectl get pods
-# NAME        READY   STATUS             RESTARTS   AGE
-# hello-pod   0/1     ImagePullBackOff   0          23s`}
-              </pre>
-              <p className="text-secondary x-small mb-0">
-                <code>READY 0/1</code> — no containers are running. <code>ImagePullBackOff</code> means Kubernetes tried to pull the image, failed, and is backing off (waiting before retrying).
-                The <code>ErrImagePull</code> state appears first, then it becomes <code>ImagePullBackOff</code> after a few attempts.
-              </p>
-            </div>
-
-            {/* Step 6 — Describe */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-info text-dark me-2">Step 6</span>Debug with <code>kubectl describe</code>
-              </h6>
-              <p className="text-secondary small mb-2">
-                <code>describe</code> is your primary diagnostic tool. It shows the full Pod spec AND the event log at the bottom.
-                <strong className="text-light"> Always scroll to the Events section first.</strong>
-              </p>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`kubectl describe pod hello-pod`}
-              </pre>
-              <pre className="bg-dark text-warning p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`Events:
-  Type     Reason     Age   From               Message
-  ----     ------     ----  ----               -------
-  Normal   Scheduled  35s   default-scheduler  Successfully assigned default/hello-pod to node-1
-  Normal   Pulling    34s   kubelet            Pulling image "nginx:this-tag-does-not-exist"
-  Warning  Failed     31s   kubelet            Failed to pull image: rpc error: ... not found
-  Warning  Failed     31s   kubelet            Error: ErrImagePull
-  Warning  BackOff    18s   kubelet            Back-off pulling image "nginx:this-tag-does-not-exist"`}
-              </pre>
-              <p className="text-secondary x-small mb-0">
-                The Events section tells you <em>exactly</em> what went wrong and when. The image tag doesn&apos;t exist. Now you know how to fix it.
-              </p>
-            </div>
-
-            {/* Step 7 — Edit */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-info text-dark me-2">Step 7</span>Fix it with <code>kubectl edit pod</code>
-              </h6>
-              <p className="text-secondary small mb-2">
-                <code>kubectl edit</code> opens the live Pod spec in your terminal editor (usually <code>vi</code>). You edit it, save, and Kubernetes applies the diff.
-              </p>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`kubectl edit pod hello-pod
-# Opens the Pod spec in vi/vim.
-# Find the image line:  image: nginx:this-tag-does-not-exist
-# Change it to:         image: nginx:1.25
-# Save and exit:        :wq  (in vi)
-# Output: pod/hello-pod edited`}
-              </pre>
-              <div className="mt-2 mb-3">
-                <p className="text-secondary x-small mb-1 fw-semibold">Alternatives to <code>kubectl edit</code>:</p>
-                <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
-                  <tbody>
-                    <tr>
-                      <td style={{width:'50%'}}><code>kubectl patch pod hello-pod -p &apos;{`{"spec":{"containers":[{"name":"hello","image":"nginx:1.25"}]}}`}&apos;</code></td>
-                      <td className="text-secondary">Patch a specific field inline — no editor needed. Useful in scripts</td>
-                    </tr>
-                    <tr>
-                      <td>Fix the YAML file → <code>kubectl delete pod hello-pod &amp;&amp; kubectl apply -f hello-pod.yaml</code></td>
-                      <td className="text-secondary">Delete and recreate — always works, even for immutable fields</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div className="doc-alert doc-alert-warning mb-0">
-                <i className="bi bi-exclamation-triangle-fill"></i>
-                <div>
-                  <p className="mb-0 x-small text-secondary">
-                    <strong className="text-light">Most Pod fields are immutable on a running Pod</strong> — you can&apos;t change the container name, volumes, or resource limits without deleting and recreating.
-                    Only a few fields (like labels and annotations) can be edited live. <code>kubectl edit</code> will warn you if you try to change an immutable field.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Step 8 — Exec */}
-            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-primary text-light me-2">Step 8</span>Enter the Pod — run commands inside it
-              </h6>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
-{`# Interactive shell inside the container:
-kubectl exec -it hello-pod -- /bin/bash
-# You're now inside the container. Try:
-nginx -v
-cat /etc/nginx/nginx.conf
-exit
-
-# Or run a one-off command without opening a shell:
-kubectl exec hello-pod -- cat /etc/hosts`}
-              </pre>
-              <div className="mt-2">
-                <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
-                  <tbody>
-                    <tr><td style={{width:'35%'}}><code>exec</code></td><td className="text-secondary">Execute a command inside a running container in the Pod</td></tr>
-                    <tr><td><code>-it</code></td><td className="text-secondary"><code>-i</code> = keep stdin open. <code>-t</code> = allocate a terminal. Together = interactive shell. Like <code>docker exec -it</code></td></tr>
-                    <tr><td><code>--</code> (double dash)</td><td className="text-secondary">Separates kubectl flags from the command being run inside the container. Everything after <code>--</code> runs in the container</td></tr>
-                    <tr><td><code>/bin/bash</code> vs <code>/bin/sh</code></td><td className="text-secondary">Use <code>/bin/bash</code> for Debian/Ubuntu images. Use <code>/bin/sh</code> for Alpine (minimal) images — bash isn&apos;t installed there</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            {/* Step 9 — Delete */}
-            <div className="mb-0">
-              <h6 className="text-light fw-bold mb-2">
-                <span className="badge bg-danger text-light me-2">Step 9</span>Clean up — delete the Pod
-              </h6>
-              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-0">
-{`kubectl delete pod hello-pod
-# or use the YAML:
-kubectl delete -f hello-pod.yaml`}
-              </pre>
-            </div>
-          </div>
-        </div>
-
-        {/* ── SECTION 7: DRY RUN WORKFLOW ──────────────────────────────────── */}
+        {/* ── SECTION 6: DRY RUN WORKFLOW ──────────────────────────────────── */}
         <div className="doc-section-card shadow-lg border-warning mb-4">
           <div className="doc-card-header-wrapper">
             <div className="heading-icon text-warning">
               <i className="bi bi-file-earmark-arrow-down-fill"></i>
             </div>
-            <h2 className="doc-card-heading text-warning">7. Why Not Write YAML by Hand — The Dry Run Workflow</h2>
+            <h2 className="doc-card-heading text-warning">6. Why Not Write YAML by Hand — The Dry Run Workflow</h2>
           </div>
           <div className="doc-card-body">
             <h5 className="text-light fw-bold mb-3">Why writing YAML by hand is risky in the CKA exam</h5>
@@ -642,6 +418,22 @@ kubectl apply -f hello-pod.yaml`}
               </table>
             </div>
 
+            <h5 className="text-light fw-bold mb-3">Powering up the dry run (Exam Shortcuts)</h5>
+            <p className="text-secondary mb-3">
+              You can instruct <code>kubectl run</code> to generate much of the YAML for you using flags. This minimizes the time spent in <code>vi</code>:
+            </p>
+            <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-4">
+{`# Add labels (--labels) and expose a container port (--port):
+kubectl run mypod --image=nginx --labels="tier=frontend,env=dev" --port=80 --dry-run=client -o yaml > pod.yaml
+
+# Inject environment variables (for multiple variables, repeat the --env flag):
+kubectl run mypod --image=nginx --env="VAR1=value1" --env="VAR2=value2" --dry-run=client -o yaml > pod.yaml
+
+# Set the restart policy (default is Always, use Never for one-off pods):
+kubectl run mypod --image=busybox --restart=Never --dry-run=client -o yaml -- sh -c "echo hello" > pod.yaml
+# (Notice how the container command goes at the very end after the -- )`}
+            </pre>
+
             <h5 className="text-light fw-bold mb-3">Quick vi cheat sheet (exam survival)</h5>
             <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-0">
 {`i          → enter Insert mode (you can type now)
@@ -655,6 +447,245 @@ p          → paste the copied line below
 u          → undo
 Ctrl+r     → redo`}
             </pre>
+          </div>
+        </div>
+
+        {/* ── SECTION 7: HANDS-ON WORKFLOW ─────────────────────────────────── */}
+        <div className="doc-section-card shadow-lg border-success mb-4">
+          <div className="doc-card-header-wrapper">
+            <div className="heading-icon text-success">
+              <i className="bi bi-terminal-fill"></i>
+            </div>
+            <h2 className="doc-card-heading text-success">7. Hands-On — Full Pod Lifecycle Workflow</h2>
+          </div>
+          <div className="doc-card-body">
+            <p className="text-secondary mb-4">
+              Follow every step in order. We&apos;ll create a Pod, break it, diagnose it, fix it, and clean up.
+            </p>
+
+            {/* Step 1 */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-success text-dark me-2">Step 1</span>Create a Cluster
+              </h6>
+              <p className="text-secondary small mb-2">Before we can create a Pod, we need a Kubernetes cluster running. Let&apos;s create a single-node cluster using Kind:</p>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kind create cluster --name cka-single --image kindest/node:v1.34.0`}
+              </pre>
+              <p className="text-secondary x-small mb-0">
+                <strong className="text-light">Note:</strong> For full cluster creation details, visit the <a href="/cka/architecture/create-cluster" className="text-info text-decoration-underline">Create a Cluster</a> guide.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-success text-dark me-2">Step 2</span>Create the hello-pod
+              </h6>
+              <p className="text-secondary small mb-2">Generate the Pod YAML using dry-run, then apply it:</p>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-0">
+{`kubectl run hello-pod --image=nginx:1.25 --dry-run=client -o yaml > hello-pod.yaml
+kubectl apply -f hello-pod.yaml
+# Output: pod/hello-pod created`}
+              </pre>
+            </div>
+
+            {/* Step 3 */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-success text-dark me-2">Step 3</span>List all Pods
+              </h6>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kubectl get pods
+# NAME        READY   STATUS    RESTARTS   AGE
+# hello-pod   1/1     Running   0          12s`}
+              </pre>
+              <div className="mt-2">
+                <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                  <tbody>
+                    <tr><td style={{width:'35%'}}><code>READY 1/1</code></td><td className="text-secondary">1 out of 1 containers is running. If it shows 0/1, the container hasn&apos;t started yet</td></tr>
+                    <tr><td><code>STATUS</code></td><td className="text-secondary">The Pod&apos;s current phase: Pending → ContainerCreating → Running → Completed/Error</td></tr>
+                    <tr><td><code>RESTARTS</code></td><td className="text-secondary">How many times the container has crashed and been restarted. Non-zero means trouble</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Step 4 */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-success text-dark me-2">Step 4</span>Delete the Pod
+              </h6>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kubectl delete pod hello-pod
+# pod "hello-pod" deleted
+# (waits ~30 seconds for graceful shutdown)
+
+# Impatient? Force-delete immediately:
+kubectl delete pod hello-pod --force
+# Warning: Immediate deletion does not wait for confirmation that the running resource has been terminated.`}
+              </pre>
+              <p className="text-secondary x-small mb-0">
+                <strong className="text-light">What happens:</strong> Kubernetes sends <code>SIGTERM</code> to the container, waits 30s (the <code>terminationGracePeriodSeconds</code>), then sends <code>SIGKILL</code>.
+                <code>--force</code> skips the wait and kills immediately. Use it in the exam to save time.
+              </p>
+            </div>
+
+            {/* Step 5 — Corrupt */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-danger text-light me-2">Step 5</span>Corrupt the Pod — break it on purpose
+              </h6>
+              <p className="text-secondary small mb-2">
+                Re-create the Pod first, then break it by editing the YAML to use a bad image name:
+              </p>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kubectl apply -f hello-pod.yaml          # create it again
+
+# Now open the file and change the image to something that doesn't exist:
+nano hello-pod.yaml
+# Change:  image: nginx:1.25
+# To:      image: nginx:this-tag-does-not-exist
+
+# Apply the broken version:
+kubectl apply -f hello-pod.yaml`}
+              </pre>
+              <div className="doc-alert doc-alert-warning mb-0">
+                <i className="bi bi-exclamation-triangle-fill"></i>
+                <div>
+                  <p className="mb-0 x-small text-secondary">
+                    Note: for a <em>running</em> Pod, changing the image in YAML and re-applying doesn&apos;t work for bare Pods (the spec is immutable).
+                    In this exercise, first delete the Pod, edit the YAML, then apply — this creates a fresh broken Pod.
+                    <code className="d-block mt-1">kubectl delete pod hello-pod && kubectl apply -f hello-pod.yaml</code>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 6 — List broken */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-warning text-dark me-2">Step 6</span>List Pods — spot the broken one
+              </h6>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kubectl get pods
+# NAME        READY   STATUS             RESTARTS   AGE
+# hello-pod   0/1     ImagePullBackOff   0          23s`}
+              </pre>
+              <p className="text-secondary x-small mb-0">
+                <code>READY 0/1</code> — no containers are running. <code>ImagePullBackOff</code> means Kubernetes tried to pull the image, failed, and is backing off (waiting before retrying).
+                The <code>ErrImagePull</code> state appears first, then it becomes <code>ImagePullBackOff</code> after a few attempts.
+              </p>
+            </div>
+
+            {/* Step 7 — Describe */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-info text-dark me-2">Step 7</span>Debug with <code>kubectl describe</code>
+              </h6>
+              <p className="text-secondary small mb-2">
+                <code>describe</code> is your primary diagnostic tool. It shows the full Pod spec AND the event log at the bottom.
+                <strong className="text-light"> Always scroll to the Events section first.</strong>
+              </p>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kubectl describe pod hello-pod`}
+              </pre>
+              <pre className="bg-dark text-warning p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`Events:
+  Type     Reason     Age   From               Message
+  ----     ------     ----  ----               -------
+  Normal   Scheduled  35s   default-scheduler  Successfully assigned default/hello-pod to node-1
+  Normal   Pulling    34s   kubelet            Pulling image "nginx:this-tag-does-not-exist"
+  Warning  Failed     31s   kubelet            Failed to pull image: rpc error: ... not found
+  Warning  Failed     31s   kubelet            Error: ErrImagePull
+  Warning  BackOff    18s   kubelet            Back-off pulling image "nginx:this-tag-does-not-exist"`}
+              </pre>
+              <p className="text-secondary x-small mb-0">
+                The Events section tells you <em>exactly</em> what went wrong and when. The image tag doesn&apos;t exist. Now you know how to fix it.
+              </p>
+            </div>
+
+            {/* Step 8 — Edit */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-info text-dark me-2">Step 8</span>Fix it with <code>kubectl edit pod</code>
+              </h6>
+              <p className="text-secondary small mb-2">
+                <code>kubectl edit</code> opens the live Pod spec in your terminal editor (usually <code>vi</code>). You edit it, save, and Kubernetes applies the diff.
+              </p>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`kubectl edit pod hello-pod
+# Opens the Pod spec in vi/vim.
+# Find the image line:  image: nginx:this-tag-does-not-exist
+# Change it to:         image: nginx:1.25
+# Save and exit:        :wq  (in vi)
+# Output: pod/hello-pod edited`}
+              </pre>
+              <div className="mt-2 mb-3">
+                <p className="text-secondary x-small mb-1 fw-semibold">Alternatives to <code>kubectl edit</code>:</p>
+                <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                  <tbody>
+                    <tr>
+                      <td style={{width:'50%'}}><code>kubectl patch pod hello-pod -p &apos;{`{"spec":{"containers":[{"name":"hello","image":"nginx:1.25"}]}}`}&apos;</code></td>
+                      <td className="text-secondary">Patch a specific field inline — no editor needed. Useful in scripts</td>
+                    </tr>
+                    <tr>
+                      <td>Fix the YAML file → <code>kubectl delete pod hello-pod &amp;&amp; kubectl apply -f hello-pod.yaml</code></td>
+                      <td className="text-secondary">Delete and recreate — always works, even for immutable fields</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="doc-alert doc-alert-warning mb-0">
+                <i className="bi bi-exclamation-triangle-fill"></i>
+                <div>
+                  <p className="mb-0 x-small text-secondary">
+                    <strong className="text-light">Most Pod fields are immutable on a running Pod</strong> — you can&apos;t change the container name, volumes, or resource limits without deleting and recreating.
+                    Only a few fields (like labels and annotations) can be edited live. <code>kubectl edit</code> will warn you if you try to change an immutable field.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 9 — Exec */}
+            <div className="mb-4 pb-4 border-bottom border-secondary border-opacity-25">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-primary text-light me-2">Step 9</span>Enter the Pod — run commands inside it
+              </h6>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-2">
+{`# Interactive shell inside the container:
+kubectl exec -it hello-pod -- /bin/bash
+# You're now inside the container. Try:
+nginx -v
+cat /etc/nginx/nginx.conf
+exit
+
+# Or run a one-off command without opening a shell:
+kubectl exec hello-pod -- cat /etc/hosts`}
+              </pre>
+              <div className="mt-2">
+                <table className="table table-dark table-sm small mb-0 border border-secondary border-opacity-25 rounded">
+                  <tbody>
+                    <tr><td style={{width:'35%'}}><code>exec</code></td><td className="text-secondary">Execute a command inside a running container in the Pod</td></tr>
+                    <tr><td><code>-it</code></td><td className="text-secondary"><code>-i</code> = keep stdin open. <code>-t</code> = allocate a terminal. Together = interactive shell. Like <code>docker exec -it</code></td></tr>
+                    <tr><td><code>--</code> (double dash)</td><td className="text-secondary">Separates kubectl flags from the command being run inside the container. Everything after <code>--</code> runs in the container</td></tr>
+                    <tr><td><code>/bin/bash</code> vs <code>/bin/sh</code></td><td className="text-secondary">Use <code>/bin/bash</code> for Debian/Ubuntu images. Use <code>/bin/sh</code> for Alpine (minimal) images — bash isn&apos;t installed there</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Step 10 — Delete */}
+            <div className="mb-0">
+              <h6 className="text-light fw-bold mb-2">
+                <span className="badge bg-danger text-light me-2">Step 10</span>Clean up — delete the Pod
+              </h6>
+              <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-0">
+{`kubectl delete pod hello-pod
+# or use the YAML:
+kubectl delete -f hello-pod.yaml`}
+              </pre>
+            </div>
           </div>
         </div>
 
@@ -696,22 +727,199 @@ kubectl get pod hello-pod -o json
             </pre>
 
             <h5 className="text-light fw-bold mb-3">Listing Pods across namespaces</h5>
-            <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-0">
+            <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-4">
 {`kubectl get pods                    # Only in the 'default' namespace
 kubectl get pods -n kube-system     # Only in the 'kube-system' namespace
 kubectl get pods -A                 # ALL namespaces (adds NAMESPACE column)
 # -A and --all-namespaces are the same flag`}
             </pre>
+
+            <h5 className="text-light fw-bold mb-3">Checking resource allocation on a Pod</h5>
+            <p className="text-secondary mb-3">
+              There are three distinct commands for this — each answers a different question:
+            </p>
+            <div className="table-responsive mb-3">
+              <table className="table table-dark table-bordered small text-secondary align-middle">
+                <thead>
+                  <tr className="table-secondary text-dark">
+                    <th>Command</th>
+                    <th>What it shows</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>kubectl describe pod &lt;name&gt;</code></td>
+                    <td>The <strong>declared</strong> <code>requests</code> &amp; <code>limits</code> from your YAML. Scroll to the Containers section.</td>
+                  </tr>
+                  <tr>
+                    <td><code>kubectl get pod &lt;name&gt; -o yaml</code></td>
+                    <td>Same declared values, but as raw YAML — useful for scripting or copy-paste.</td>
+                  </tr>
+                  <tr>
+                    <td><code>kubectl top pod &lt;name&gt;</code></td>
+                    <td>The <strong>actual live</strong> CPU and memory the Pod is consuming right now. Requires the Metrics Server.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-3">
+{`# See what resources were declared (requests / limits):
+kubectl describe pod hello-pod
+# Look for:
+#   Limits:
+#     cpu:     200m
+#     memory:  128Mi
+#   Requests:
+#     cpu:     100m
+#     memory:  64Mi
+
+# See actual real-time usage (needs Metrics Server):
+kubectl top pod hello-pod
+# NAME        CPU(cores)   MEMORY(bytes)
+# hello-pod   1m           3Mi`}
+            </pre>
+
+            <div className="doc-alert doc-alert-warning mb-4">
+              <i className="bi bi-exclamation-triangle-fill"></i>
+              <div>
+                <h6 className="fw-bold mb-1 text-warning">No CPU or memory in describe? That means you never defined any.</h6>
+                <p className="mb-0 x-small text-secondary">
+                  If you create a Pod without a <code>resources:</code> block, <code>kubectl describe</code> will show nothing under Limits/Requests. This is valid — but it means the Pod gets <strong>no guarantees</strong>. It will use whatever is free and be the first evicted under memory pressure.
+                </p>
+              </div>
+            </div>
+
+            <h5 className="text-light fw-bold mb-3">QoS Class — the hidden grade Kubernetes gives every Pod</h5>
+            <p className="text-secondary mb-3">
+              Look at the bottom of <code>kubectl describe pod</code> output — you will see a <strong>QoS Class</strong> field. Kubernetes assigns it automatically based on whether you defined resources. It determines <strong>who gets killed first</strong> when the node runs out of memory.
+            </p>
+            <div className="table-responsive mb-4">
+              <table className="table table-dark table-bordered small text-secondary align-middle">
+                <thead>
+                  <tr className="table-secondary text-dark">
+                    <th>QoS Class</th>
+                    <th>When you get it</th>
+                    <th>Under memory pressure</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span className="text-danger fw-semibold">BestEffort</span></td>
+                    <td>No <code>requests</code> or <code>limits</code> defined at all</td>
+                    <td>Killed <strong>first</strong> — no guarantees</td>
+                  </tr>
+                  <tr>
+                    <td><span className="text-warning fw-semibold">Burstable</span></td>
+                    <td><code>requests</code> defined, but lower than <code>limits</code></td>
+                    <td>Killed after BestEffort — gets guaranteed minimum</td>
+                  </tr>
+                  <tr>
+                    <td><span className="text-success fw-semibold">Guaranteed</span></td>
+                    <td><code>requests</code> == <code>limits</code> (both set, both equal)</td>
+                    <td>Killed <strong>last</strong> — highest priority</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-3">
+{`# To check a Pod's QoS class:
+kubectl describe pod hello-pod | grep QoS
+# QoS Class: BestEffort   ← no resources defined
+# QoS Class: Burstable    ← requests < limits
+# QoS Class: Guaranteed   ← requests == limits`}
+            </pre>
+
+            <div className="doc-alert doc-alert-info mb-0">
+              <i className="bi bi-exclamation-triangle-fill"></i>
+              <div>
+                <p className="mb-0 x-small text-secondary">
+                  <strong className="text-warning">kubectl top requires the Metrics Server.</strong> Kind clusters do not ship with it by default. The CKA exam clusters usually have it pre-installed, so <code>kubectl top</code> will work there. If you run it locally and get <em>&quot;Metrics API not available&quot;</em>, install the Metrics Server first.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* ── SECTION 9: LABELS ───────────────────────────────────────────── */}
+                {/* ── SECTION 9: NODE ASSIGNMENT ───────────────────────────────────── */}
+        <div className="doc-section-card shadow-lg border-primary mb-4">
+          <div className="doc-card-header-wrapper">
+            <div className="heading-icon text-primary">
+              <i className="bi bi-hdd-network-fill"></i>
+            </div>
+            <h2 className="doc-card-heading text-primary">9. Node Assignment — Where Does the Pod Go?</h2>
+          </div>
+          <div className="doc-card-body">
+            <h5 className="text-light fw-bold mb-3">How Kubernetes chooses automatically</h5>
+            <p className="text-secondary mb-3">
+              When you create a Pod without specifying a node, the <strong>kube-scheduler</strong> automatically decides where it should run. It evaluates all available nodes, filters out those that cannot host the Pod (due to lack of CPU/memory or specific "taints"), and schedules the Pod on the best match.
+            </p>
+            <p className="text-secondary mb-3">
+              By default, control-plane nodes have a <code>NoSchedule</code> taint, meaning regular Pods are restricted to worker nodes.
+            </p>
+            
+            <h5 className="text-light fw-bold mb-3">How to see which Node your Pod is on</h5>
+            <p className="text-secondary mb-3">
+              As covered earlier, append the <code>-o wide</code> flag to your get command. The <strong>NODE</strong> column reveals the assignment.
+            </p>
+            <pre className="bg-dark text-success p-3 rounded border border-secondary border-opacity-50 small mb-4">
+{`kubectl get pods -o wide`}
+            </pre>
+
+            <h5 className="text-light fw-bold mb-3">How to override the Scheduler (Manual Scheduling)</h5>
+            <p className="text-secondary mb-3">
+              Sometimes you need a Pod on a specific node. <code>kubectl run</code> doesn't have a simple flag for this, so you must use the dry-run workflow to generate YAML, then add either <code>nodeName</code> or <code>nodeSelector</code> to the <code>spec</code>.
+            </p>
+            
+            <div className="row g-3 mb-4">
+              <div className="col-md-6">
+                <p className="text-secondary x-small fw-semibold mb-1">Method 1: nodeName (Bypasses scheduler completely)</p>
+                <pre className="bg-dark text-success p-3 rounded border border-success border-opacity-25 small mb-0">
+{`# 1. Generate YAML
+kubectl run pin-pod --image=nginx --dry-run=client -o yaml > pin.yaml
+
+# 2. Edit pin.yaml
+vi pin.yaml
+# Add nodeName under spec:
+spec:
+  nodeName: cka-single
+  containers:
+  - image: nginx`}
+                </pre>
+              </div>
+              <div className="col-md-6">
+                <p className="text-secondary x-small fw-semibold mb-1">Method 2: nodeSelector (Uses labels)</p>
+                <pre className="bg-dark text-success p-3 rounded border border-success border-opacity-25 small mb-0">
+{`# 1. Label the node first
+kubectl label nodes cka-single disktype=ssd
+
+# 2. Generate and edit YAML
+spec:
+  nodeSelector:
+    disktype: ssd
+  containers:
+  - image: nginx`}
+                </pre>
+              </div>
+            </div>
+
+            <div className="doc-alert doc-alert-info mb-0">
+              <i className="bi bi-lightbulb-fill"></i>
+              <div>
+                <p className="mb-0 x-small text-secondary">
+                  <strong>Exam Tip:</strong> If the question asks you to schedule a Pod on a specific node, <code>nodeName</code> is the fastest, most reliable way to guarantee it runs exactly there.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{/* ── SECTION 10: LABELS ───────────────────────────────────────────── */}
         <div className="doc-section-card shadow-lg border-primary mb-4">
           <div className="doc-card-header-wrapper">
             <div className="heading-icon text-primary">
               <i className="bi bi-tags-fill"></i>
             </div>
-            <h2 className="doc-card-heading text-primary">9. Why Labels Matter — and How to Filter Pods</h2>
+            <h2 className="doc-card-heading text-primary">10. Why Labels Matter — and How to Filter Pods</h2>
           </div>
           <div className="doc-card-body">
             <p className="text-secondary mb-3">
@@ -773,13 +981,13 @@ kubectl label pod hello-pod env-                    # remove the 'env' label (da
           </div>
         </div>
 
-        {/* ── SECTION 10: CKA SURVIVAL BOX ─────────────────────────────────── */}
+        {/* ── SECTION 11: CKA SURVIVAL BOX ─────────────────────────────────── */}
         <div className="doc-section-card shadow-lg border-danger mb-4">
           <div className="doc-card-header-wrapper">
             <div className="heading-icon text-danger">
               <i className="bi bi-shield-fill-check"></i>
             </div>
-            <h2 className="doc-card-heading text-danger">10. CKA Survival Box — Pods</h2>
+            <h2 className="doc-card-heading text-danger">11. CKA Survival Box — Pods</h2>
           </div>
           <div className="doc-card-body">
             <p className="text-secondary mb-4">

@@ -49,6 +49,21 @@ export const CKA_NAV_CONFIG: NavItem[] = [
     ],
   },
   {
+    section: "WORKLOADS",
+    label: "ReplicaSet",
+    icon: "bi-diagram-2-fill",
+    children: [
+      { label: "Understanding ReplicaSet", icon: "bi-info-circle-fill", href: "/cka/core-concepts/replicaset" },
+    ],
+  },
+  {
+    label: "Deployment",
+    icon: "bi-layers-fill",
+    children: [
+      { label: "Understanding Deployment", icon: "bi-info-circle-fill", href: "/cka/core-concepts/deployment" },
+    ],
+  },
+  {
     section: "PRACTICE",
     label: "Practice Tasks",
     icon: "bi-laptop",

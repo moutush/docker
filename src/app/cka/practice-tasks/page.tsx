@@ -161,13 +161,13 @@ kind create cluster --config config.yaml`,
       {
         id: 'B5',
         title: 'Switch to a different context',
-        description: "Switch your active context to 'kind-cka-multi' (assuming you have a cluster named cka-multi). Then verify the switch worked.",
-        solution: `kubectl config use-context kind-cka-multi
+        description: "Switch your active context to the multi-node cluster 'kind-cka-cluster2' (created in task A4). Then verify the switch worked.",
+        solution: `kubectl config use-context kind-cka-cluster2
 
 # Verify:
 kubectl config current-context
-# Output: kind-cka-multi`,
-        hint: "The context name must match exactly — use 'kubectl config get-contexts' first to see the exact names. Remember: Kind prefixes cluster names with 'kind-' in kubeconfig.",
+# Output: kind-cka-cluster2`,
+        hint: "The context name must match exactly — use 'kubectl config get-contexts' first to see the exact names available. Kind always prefixes the cluster name with 'kind-' when writing to kubeconfig.",
       },
       {
         id: 'B6',
@@ -213,35 +213,30 @@ kubectl config current-context`,
     tasks: [
       {
         id: 'C1',
-        title: 'Create a Pod — declaratively',
-        description: `Write a Pod manifest named hello-pod.yaml with the following spec and apply it:
+        title: 'Prerequisite: Create a Cluster',
+        description: 'Before working with Pods, ensure you have a running Kubernetes cluster. Create a single-node cluster using Kind named "cka-single".',
+        solution: 'kind create cluster --name cka-single --image kindest/node:v1.34.0',
+        hint: 'Use `kind create cluster`. Refer to the "Create a Cluster" section if you forget the syntax.',
+      },
+      {
+        id: 'C2',
+        title: 'Create a Pod using Dry-Run',
+        description: `Generate a Pod manifest named hello-pod.yaml using the kubectl dry-run feature with the following spec, and then apply it:
 - name: hello-pod
 - label:  app=hello
 - image:  nginx:1.25
 - port:   80
 - restartPolicy: Always`,
-        solution: `# hello-pod.yaml:
-apiVersion: v1
-kind: Pod
-metadata:
-  name: hello-pod
-  labels:
-    app: hello
-spec:
-  containers:
-    - name: hello
-      image: nginx:1.25
-      ports:
-        - containerPort: 80
-  restartPolicy: Always
+        solution: `# Generate the YAML using dry-run and save to file:
+kubectl run hello-pod --image=nginx:1.25 --labels="app=hello" --port=80 --restart=Always --dry-run=client -o yaml > hello-pod.yaml
 
-# Apply it:
+# Apply the generated YAML:
 kubectl apply -f hello-pod.yaml
 # Output: pod/hello-pod created`,
-        hint: 'Remember: apiVersion for Pods is v1. containers is a list (starts with -). labels go under metadata, not spec.',
+        hint: 'Use `kubectl run ... --dry-run=client -o yaml > pod.yaml` to generate the file without writing it by hand.',
       },
       {
-        id: 'C2',
+        id: 'C3',
         title: 'List all Pods and understand the columns',
         description: `List all Pods in the default namespace.
 What does each column mean?
@@ -261,7 +256,7 @@ Expected output when healthy:
         hint: 'READY shows <running containers>/<total containers>. RESTARTS > 0 is always worth investigating.',
       },
       {
-        id: 'C3',
+        id: 'C4',
         title: 'Delete the Pod — two ways',
         description: `Delete the hello-pod you created.
 Try both methods — by name and by file.
@@ -280,9 +275,9 @@ kubectl delete pod hello-pod --force
         hint: 'Use --force in the CKA exam whenever you just want the Pod gone quickly. Waiting 30s per delete adds up.',
       },
       {
-        id: 'C4',
+        id: 'C5',
         title: 'Corrupt a Pod — create it with a bad image',
-        description: `Re-create the Pod from C1, but intentionally use a broken image tag:
+        description: `Re-create the Pod from C2, but intentionally use a broken image tag:
 - image: nginx:this-tag-does-not-exist
 
 Apply it. Then list Pods — what STATUS do you see?`,
@@ -300,7 +295,7 @@ kubectl get pods
         hint: 'You must delete the existing Pod first — bare Pods have immutable specs, you cannot change the image of a running Pod by re-applying.',
       },
       {
-        id: 'C5',
+        id: 'C6',
         title: 'Debug the broken Pod with kubectl describe',
         description: `The hello-pod is in ImagePullBackOff.
 Run the describe command on it.
@@ -323,7 +318,7 @@ What does the Events section tell you?`,
         hint: 'kubectl describe gives you the full story. Always read the Events section at the bottom first — it tells you exactly what Kubernetes tried and what failed.',
       },
       {
-        id: 'C6',
+        id: 'C7',
         title: 'Fix the Pod with kubectl edit',
         description: `Use kubectl edit to fix the broken image tag on hello-pod.
 Change the image back to nginx:1.25.
@@ -349,7 +344,7 @@ kubectl delete pod hello-pod && kubectl apply -f hello-pod.yaml`,
         hint: 'If kubectl edit rejects your change with "field is immutable", the only option is delete + recreate. Fix the YAML file first, then: kubectl delete pod hello-pod && kubectl apply -f hello-pod.yaml',
       },
       {
-        id: 'C7',
+        id: 'C8',
         title: 'Enter the running Pod',
         description: `Open an interactive shell inside hello-pod.
 Once inside, run: nginx -v
@@ -371,7 +366,7 @@ kubectl exec hello-pod -- cat /etc/hosts
         hint: 'Use /bin/bash for Debian/Ubuntu-based images. Use /bin/sh for Alpine-based images (bash is not installed there). If you get "exec: bash: not found", try /bin/sh.',
       },
       {
-        id: 'C8',
+        id: 'C9',
         title: 'Generate Pod YAML with dry-run — never write from scratch',
         description: `Generate a Pod YAML for an nginx Pod named web-pod (image: nginx:1.25, port: 80) WITHOUT creating anything.
 Save it to web-pod.yaml.
@@ -400,7 +395,7 @@ kubectl get pods --show-labels
         hint: '--dry-run=client -o yaml is the most important kubectl pattern for the CKA exam. Never write YAML from scratch — generate it, edit it, apply it.',
       },
       {
-        id: 'C9',
+        id: 'C10',
         title: 'Get all info about a Pod — wide output and full YAML',
         description: `For the web-pod running from C8:
 1. List it with extra columns (IP and Node)
@@ -419,7 +414,7 @@ kubectl get pod web-pod -o yaml
         hint: '-o wide is your first tool when something is wrong at the network or scheduling level. The IP and Node columns are often the answer.',
       },
       {
-        id: 'C10',
+        id: 'C11',
         title: 'Filter Pods by label',
         description: `You have two Pods running — hello-pod (app=hello) and web-pod (tier=frontend).
 1. List only Pods with label app=hello
@@ -447,7 +442,7 @@ kubectl label pod hello-pod owner-`,
         hint: 'Labels are the glue of Kubernetes — Services and ReplicaSets use them to find Pods. Always label your Pods, even in the exam. The -l flag uses the same selector syntax.',
       },
       {
-        id: 'C11',
+        id: 'C12',
         title: 'Look up any YAML field without leaving the terminal',
         description: `Without opening a browser or this study guide, find:
 1. What fields are available under pod.spec.containers?
@@ -471,7 +466,92 @@ kubectl api-resources | grep -i pod
         hint: 'kubectl explain is your in-exam documentation. You can drill down as deep as needed: kubectl explain pod.spec.containers.resources.limits',
       },
       {
-        id: 'C12',
+        id: 'C13',
+        title: 'Schedule a Pod to a specific Node using nodeName',
+        description: `Create a pod named 'pinned-pod' using the 'nginx' image.
+Ensure this pod is scheduled exactly on the node 'cka-single'.
+Verify the node assignment using the appropriate flag.`,
+        solution: `# 1. Generate the YAML using dry-run
+kubectl run pinned-pod --image=nginx --dry-run=client -o yaml > pinned.yaml
+
+# 2. Edit the YAML
+vi pinned.yaml
+# Add nodeName under spec:
+# spec:
+#   nodeName: cka-single
+#   containers: ...
+
+# 3. Apply it
+kubectl apply -f pinned.yaml
+
+# 4. Verify node assignment
+kubectl get pods -o wide`,
+        hint: 'Use the nodeName field under the spec section in your Pod YAML to bypass the scheduler entirely.',
+      },
+      {
+        id: 'C14',
+        title: 'Schedule a Pod using nodeSelector',
+        description: `1. Label your node 'cka-single' with 'environment=production'.
+2. Create a pod named 'labeled-pod' using the 'nginx' image.
+3. Configure the pod to only be scheduled on nodes with the 'environment=production' label.`,
+        solution: `# 1. Label the node
+kubectl label nodes cka-single environment=production
+
+# 2. Generate the YAML using dry-run
+kubectl run labeled-pod --image=nginx --dry-run=client -o yaml > labeled.yaml
+
+# 3. Edit the YAML
+vi labeled.yaml
+# Add nodeSelector under spec:
+# spec:
+#   nodeSelector:
+#     environment: production
+#   containers: ...
+
+# 4. Apply it
+kubectl apply -f labeled.yaml`,
+        hint: 'First label the node using `kubectl label nodes <node> <key>=<val>`. Then add nodeSelector under spec in the Pod YAML.',
+      },
+      {
+        id: 'C15',
+        title: 'Check declared resource requests and limits on a Pod',
+        description: `The 'hello-pod' from C2 has resource requests and limits defined.
+Without opening any file, find out:
+- What CPU and memory is it requesting?
+- What CPU and memory is it limited to?`,
+        solution: `kubectl describe pod hello-pod
+# Scroll to the Containers section. Look for:
+#   Limits:
+#     cpu:     200m
+#     memory:  128Mi
+#   Requests:
+#     cpu:     100m
+#     memory:  64Mi
+
+# Alternatively, get the raw YAML:
+kubectl get pod hello-pod -o yaml
+# Look for the 'resources:' block under spec.containers`,
+        hint: '`kubectl describe pod` is the fastest way. Scroll to the Containers section — requests and limits are listed right below the image name.',
+      },
+      {
+        id: 'C16',
+        title: 'Check actual live resource usage of a Pod',
+        description: `Run a command to see the actual CPU and memory your 'hello-pod' is consuming right now (not what was declared, but what it is actually using).
+What command do you need, and what output format should you expect?`,
+        solution: `kubectl top pod hello-pod
+# NAME        CPU(cores)   MEMORY(bytes)
+# hello-pod   1m           3Mi
+
+# To see all pods at once:
+kubectl top pods
+
+# NOTE: This requires the Metrics Server to be installed.
+# On Kind, you may get "Metrics API not available" locally.
+# In the CKA exam, the Metrics Server is pre-installed — this command will work.`,
+        hint: '`kubectl top` shows live usage. `kubectl describe` shows declared limits. They are different things — do not confuse them in the exam.',
+      },
+      {
+        id: 'C17',
         title: 'Clean up — delete Pods by name and by label',
         description: `Delete all the Pods created in this section.
 Try both: deleting by Pod name and deleting all Pods matching a label.`,
@@ -488,6 +568,395 @@ kubectl delete -f hello-pod.yaml
 kubectl get pods
 # No resources found in default namespace.`,
         hint: 'Deleting by label is powerful — and dangerous. Always double-check what matches your selector with kubectl get pods -l <selector> before running delete.',
+      },
+    ],
+  },
+  {
+    id: 'RS',
+    label: 'ReplicaSets',
+    icon: 'bi-diagram-2-fill',
+    color: 'text-info',
+    borderColor: 'border-info',
+    badgeClass: 'bg-info',
+    docHref: '/cka/core-concepts/replicaset',
+    tasks: [
+      {
+        id: 'RS1',
+        title: 'Create a ReplicaSet YAML and Apply',
+        description: 'Write a ReplicaSet manifest named `nginx-rs.yaml` with 3 replicas, using the `nginx:1.25` image, matching selector `app=frontend`, and container port 80. Then apply it.',
+        solution: `# Save to nginx-rs.yaml:
+cat <<EOF > nginx-rs.yaml
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-rs
+  labels:
+    app: frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+EOF
+
+# Apply:
+kubectl apply -f nginx-rs.yaml`,
+        hint: 'ReplicaSet uses `apiVersion: apps/v1`. Ensure `spec.selector.matchLabels` matches `spec.template.metadata.labels` exactly.',
+      },
+      {
+        id: 'RS2',
+        title: 'Verify ReplicaSet Status & Created Pods',
+        description: 'Inspect the newly created ReplicaSet and list all Pods managed by it.',
+        solution: `kubectl get replicaset nginx-rs
+kubectl get rs
+kubectl get pods -l app=frontend`,
+        hint: 'Check that DESIRED, CURRENT, and READY columns show 3.',
+      },
+      {
+        id: 'RS3',
+        title: 'Observe Self-Healing',
+        description: 'Delete one of the Pods created by `nginx-rs` and verify that the ReplicaSet automatically creates a replacement Pod.',
+        solution: `# Get pod name:
+kubectl get pods -l app=frontend
+
+# Delete one pod:
+kubectl delete pod <pod-name>
+
+# Immediately check pods:
+kubectl get pods -l app=frontend`,
+        hint: 'ReplicaSet constantly monitors cluster state and replaces missing Pods automatically.',
+      },
+      {
+        id: 'RS4',
+        title: 'Scale a ReplicaSet Imperatively',
+        description: 'Scale the `nginx-rs` ReplicaSet from 3 replicas up to 5 replicas using `kubectl scale`.',
+        solution: `kubectl scale replicaset nginx-rs --replicas=5
+
+# Verify:
+kubectl get rs nginx-rs`,
+        hint: '`kubectl scale rs <name> --replicas=<count>` is the fastest speed trick for CKA.',
+      },
+      {
+        id: 'RS5',
+        title: 'Scale a ReplicaSet Live via Edit',
+        description: 'Scale `nginx-rs` down to 2 replicas using `kubectl edit`.',
+        solution: `kubectl edit rs nginx-rs
+# Change "replicas: 5" to "replicas: 2", save and exit (:wq)
+
+# Verify:
+kubectl get rs nginx-rs`,
+        hint: '`kubectl edit` edits live cluster resources in your default terminal text editor.',
+      },
+      {
+        id: 'RS6',
+        title: 'Delete ReplicaSet with Orphaned Pods',
+        description: 'Delete the `nginx-rs` ReplicaSet without deleting its running Pods (keep Pods running as orphans).',
+        solution: `kubectl delete rs nginx-rs --cascade=orphan
+
+# Verify RS is gone but Pods are still running:
+kubectl get rs
+kubectl get pods`,
+        hint: 'Use `--cascade=orphan` to delete the controller without deleting the managed Pods.',
+      },
+      {
+        id: 'RS7',
+        title: 'Troubleshoot Selector Mismatch in ReplicaSet',
+        description: 'Fix the issue in this ReplicaSet manifest:\n\n```yaml\napiVersion: apps/v1\nkind: ReplicaSet\nmetadata:\n  name: my-rs\nspec:\n  replicas: 2\n  selector:\n    matchLabels:\n      tier: frontend\n  template:\n    metadata:\n      labels:\n        tier: web\n    spec:\n      containers:\n      - name: nginx\n        image: nginx\n```',
+        solution: `# Issue: selector.matchLabels has "tier: frontend", but template.metadata.labels has "tier: web".
+
+# Fixed YAML:
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: my-rs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx`,
+        hint: 'The selector labels must match the template metadata labels exactly.',
+      },
+      {
+        id: 'RS8',
+        title: 'Complex Debugging 1: Pod Adoption & Replica Eviction Conflict',
+        description: `Scenario: You apply a ReplicaSet with replicas=2 and selector app=payment. But when you run kubectl get pods, you see 5 running pods with app=payment, and the ReplicaSet is actively deleting 3 pods that belong to another application!
+
+What caused this bug, how do you debug it, and how do you resolve it safely?`,
+        solution: `# Diagnosis:
+# Another workload (or standalone Pods) were created with the label app=payment.
+# Because ReplicaSets track Pods strictly via selector labels, this ReplicaSet "adopted" all 5 pods in the namespace matching app=payment.
+# Since desired replicas=2, the ReplicaSet started terminating 3 of those pods to reconcile state to 2!
+
+# Debug steps:
+kubectl get pods -l app=payment --show-labels
+kubectl describe rs <replicaset-name>
+
+# Fix:
+# 1. Update the ReplicaSet's spec.selector.matchLabels and spec.template.metadata.labels to a more specific/unique label (e.g. app=payment, tier=backend, release=v1).
+# 2. Re-apply or edit the ReplicaSet object:
+kubectl edit rs <replicaset-name>`,
+        hint: 'ReplicaSets adopt any Pods matching `spec.selector.matchLabels` regardless of who created them.',
+      },
+      {
+        id: 'RS9',
+        title: 'Complex Debugging 2: Image Update Does Not Restart Pods',
+        description: `Scenario: A developer updated the image in an existing ReplicaSet manifest from nginx:1.24 to nginx:1.25 and ran kubectl apply -f rs.yaml.
+However, running kubectl get pods -o wide shows that all running Pods are still using nginx:1.24!
+
+Why didn't the Pods update to nginx:1.25, and how do you force the update?`,
+        solution: `# Diagnosis:
+# ReplicaSets ONLY reconcile the NUMBER of running Pods (count). 
+# They DO NOT perform rolling updates or restart existing Pods when the pod template changes!
+
+# Fix Option A (Manual Pod deletion):
+# Manually delete existing Pods. As the ReplicaSet replaces them, new Pods will use nginx:1.25:
+kubectl delete pod -l app=nginx
+
+# Fix Option B (Production standard):
+# Migrate the workload from a ReplicaSet to a Deployment, which supports automated rolling updates via "kubectl set image" or "kubectl apply".`,
+        hint: 'ReplicaSets do not update existing Pods on template changes. You must delete Pods manually or use a Deployment.',
+      },
+      {
+        id: 'RS10',
+        title: 'Complex Debugging 3: ImagePullBackOff + FailedCreate Event Analysis',
+        description: `Scenario: A ReplicaSet named web-rs shows DESIRED=3, CURRENT=0, READY=0.
+Running kubectl get pods shows no Pods running or created.
+
+How do you debug why the ReplicaSet is unable to create Pods or why Pods are stuck?`,
+        solution: `# Step 1: Inspect ReplicaSet events
+kubectl describe rs web-rs
+
+# Look at the "Events:" section at the bottom.
+# Common failure causes revealed in RS events:
+# - FailedCreate: quota exceeded (ResourceQuota limit reached)
+# - FailedCreate: invalid spec or nonexistent secret/configmap referenced
+# - FailedCreate: forbidden PSP or SecurityContext restriction
+
+# Step 2: If Pods WERE created but are failing to start:
+kubectl get pods -l app=web
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+
+# Common pod causes: ImagePullBackOff (invalid image tag/private registry) or CrashLoopBackOff.`,
+        hint: 'Always check `kubectl describe rs <rs-name>` events first when DESIRED > 0 but CURRENT = 0.',
+      },
+    ],
+  },
+  {
+    id: 'D',
+    label: 'Deployments',
+    icon: 'bi-layers-fill',
+    color: 'text-warning',
+    borderColor: 'border-warning',
+    badgeClass: 'bg-warning',
+    docHref: '/cka/core-concepts/deployment',
+    tasks: [
+      {
+        id: 'D1',
+        title: 'Create a Deployment named nginx',
+        description: 'Create a Deployment named nginx with 3 replicas. The Pods should use the nginx:1.23.0 image and the name nginx. The Deployment uses the label tier=backend. The Pod template should use the label app=v1.',
+        solution: `# Step 1: Generate YAML with dry-run
+kubectl create deployment nginx --image=nginx:1.23.0 --replicas=3 --dry-run=client -o yaml > deploy.yaml
+
+# Step 2: Edit deploy.yaml to set Deployment label tier=backend and Pod label app=v1
+# metadata.labels: tier=backend
+# spec.selector.matchLabels: app=v1
+# spec.template.metadata.labels: app=v1
+
+# Step 3: Apply
+kubectl apply -f deploy.yaml`,
+        hint: 'Generate the base manifest using `kubectl create deployment --dry-run=client -o yaml > deploy.yaml`, then update the labels before applying.',
+      },
+      {
+        id: 'D2',
+        title: 'List the Deployment and verify replicas',
+        description: 'List the Deployment and ensure the correct number of replicas is running.',
+        solution: `kubectl get deployment nginx
+kubectl get pods -l app=v1`,
+        hint: 'Check that READY column shows 3/3.',
+      },
+      {
+        id: 'D3',
+        title: 'Update the image to nginx:1.23.4 (Upgrade)',
+        description: 'Update the container image of the nginx Deployment to nginx:1.23.4.',
+        solution: 'kubectl set image deployment/nginx nginx=nginx:1.23.4',
+        hint: 'Use `kubectl set image deployment/<deployment-name> <container-name>=<new-image>`.',
+      },
+      {
+        id: 'D4',
+        title: 'Verify rollout status and container image',
+        description: 'Verify that the change has been rolled out to all replicas.',
+        solution: `kubectl rollout status deployment/nginx
+kubectl get pods -o jsonpath='{.items[*].spec.containers[*].image}'`,
+        hint: 'Use `kubectl rollout status` to track completion.',
+      },
+      {
+        id: 'D5',
+        title: 'Assign change cause annotation',
+        description: 'Assign the change cause "Pick up patch version" to the revision.',
+        solution: 'kubectl annotate deployment/nginx kubernetes.io/change-cause="Pick up patch version" --overwrite',
+        hint: 'Set the annotation key `kubernetes.io/change-cause`.',
+      },
+      {
+        id: 'D6',
+        title: 'Scale the Deployment',
+        description: 'Scale the Deployment to 5 replicas.',
+        solution: 'kubectl scale deployment nginx --replicas=5',
+        hint: 'Use `kubectl scale deployment nginx --replicas=5`.',
+      },
+      {
+        id: 'D7',
+        title: 'View Deployment rollout history',
+        description: 'Have a look at the Deployment rollout history.',
+        solution: 'kubectl rollout history deployment/nginx',
+        hint: 'Use `kubectl rollout history deployment/<name>`.',
+      },
+      {
+        id: 'D8',
+        title: 'Revert Deployment to revision 1 (Rollback)',
+        description: 'Revert the Deployment to revision 1.',
+        solution: 'kubectl rollout undo deployment/nginx --to-revision=1',
+        hint: 'Use `kubectl rollout undo deployment/<name> --to-revision=1`.',
+      },
+      {
+        id: 'D9',
+        title: 'Verify image version after rollback',
+        description: 'Ensure that the Pods use the image nginx:1.23.0.',
+        solution: `kubectl get pods -o jsonpath='{.items[*].spec.containers[*].image}'
+kubectl describe deployment nginx | grep -i image`,
+        hint: 'Check container image spec using jsonpath or describe.',
+      },
+      {
+        id: 'D10',
+        title: 'Troubleshoot issue 1: Invalid apiVersion',
+        description: `Apply the below YAML and fix the issue with it:
+
+\`\`\`yaml
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    env: demo
+spec:
+  template:
+    metadata:
+      labels:
+        env: demo
+      name: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+  replicas: 3
+  selector:
+    matchLabels:
+      env: demo
+\`\`\``,
+        solution: `# Issue: "apiVersion: v1" is invalid for Deployment. Deployments belong to the "apps/v1" API group.
+
+# Fixed YAML:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    env: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: demo
+  template:
+    metadata:
+      labels:
+        env: demo
+      name: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80`,
+        hint: 'Deployments must use `apiVersion: apps/v1`. Core `v1` is only for Pods, Services, Namespaces, etc.',
+      },
+      {
+        id: 'D11',
+        title: 'Troubleshoot issue 2: Selector label mismatch & apiVersion',
+        description: `Apply the below YAML and fix the issue with it:
+
+\`\`\`yaml
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    env: demo
+spec:
+  template:
+    metadata:
+      labels:
+        env: demo
+      name: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+  replicas: 3
+  selector:
+    matchLabels:
+      env: dev
+\`\`\``,
+        solution: `# Issues:
+# 1. "apiVersion: v1" is invalid for Deployment (must be "apps/v1").
+# 2. Selector mismatch: matchLabels has "env: dev", but pod template metadata has "env: demo". They must match exactly!
+
+# Fixed YAML:
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  labels:
+    env: demo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      env: demo
+  template:
+    metadata:
+      labels:
+        env: demo
+      name: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80`,
+        hint: '1) Change `apiVersion` to `apps/v1`. 2) Ensure `spec.selector.matchLabels` matches `spec.template.metadata.labels` (`env: demo`).',
       },
     ],
   },
